@@ -20,7 +20,7 @@ class Client(object):
             raise Exception("unexpected status code %s" % (response.status_code,))
 
     def create_changeset(self, table_id, summary):
-        result = self.api_request("tables/%s/changesets/create" % (table_id,), json={'summary': summary})
+        result = self.api_request("tables/%s/changesets/create" % (table_id,), data={'summary': summary})
         return result['id']
 
 
