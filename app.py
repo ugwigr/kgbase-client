@@ -1,5 +1,6 @@
 from github import Github
 from sets import Set
+from client import Client
 
 g = Github("e65a450c670366efa4811ff55c7d96bf89bcf19e")
 
@@ -21,6 +22,13 @@ for user in ["vojto", "lprokein"]:
 
 all_issues = all_issues.values()
 
-print "All issues: %s" % (all_issues,)
+print "Total issues count: %s" % (len(all_issues),)
 
+# Copy into Metabase
 
+client = Client("ttsejo1uh45dvf0n")
+table_id = "frontend-issues-LVe7zDLnraMRnJTljhR"
+
+changeset_id = client.create_changeset(table_id, "loading issues")
+
+print "Created changeset with ID: %s" % (changeset_id,)
