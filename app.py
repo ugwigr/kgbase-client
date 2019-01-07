@@ -31,4 +31,10 @@ table_id = "frontend-issues-LVe7zDLnraMRnJTljhR"
 
 changeset_id = client.create_changeset(table_id, "loading issues")
 
-print "Created changeset with ID: %s" % (changeset_id,)
+for issue in all_issues:
+    client.create_data(table_id, changeset_id, {
+        'title': issue.title,
+        'number': issue.number,
+    })
+
+client.submit_changeset(table_id, changeset_id, "loaded issues")

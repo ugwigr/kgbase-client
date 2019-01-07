@@ -20,26 +20,13 @@ class Client(object):
             raise Exception("unexpected status code %s" % (response.status_code,))
 
     def create_changeset(self, table_id, summary):
-        result = self.api_request("tables/%s/changesets/create" % (table_id,), data={'summary': summary})
+        result = self.api_request("tables/%s/changesets/create" % (table_id,), json={'summary': summary})
         return result['id']
 
+    def submit_changeset(self, table_id, changeset_id, summary):
+        result = self.api_request("tables/%s/changesets/%s/submit" % (table_id, changeset_id,), json={'summary': summary})
+        print "Result: %s" % (result,)
 
-# for i in range(0, 10):
-#     item = mappings[i]
-#     brand, ticker_name, ticker_market = item
-
-#     payload = {}
-
-#     if brand:
-#         payload['brand'] = brand
-
-#     if ticker_name:
-#         payload['ticker_name'] = ticker_name
-
-#     if ticker_market:
-#         payload['ticker_market'] = ticker_market
-
-#     api_request("tables/%s/changesets/%s/data/create" % (table_id, changeset_id,), json=payload)
-
-
-# api_request("tables/%s/changesets/%s/submit" % (table_id, changeset_id,), json={'summary': 'Loading brand mappings'})
+    def create_data(self, table_id, changeset_id, data):
+        result = self.api_request("tables/%s/changesets/%s/data/create" % (table_id, changeset_id,), json=data)
+        print "Result: %s" % (result,)
