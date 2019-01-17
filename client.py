@@ -25,12 +25,44 @@ class Client(object):
             raise Exception("unexpected status code %s" % (response.status_code,))
 
     def project_list(self):
-        result = self.api_request("projects", method='GET')
+        result = self.api_request(
+            path="projects",
+            method='GET'
+        )
         return result
 
     def project_create(self, **kwargs):
-        result = self.api_request(path="projects/create", method='POST', json=kwargs)
+        result = self.api_request(
+            path="projects/create",
+            method='POST',
+            json=kwargs
+        )
         return result
+
+    def table_list(self, project_id, **kwargs):
+        result = self.api_request(
+            path="projects/%s/tables" % (project_id,), 
+            method='GET',
+            json=kwargs
+        )
+        return result
+
+    def table_create(self, project_id, **kwargs):
+        result = self.api_request(
+            path="projects/%s/tables/create" % (project_id,),
+            method='POST',
+            json=kwargs
+        )
+        return result
+    
+    def column_create(self, project_id, table_id, **kwargs):
+        result = self.api_request(
+            path="projects/%s/tables/%s/columns/create" % (project_id, table_id,),
+            method='POST',
+            json=kwargs
+        )
+        return result
+
 
     def create_changeset(self, table_id, summary):
         result = self.api_request("tables/%s/changesets/create" % (table_id,), json={'summary': summary})
