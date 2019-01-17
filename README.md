@@ -62,8 +62,10 @@ print result
 ```
 
 ## List Table
+```
 result = c.table_list('client-test1111111-LWS2AsRVWYkIaEr9Isq')
 print result
+```
 ```
 {
     "tables": [
@@ -110,8 +112,8 @@ print result
     },
     "message": "New table created"
 }
-
 ```
+
 ## Create Column
 ```
 result = c.column_create(
@@ -127,6 +129,7 @@ print result
     "changeset_id": 71
 }
 ```
+
 ## Create Column with  Changeset ID
 ```
 result = c.column_create(
