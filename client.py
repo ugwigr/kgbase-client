@@ -62,17 +62,40 @@ class Client(object):
             json=kwargs
         )
         return result
+    
+    def data_create(self, project_id, table_id, **kwargs):
+        result = self.api_request(
+            path="projects/%s/tables/%s/data/create" % (project_id, table_id,),
+            method='POST',
+            json=kwargs
+        )
+        return result
+    
+    def changeset_submit(self, project_id, table_id, changeset_id, **kwargs):
+        result = self.api_request(
+            path="projects/%s/tables/%s/changesets/%s/submit" % (project_id, table_id, changeset_id,),
+            method='POST',
+            json=kwargs
+        )
+        return result
+    
+    def changeset_publish(self, project_id, table_id, changeset_id, **kwargs):
+        result = self.api_request(
+            path="projects/%s/tables/%s/changesets/%s/publish" % (project_id, table_id, changeset_id,),
+            method='POST',
+            json=kwargs
+        )
+        return result
 
+    # def create_changeset(self, table_id, summary):
+    #     result = self.api_request("tables/%s/changesets/create" % (table_id,), json={'summary': summary})
+    #     return result['id']
 
-    def create_changeset(self, table_id, summary):
-        result = self.api_request("tables/%s/changesets/create" % (table_id,), json={'summary': summary})
-        return result['id']
+    # def submit_changeset(self, table_id, changeset_id, summary):
+    #     result = self.api_request("tables/%s/changesets/%s/submit" % (table_id, changeset_id,), json={'summary': summary})
+    #     print "Result: %s" % (result,)
 
-    def submit_changeset(self, table_id, changeset_id, summary):
-        result = self.api_request("tables/%s/changesets/%s/submit" % (table_id, changeset_id,), json={'summary': summary})
-        print "Result: %s" % (result,)
-
-    def create_data(self, table_id, changeset_id, data):
-        result = self.api_request("tables/%s/changesets/%s/data/create" % (table_id, changeset_id,), json=data)
-        print "Result: %s" % (result,)
+    # def create_data(self, table_id, changeset_id, data):
+    #     result = self.api_request("tables/%s/changesets/%s/data/create" % (table_id, changeset_id,), json=data)
+    #     print "Result: %s" % (result,)
 
