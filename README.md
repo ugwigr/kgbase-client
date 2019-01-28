@@ -142,7 +142,7 @@ When creating column for table, project `slug` and table `slug` are necessary.
 c.column_create(
     project_id='client-test1111111-LWS2AsRVWYkIaEr9Isq',
     table_id='test3-LWSJDcerl3f3ZSXECsC',
-    **{'type': u'text', 'is_unique': False, 'display_name': u'Sangwon Column1', 'id': u'sangwon-column1'}
+    **{'type': u'text', 'is_unique': False, 'name': u'Column1'}
 )
 ```
 
@@ -162,7 +162,7 @@ If you know changeset id, then you can create a column multiple times under same
 c.column_create(
     project_id='client-test1111111-LWS2AsRVWYkIaEr9Isq',
     table_id='test3-LWSJDcerl3f3ZSXECsC',
-    **{'type': u'text', 'is_unique': False, 'display_name': u'Sangwon Column2', 'id': u'sangwon-column2', 'changeset_id': 72}
+    **{'type': u'text', 'is_unique': False, 'name': u'Column2', 'changeset_id': 72}
 )
 ```
 
@@ -184,7 +184,7 @@ When adding data, project `slug` and table `slug` are necessary.
 c.data_create(
     project_id='client-test1111111-LWS2AsRVWYkIaEr9Isq',
     table_id='test3-LWSJDcerl3f3ZSXECsC',
-    **{'sangwon-column1': '1', 'sangwon-column2': '2'}
+    **{'Column1': '1', 'Column2': '2'}
 )
 ```
 
@@ -204,7 +204,7 @@ If you know changeset id, then you can add data multiple times under same change
 c.data_create(
     project_id='client-test1111111-LWS2AsRVWYkIaEr9Isq',
     table_id='test3-LWSJDcerl3f3ZSXECsC',
-    **{'sangwon-column1': '1', 'sangwon-column2': '2', 'changeset_id': 74}
+    **{'Column1': '1', 'Column2': '2', 'changeset_id': 74}
 )
 ```
 ##### Example response
