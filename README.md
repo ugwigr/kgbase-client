@@ -1,14 +1,22 @@
-## Instantiate object
+# Kgbase library reference
+You should get API key first, then you can instantiate object with API key.
+
+##### Example code
 ```
 import client
-c = client.Client('ab')
+c = client.Client('API_KEY')
 ```
 
-## List Project
+*** 
+# Project
+### List
+Project list that user created and public project will be retrieved.
+##### Example code
 ```
-result = c.project_list()
-print result
+c.project_list()
 ```
+
+##### Example response
 ```
 {
     "user_projects": [
@@ -39,15 +47,19 @@ print result
     ]
 }
 ```
-## Create Project
+
+### Create
+User can create public or private project.
+##### Example code
 ```
-result = c.project_create(**{
+c.project_create(**{
     'name': 'client-test1111111',
     'description': 'client-test1111111',
     'is_public': True
 })
-print result
 ```
+
+##### Example response
 ```
 {
     "project": {
@@ -61,11 +73,15 @@ print result
 }
 ```
 
-## List Table
+***
+# Table
+### List
+Table list of one particular project will be retrieved. Project `slug` should be passed.
+##### Example code
 ```
-result = c.table_list('client-test1111111-LWS2AsRVWYkIaEr9Isq')
-print result
+c.table_list('client-test1111111-LWS2AsRVWYkIaEr9Isq')
 ```
+##### Example response
 ```
 {
     "tables": [
@@ -91,17 +107,19 @@ print result
 }
 ```
 
-## Create Table
+### Create
+When creating table, project `slug` should be passed.
+##### Example code
 ```
-result = c.table_create(
+c.table_create(
     project_id='client-test1111111-LWS2AsRVWYkIaEr9Isq',
     **{
         'name': 'test3',
         'description': 'test3',
     }
 )
-print result
 ```
+##### Example response
 ```
 {
     "project": {
@@ -114,15 +132,21 @@ print result
 }
 ```
 
-## Create Column
+***
+# Column
+### Create
+When creating column for table, project `slug` and table `slug` are necessary.
+`type` should be one of `text`, `int`, `float`
+##### Example code
 ```
-result = c.column_create(
+c.column_create(
     project_id='client-test1111111-LWS2AsRVWYkIaEr9Isq',
     table_id='test3-LWSJDcerl3f3ZSXECsC',
     **{'type': u'text', 'is_unique': False, 'display_name': u'Sangwon Column1', 'id': u'sangwon-column1'}
 )
-print result
 ```
+
+##### Example response
 ```
 {
     "message": "Column created",
@@ -130,15 +154,19 @@ print result
 }
 ```
 
-## Create Column with  Changeset ID
+### Create Column with Changeset ID
+If you know changeset id, then you can create a column multiple times under same changeset id. And then you can submit changeset for all created columns at once.
+
+##### Example code
 ```
-result = c.column_create(
+c.column_create(
     project_id='client-test1111111-LWS2AsRVWYkIaEr9Isq',
     table_id='test3-LWSJDcerl3f3ZSXECsC',
     **{'type': u'text', 'is_unique': False, 'display_name': u'Sangwon Column2', 'id': u'sangwon-column2', 'changeset_id': 72}
 )
-print result
 ```
+
+##### Example response
 ```
 {
     "message": "Column created",
@@ -146,15 +174,21 @@ print result
 }
 ```
 
-## Create Data
+***
+# Data
+### Create
+When adding data, project `slug` and table `slug` are necessary.
+
+##### Example code
 ```
-result = c.data_create(
+c.data_create(
     project_id='client-test1111111-LWS2AsRVWYkIaEr9Isq',
     table_id='test3-LWSJDcerl3f3ZSXECsC',
     **{'sangwon-column1': '1', 'sangwon-column2': '2'}
 )
-print result
 ```
+
+##### Example response
 ```
 {
     "message": "Data created",
@@ -162,15 +196,18 @@ print result
 }
 ```
 
-## Create Data with Changeset ID
+### Create Data with Changeset ID
+If you know changeset id, then you can add data multiple times under same changeset id. And then you can submit changeset for all added data at once.
+
+##### Example code
 ```
-result = c.data_create(
+c.data_create(
     project_id='client-test1111111-LWS2AsRVWYkIaEr9Isq',
     table_id='test3-LWSJDcerl3f3ZSXECsC',
     **{'sangwon-column1': '1', 'sangwon-column2': '2', 'changeset_id': 74}
 )
-print result
 ```
+##### Example response
 ```
 {
     "message": "Data created",
@@ -178,31 +215,39 @@ print result
 }
 ```
 
-## Submit Changeset
+***
+# Changeset
+### Submit Changeset
+You can submit changeset under the combination of project and table.
+
+##### Example code
 ```
-result = c.changeset_submit(
+c.changeset_submit(
     project_id='client-test1111111-LWS2AsRVWYkIaEr9Isq',
     table_id='test1-LWS2_M7GCM-Q2Xx7-kt',
     changeset_id=74,
     **{'summary': 'api test'}
 )
-print result
 ```
+##### Example response
 ```
 {
     "message": "Changeset submitted",
     "changeset_id": "74"
 }
 ```
-## Publish Changeset
+
+### Publish
+You can submit changeset under the combination of project and table.
+##### Example code
 ```
-result = c.changeset_publish(
+c.changeset_publish(
     project_id='client-test1111111-LWS2AsRVWYkIaEr9Isq',
     table_id='test1-LWS2_M7GCM-Q2Xx7-kt',
     changeset_id=74,
 )
-print result
 ```
+##### Example response
 ```
 {
     "message": "Changeset published",

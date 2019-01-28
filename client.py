@@ -86,16 +86,3 @@ class Client(object):
             json=kwargs
         )
         return result
-
-    # def create_changeset(self, table_id, summary):
-    #     result = self.api_request("tables/%s/changesets/create" % (table_id,), json={'summary': summary})
-    #     return result['id']
-
-    # def submit_changeset(self, table_id, changeset_id, summary):
-    #     result = self.api_request("tables/%s/changesets/%s/submit" % (table_id, changeset_id,), json={'summary': summary})
-    #     print "Result: %s" % (result,)
-
-    # def create_data(self, table_id, changeset_id, data):
-    #     result = self.api_request("tables/%s/changesets/%s/data/create" % (table_id, changeset_id,), json=data)
-    #     print "Result: %s" % (result,)
-
