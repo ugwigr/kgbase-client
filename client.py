@@ -3,8 +3,7 @@ import requests
 
 class Client(object):
     def __init__(self, api_key):
-        # self.base = "http://kgbase.com/api"
-        self.base = "http://0.0.0.0:8080/api"
+        self.base = "https://kgbase.com/api"
         self.api_key = api_key
 
     def create_url(self, path):
