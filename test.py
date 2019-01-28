@@ -5,7 +5,7 @@ c = client.Client('ab')
 
 # List Project
 result = c.project_list()
-print(result)
+print result
 
 # Create Project
 # result = c.project_create(**{
@@ -13,11 +13,11 @@ print(result)
 #     'description': 'client-1',
 #     'is_public': True
 # })
-# print(result)
+# print result
 
 # List Table
 # result = c.table_list('client-1-LXKLEQaTfqx-PQhONGE')
-# print(result)
+# print result
 
 # Create Table
 # result = c.table_create(
@@ -27,7 +27,7 @@ print(result)
 #         'description': 'test3',
 #     }
 # )
-# print(result)
+# print result
 
 # Create Column without changeset id
 # result = c.column_create(
@@ -35,7 +35,7 @@ print(result)
 #     table_id='test3-LXKLJd3BMnja_WbNeID',
 #     **{'type': u'text', 'is_unique': False, 'name': u'Column1'}
 # )
-# print(result)
+# print result
 
 # Create Column with changeset id
 # result = c.column_create(
@@ -43,7 +43,7 @@ print(result)
 #     table_id='test3-LXKLJd3BMnja_WbNeID',
 #     **{'type': u'text', 'is_unique': False, 'name': u'Column2', 'changeset_id': 79}
 # )
-# print(result)
+# print result
 
 # Submit changeset
 # result = c.changeset_submit(
@@ -52,7 +52,7 @@ print(result)
 #     changeset_id=79,
 #     **{'summary': 'api test'}
 # )
-# print(result)
+# print result
 
 # Publish changeset
 # result = c.changeset_publish(
@@ -60,7 +60,7 @@ print(result)
 #     table_id='test3-LXKLJd3BMnja_WbNeID',
 #     changeset_id=79,
 # )
-# print(result)
+# print result
 
 # Create data without changeset id
 # result = c.data_create(
@@ -83,7 +83,7 @@ print(result)
 #     changeset_id=87,
 #     **{'summary': 'api test'}
 # )
-# print(result)
+# print result
 
 # Publish changeset
 # result = c.changeset_publish(
@@ -91,4 +91,4 @@ print(result)
 #     table_id='test3-LXKLJd3BMnja_WbNeID',
 #     changeset_id=87,
 # )
-# print(result)
+# print result
