@@ -1,7 +1,9 @@
-# Kgbase library reference
-You should get API key first, then you can instantiate object with API key.
+# KGbase library reference
+
+To instantiate KGbase client, you will first need an API key. To get an API key for your project, open your project, click on "Collaborators" button in the upper right corner, and add an API user. Save the API key generated for this user.
 
 ##### Example code
+
 ```
 import client
 c = client.Client('API_KEY')
