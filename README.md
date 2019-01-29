@@ -15,7 +15,7 @@ c = client.Client('API_KEY')
 Project list that user created and public project will be retrieved.
 ##### Example code
 ```
-c.project_list()
+result = c.project_list()
 ```
 
 ##### Example response
@@ -54,11 +54,11 @@ c.project_list()
 User can create public or private project.
 ##### Example code
 ```
-c.project_create(**{
-    'name': 'client-test1111111',
-    'description': 'client-test1111111',
-    'is_public': True
-})
+result = c.project_create(
+    name='client-9',
+    description='client-9',
+    is_public=True,
+)
 ```
 
 ##### Example response
@@ -81,7 +81,9 @@ c.project_create(**{
 Table list of one particular project will be retrieved. Project `slug` should be passed.
 ##### Example code
 ```
-c.table_list('client-test1111111-LWS2AsRVWYkIaEr9Isq')
+result = c.table_list(
+    project_id='client-1-LXKLEQaTfqx-PQhONGE'
+)
 ```
 ##### Example response
 ```
@@ -113,12 +115,10 @@ c.table_list('client-test1111111-LWS2AsRVWYkIaEr9Isq')
 When creating table, project `slug` should be passed.
 ##### Example code
 ```
-c.table_create(
-    project_id='client-test1111111-LWS2AsRVWYkIaEr9Isq',
-    **{
-        'name': 'test3',
-        'description': 'test3',
-    }
+result = c.table_create(
+    project_id='client-1-LXKLEQaTfqx-PQhONGE',
+    name='test3',
+    description='test3',
 )
 ```
 ##### Example response
@@ -141,30 +141,12 @@ When creating column for table, project `slug` and table `slug` are necessary.
 `type` should be one of `text`, `int`, `float`
 ##### Example code
 ```
-c.column_create(
-    project_id='client-test1111111-LWS2AsRVWYkIaEr9Isq',
-    table_id='test3-LWSJDcerl3f3ZSXECsC',
-    **{'type': u'text', 'is_unique': False, 'name': u'Column1'}
-)
-```
-
-##### Example response
-```
-{
-    "message": "Column created",
-    "changeset_id": 71
-}
-```
-
-### Create Column with Changeset ID
-If you know changeset id, then you can create a column multiple times under same changeset id. And then you can submit changeset for all created columns at once.
-
-##### Example code
-```
-c.column_create(
-    project_id='client-test1111111-LWS2AsRVWYkIaEr9Isq',
-    table_id='test3-LWSJDcerl3f3ZSXECsC',
-    **{'type': u'text', 'is_unique': False, 'name': u'Column2', 'changeset_id': 72}
+result = c.column_create(
+    table_id='test3-LXKLJd3BMnja_WbNeID',
+    name='Column1',
+    column_type='text',
+    is_unique=False,
+    changeset_id=79,
 )
 ```
 
@@ -183,32 +165,13 @@ When adding data, project `slug` and table `slug` are necessary.
 
 ##### Example code
 ```
-c.data_create(
-    project_id='client-test1111111-LWS2AsRVWYkIaEr9Isq',
-    table_id='test3-LWSJDcerl3f3ZSXECsC',
-    **{'Column1': '1', 'Column2': '2'}
+result = c.data_create(
+    table_id='test3-LXKLJd3BMnja_WbNeID',
+    data={'Column1': '1', 'Column2': '2'},
+    changeset_id=87
 )
 ```
 
-##### Example response
-```
-{
-    "message": "Data created",
-    "changeset_id": 74
-}
-```
-
-### Create Data with Changeset ID
-If you know changeset id, then you can add data multiple times under same changeset id. And then you can submit changeset for all added data at once.
-
-##### Example code
-```
-c.data_create(
-    project_id='client-test1111111-LWS2AsRVWYkIaEr9Isq',
-    table_id='test3-LWSJDcerl3f3ZSXECsC',
-    **{'Column1': '1', 'Column2': '2', 'changeset_id': 74}
-)
-```
 ##### Example response
 ```
 {
@@ -224,11 +187,10 @@ You can submit changeset under the combination of project and table.
 
 ##### Example code
 ```
-c.changeset_submit(
-    project_id='client-test1111111-LWS2AsRVWYkIaEr9Isq',
-    table_id='test1-LWS2_M7GCM-Q2Xx7-kt',
-    changeset_id=74,
-    **{'summary': 'api test'}
+result = c.changeset_submit(
+    table_id='test3-LXKLJd3BMnja_WbNeID',
+    changeset_id=87,
+    summary='API Test'
 )
 ```
 ##### Example response
@@ -243,10 +205,9 @@ c.changeset_submit(
 You can submit changeset under the combination of project and table.
 ##### Example code
 ```
-c.changeset_publish(
-    project_id='client-test1111111-LWS2AsRVWYkIaEr9Isq',
-    table_id='test1-LWS2_M7GCM-Q2Xx7-kt',
-    changeset_id=74,
+result = c.changeset_publish(
+    table_id='test3-LXKLJd3BMnja_WbNeID',
+    changeset_id=87,
 )
 ```
 ##### Example response

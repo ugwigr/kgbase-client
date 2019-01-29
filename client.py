@@ -6,7 +6,7 @@ class Client(object):
         if base:
             self.base = base
         else:
-            self.base = "https://kgbase.com/api"
+            self.base = "http://0.0.0.0:8181/api"
         self.api_key = api_key
 
     def create_url(self, path):
@@ -22,8 +22,10 @@ class Client(object):
         if response.status_code == 200:
             return response.json()
         else:
-            # print(response.text)
-            raise Exception("unexpected status code %s" % (response.status_code,))
+            return {
+                'status_code': response.status_code,
+                'message': response.json().get('message')
+            }
 
     def project_list(self):
         result = self.api_request(
@@ -32,35 +34,45 @@ class Client(object):
         )
         return result
 
-    def project_create(self, **kwargs):
+    def project_create(self, name, description, is_public):
         result = self.api_request(
             path="projects/create",
             method='POST',
-            json=kwargs
+            json={
+                'name': name,
+                'description': description,
+                'is_public': is_public,
+            }
         )
         return result
 
-    def table_list(self, project_id, **kwargs):
+    def table_list(self, project_id):
         result = self.api_request(
             path="projects/%s/tables" % (project_id,),
             method='GET',
-            json=kwargs
         )
         return result
 
-    def table_create(self, project_id, **kwargs):
+    def table_create(self, project_id, name, description):
         result = self.api_request(
             path="projects/%s/tables/create" % (project_id,),
             method='POST',
-            json=kwargs
+            json={
+                'name': name,
+                'description': description,
+            }
         )
         return result
 
-    def column_create(self, table_id, **kwargs):
+    def column_create(self, table_id, name, column_type, is_unique, changeset_id):
         result = self.api_request(
-            path="tables/%s/columns/create" % (table_id,),
+            path="tables/%s/changesets/%s/columns/create" % (table_id, changeset_id),
             method='POST',
-            json=kwargs
+            json={
+                'name': name,
+                'type': column_type,
+                'is_unique': is_unique,
+            }
         )
         return result
 
@@ -74,7 +86,7 @@ class Client(object):
         )
         return result['rows']
 
-    def data_create(self, table_id, changeset_id, data):
+    def data_create(self, table_id, data, changeset_id):
         result = self.api_request(
             path="tables/%s/changesets/%s/data/create" % (table_id, changeset_id,),
             method='POST',
@@ -114,7 +126,7 @@ class Client(object):
 
     def changeset_publish(self, table_id, changeset_id):
         result = self.api_request(
-            path="tables/%s/changesets/%s/publish" % (project_id, table_id, changeset_id,),
+            path="tables/%s/changesets/%s/publish" % (table_id, changeset_id,),
             method='POST',
         )
         return result
