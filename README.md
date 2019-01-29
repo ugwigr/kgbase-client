@@ -141,12 +141,17 @@ When creating column for table, project `slug` and table `slug` are necessary.
 `type` should be one of `text`, `int`, `float`
 ##### Example code
 ```
+result = c.changeset_create(
+    table_id='test3-LXQ3HYMDRjzTYMjY5Js',
+)
+changeset_id = result['changeset']['id']
+
 result = c.column_create(
     table_id='test3-LXKLJd3BMnja_WbNeID',
     name='Column1',
     column_type='text',
     is_unique=False,
-    changeset_id=79,
+    changeset_id=changeset_id,
 )
 ```
 
@@ -165,10 +170,15 @@ When adding data, project `slug` and table `slug` are necessary.
 
 ##### Example code
 ```
+result = c.changeset_create(
+    table_id='test3-LXQ3HYMDRjzTYMjY5Js',
+)
+changeset_id = result['changeset']['id']
+
 result = c.data_create(
     table_id='test3-LXKLJd3BMnja_WbNeID',
     data={'Column1': '1', 'Column2': '2'},
-    changeset_id=87
+    changeset_id=changeset_id
 )
 ```
 

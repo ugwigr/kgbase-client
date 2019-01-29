@@ -111,8 +111,7 @@ class Client(object):
             method='POST',
             json=kwargs,
         )
-
-        return result['id']
+        return result
 
     def changeset_submit(self, table_id, changeset_id, summary=None):
         result = self.api_request(
