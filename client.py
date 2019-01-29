@@ -22,8 +22,7 @@ class Client(object):
         if response.status_code == 200:
             return response.json()
         else:
-            with open('error.html', 'w') as file:
-                file.write(response.text)
+            # print(response.text)
             raise Exception("unexpected status code %s" % (response.status_code,))
 
     def project_list(self):
@@ -64,6 +63,16 @@ class Client(object):
             json=kwargs
         )
         return result
+
+    def data_list(self, table_id, filters=None):
+        result = self.api_request(
+            path="tables/%s/data/list" % (table_id,),
+            method='POST',
+            json={
+                'filters': filters,
+            }
+        )
+        return result['rows']
 
     def data_create(self, table_id, changeset_id, data):
         result = self.api_request(

@@ -39,8 +39,12 @@ class GithubLoader(object):
         print("Created changeset with ID: %s" % (changeset_id,))
 
         for issue in issues:
-            print("Created at: %s" % (issue.created_at,))
-            print("Updated at: %s" % (issue.updated_at,))
+            # First, let's try to find an existing record
+            records = self.client.data_list(table_id, filters={
+                'Number': issue.number,
+            })
+
+            print("Existing records: %s" % (records,))
 
             self.client.data_create(table_id, changeset_id, {
                 'Title': issue.title,
@@ -48,6 +52,7 @@ class GithubLoader(object):
                 'Assignees': ', '.join([a.login for a in issue.assignees]),
                 'Created at': str(issue.created_at),
                 'Updated at': str(issue.updated_at),
+                'Link': issue.url,
             })
 
         self.client.changeset_submit(table_id, changeset_id)
