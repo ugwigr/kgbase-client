@@ -82,6 +82,17 @@ class Client(object):
         )
         return result
 
+    def data_destroy(self, table_id, changeset_id, filters=None):
+        result = self.api_request(
+            path="tables/%s/changesets/%s/data/destroy" % (table_id, changeset_id,),
+            method='POST',
+            json={
+                'filters': filters,
+            }
+        )
+
+        return result
+
     def changeset_create(self, table_id, **kwargs):
         result = self.api_request(
             path="tables/%s/changesets/create" % (table_id),

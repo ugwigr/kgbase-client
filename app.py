@@ -7,8 +7,8 @@ class GithubLoader(object):
         self.github = Github("e65a450c670366efa4811ff55c7d96bf89bcf19e")
         self.repo = self.github.get_repo("thinknum/thinknum_base")
 
-        self.client = Client("ekoknrzv45k38qeh", base="http://127.0.0.1:8000/api")
-        # self.client = Client("20g6qla0yb15qzjz")
+        # self.client = Client("ekoknrzv45k38qeh", base="http://127.0.0.1:8000/api")
+        self.client = Client("20g6qla0yb15qzjz")
 
     def find_issues(self, user):
         label_high_priority = self.repo.get_label("Priority: High")
@@ -32,12 +32,15 @@ class GithubLoader(object):
 
         # Copy into Metabase
 
-        table_id = "frontend-issues-LXNjNZ39V5E5-QhCal7"
-        # table_id = "frontend-issues-LXPEI2mxjV6cI2nGGcn"
+        # table_id = "frontend-issues-LXNjNZ39V5E5-QhCal7"
+        table_id = "frontend-issues-LXPEI2mxjV6cI2nGGcn"
 
         changeset_id = self.client.changeset_create(table_id, summary="Loading frontend issues from GitHub")
 
         print("Created changeset with ID: %s" % (changeset_id,))
+
+        # First, we remove all existing data in this changeset
+        self.client.data_destroy(table_id, changeset_id, filters={})
 
         for issue in issues:
             # First, let's try to find an existing record
