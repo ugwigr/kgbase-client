@@ -2,8 +2,11 @@ import requests
 
 
 class Client(object):
-    def __init__(self, api_key):
-        self.base = "https://kgbase.com/api"
+    def __init__(self, api_key, base=None):
+        if base:
+            self.base = base
+        else:
+            self.base = "https://kgbase.com/api"
         self.api_key = api_key
 
     def create_url(self, path):
@@ -40,7 +43,7 @@ class Client(object):
 
     def table_list(self, project_id, **kwargs):
         result = self.api_request(
-            path="projects/%s/tables" % (project_id,), 
+            path="projects/%s/tables" % (project_id,),
             method='GET',
             json=kwargs
         )
@@ -53,7 +56,7 @@ class Client(object):
             json=kwargs
         )
         return result
-    
+
     def column_create(self, project_id, table_id, **kwargs):
         result = self.api_request(
             path="projects/%s/tables/%s/columns/create" % (project_id, table_id,),
@@ -61,15 +64,24 @@ class Client(object):
             json=kwargs
         )
         return result
-    
-    def data_create(self, project_id, table_id, **kwargs):
+
+    def data_create(self, table_id, changeset_id, data):
         result = self.api_request(
-            path="projects/%s/tables/%s/data/create" % (project_id, table_id,),
+            path="tables/%s/changesets/%s/data/create" % (table_id, changeset_id,),
             method='POST',
-            json=kwargs
+            json=data
         )
         return result
-    
+
+    def changeset_create(self, table_id, **kwargs):
+        result = self.api_request(
+            path="tables/%s/changesets/create" % (table_id),
+            method='POST',
+            json=kwargs,
+        )
+
+        return result['id']
+
     def changeset_submit(self, project_id, table_id, changeset_id, **kwargs):
         result = self.api_request(
             path="projects/%s/tables/%s/changesets/%s/submit" % (project_id, table_id, changeset_id,),
@@ -77,7 +89,7 @@ class Client(object):
             json=kwargs
         )
         return result
-    
+
     def changeset_publish(self, project_id, table_id, changeset_id, **kwargs):
         result = self.api_request(
             path="projects/%s/tables/%s/changesets/%s/publish" % (project_id, table_id, changeset_id,),
