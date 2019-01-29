@@ -29,7 +29,6 @@ class GithubLoader(object):
 
         print "Total issues count: %s" % (len(issues),)
 
-
         # Copy into Metabase
 
         project_id = "github-LVjeOIJl4LOxN2DK0f1"
@@ -37,13 +36,18 @@ class GithubLoader(object):
 
         changeset_id = self.client.changeset_create(table_id, summary="Loading frontend issues from GitHub")
 
-        print("Response from creating changeset: %s" % (changeset_id,))
+        print("Created changeset with ID: %s" % (changeset_id,))
 
         for issue in issues:
+            print("Created at: %s" % (issue.created_at,))
+            print("Updated at: %s" % (issue.updated_at,))
+
             self.client.data_create(table_id, changeset_id, {
                 'Title': issue.title,
                 'Number': issue.number,
                 'Assignees': ', '.join([a.login for a in issue.assignees]),
+                'Created at': str(issue.created_at),
+                'Updated at': str(issue.updated_at),
             })
 
         self.client.changeset_submit(table_id, changeset_id)
