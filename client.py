@@ -57,9 +57,9 @@ class Client(object):
         )
         return result
 
-    def column_create(self, project_id, table_id, **kwargs):
+    def column_create(self, table_id, **kwargs):
         result = self.api_request(
-            path="projects/%s/tables/%s/columns/create" % (project_id, table_id,),
+            path="tables/%s/columns/create" % (table_id,),
             method='POST',
             json=kwargs
         )
@@ -82,17 +82,17 @@ class Client(object):
 
         return result['id']
 
-    def changeset_submit(self, project_id, table_id, changeset_id, **kwargs):
+    def changeset_submit(self, table_id, changeset_id):
         result = self.api_request(
-            path="projects/%s/tables/%s/changesets/%s/submit" % (project_id, table_id, changeset_id,),
+            path="tables/%s/changesets/%s/submit" % (table_id, changeset_id,),
             method='POST',
             json=kwargs
         )
         return result
 
-    def changeset_publish(self, project_id, table_id, changeset_id, **kwargs):
+    def changeset_publish(self, table_id, changeset_id):
         result = self.api_request(
-            path="projects/%s/tables/%s/changesets/%s/publish" % (project_id, table_id, changeset_id,),
+            path="tables/%s/changesets/%s/publish" % (project_id, table_id, changeset_id,),
             method='POST',
             json=kwargs
         )
