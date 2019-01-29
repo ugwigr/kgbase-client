@@ -46,7 +46,7 @@ class GithubLoader(object):
                 'Assignees': ', '.join([a.login for a in issue.assignees]),
             })
 
-        self.client.changeset_submit(project_id, table_id, changeset_id)
+        self.client.changeset_submit(table_id, changeset_id)
 
 loader = GithubLoader()
 loader.load()
