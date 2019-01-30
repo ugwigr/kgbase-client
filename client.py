@@ -76,9 +76,9 @@ class Client(object):
         )
         return result
 
-    def data_list(self, table_id, filters=None):
+    def data_list(self, changeset_id, table_id, filters=None):
         result = self.api_request(
-            path="tables/%s/data/list" % (table_id,),
+            path="changesets/%s/tables/%s/data/list" % (changeset_id, table_id,),
             method='POST',
             json={
                 'filters': filters,
@@ -86,17 +86,25 @@ class Client(object):
         )
         return result['rows']
 
-    def data_create(self, table_id, data, changeset_id):
+    def data_create(self, changeset_id, table_id, data):
         result = self.api_request(
-            path="tables/%s/changesets/%s/data/create" % (table_id, changeset_id,),
+            path="changesets/%s/tables/%s/data/create" % (changeset_id, table_id,),
             method='POST',
             json=data
         )
         return result
 
-    def data_destroy(self, table_id, changeset_id, filters=None):
+    def data_update(self, changeset_id, table_id, row_id, data):
         result = self.api_request(
-            path="tables/%s/changesets/%s/data/destroy" % (table_id, changeset_id,),
+            path="changesets/%s/tables/%s/data/%s/update" % (changeset_id, table_id, row_id,),
+            method='POST',
+            json=data
+        )
+        return result
+
+    def data_destroy(self, changeset_id, table_id, filters=None):
+        result = self.api_request(
+            path="tables/%s/changesets/%s/data/destroy" % (changeset_id, table_id,),
             method='POST',
             json={
                 'filters': filters,
@@ -105,17 +113,19 @@ class Client(object):
 
         return result
 
-    def changeset_create(self, table_id, **kwargs):
+    def changeset_create(self, project_id, summary=None):
         result = self.api_request(
-            path="tables/%s/changesets/create" % (table_id),
+            path="projects/%s/changesets/create" % (project_id),
             method='POST',
-            json=kwargs,
+            json={
+                'summary': summary,
+            },
         )
         return result
 
-    def changeset_submit(self, table_id, changeset_id, summary=None):
+    def changeset_submit(self, changeset_id, summary=None):
         result = self.api_request(
-            path="tables/%s/changesets/%s/submit" % (table_id, changeset_id,),
+            path="changesets/%s/submit" % (changeset_id,),
             method='POST',
             json={
                 'summary': summary,
@@ -123,9 +133,9 @@ class Client(object):
         )
         return result
 
-    def changeset_publish(self, table_id, changeset_id):
+    def changeset_publish(self, changeset_id):
         result = self.api_request(
-            path="tables/%s/changesets/%s/publish" % (table_id, changeset_id,),
+            path="changesets/%s/publish" % (changeset_id,),
             method='POST',
         )
         return result
