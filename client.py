@@ -93,18 +93,20 @@ class Client(object):
 
         return result
 
-    def changeset_create(self, table_id, **kwargs):
+    def changeset_create(self, project_id, summary=None):
         result = self.api_request(
-            path="tables/%s/changesets/create" % (table_id),
+            path="projects/%s/changesets/create" % (project_id),
             method='POST',
-            json=kwargs,
+            json={
+                'summary': summary,
+            },
         )
 
         return result['id']
 
-    def changeset_submit(self, table_id, changeset_id, summary=None):
+    def changeset_submit(self, changeset_id, summary=None):
         result = self.api_request(
-            path="tables/%s/changesets/%s/submit" % (table_id, changeset_id,),
+            path="changesets/%s/submit" % (changeset_id,),
             method='POST',
             json={
                 'summary': summary,
@@ -112,9 +114,9 @@ class Client(object):
         )
         return result
 
-    def changeset_publish(self, table_id, changeset_id):
+    def changeset_publish(self, changeset_id):
         result = self.api_request(
-            path="tables/%s/changesets/%s/publish" % (project_id, table_id, changeset_id,),
+            path="changesets/%s/publish" % (changeset_id,),
             method='POST',
         )
         return result

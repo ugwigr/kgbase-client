@@ -2,13 +2,20 @@ from github import Github
 from sets import Set
 from client import Client
 
+IS_PROD = False
+
 class GithubLoader(object):
     def __init__(self):
         self.github = Github("e65a450c670366efa4811ff55c7d96bf89bcf19e")
         self.repo = self.github.get_repo("thinknum/thinknum_base")
 
-        self.client = Client("ekoknrzv45k38qeh", base="http://127.0.0.1:8000/api")
-        # self.client = Client("20g6qla0yb15qzjz")
+        if IS_PROD:
+            self.client = Client("20g6qla0yb15qzjz")
+            self.issues_table = "frontend-issues-LXPEI2mxjV6cI2nGGcn"
+        else:
+            self.client = Client("ekoknrzv45k38qeh", base="http://127.0.0.1:8000/api")
+            self.project = "github-LVjeOIJl4LOxN2DK0f1"
+            self.issues_table = "frontend-issues-LXNjNZ39V5E5-QhCal7"
 
     def find_issues(self, user):
         label_high_priority = self.repo.get_label("Priority: High")
@@ -30,27 +37,22 @@ class GithubLoader(object):
 
         print "Total issues count: %s" % (len(issues),)
 
-        # Copy into Metabase
-
-        table_id = "frontend-issues-LXNjNZ39V5E5-QhCal7"
-        # table_id = "frontend-issues-LXPEI2mxjV6cI2nGGcn"
-
-        changeset_id = self.client.changeset_create(table_id, summary="Loading frontend issues from GitHub")
+        changeset_id = self.client.changeset_create(project_id=self.project, summary="Loading frontend issues from GitHub")
 
         print("Created changeset with ID: %s" % (changeset_id,))
 
         # First, we remove all existing data in this changeset
-        self.client.data_destroy(table_id, changeset_id, filters={})
+        # self.client.data_destroy(self.issues_table, changeset_id, filters={})
 
         for issue in issues:
             # First, let's try to find an existing record
-            records = self.client.data_list(table_id, filters={
+            records = self.client.data_list(self.issues_table, filters={
                 'Number': issue.number,
             })
 
             print("Existing records: %s" % (records,))
 
-            self.client.data_create(table_id, changeset_id, {
+            self.client.data_create(self.issues_table, changeset_id, {
                 'Title': issue.title,
                 'Number': issue.number,
                 'Assignees': ', '.join([a.login for a in issue.assignees]),
@@ -59,7 +61,7 @@ class GithubLoader(object):
                 'Link': issue.html_url,
             })
 
-        self.client.changeset_submit(table_id, changeset_id)
+        self.client.changeset_submit(changeset_id)
 
 loader = GithubLoader()
 loader.load()
