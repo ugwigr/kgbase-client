@@ -64,9 +64,9 @@ class Client(object):
         )
         return result
 
-    def data_list(self, table_id, filters=None):
+    def data_list(self, changeset_id, table_id, filters=None):
         result = self.api_request(
-            path="tables/%s/data/list" % (table_id,),
+            path="changesets/%s/tables/%s/data/list" % (changeset_id, table_id,),
             method='POST',
             json={
                 'filters': filters,
@@ -74,17 +74,17 @@ class Client(object):
         )
         return result['rows']
 
-    def data_create(self, table_id, changeset_id, data):
+    def data_create(self, changeset_id, table_id, data):
         result = self.api_request(
-            path="tables/%s/changesets/%s/data/create" % (table_id, changeset_id,),
+            path="changesets/%s/tables/%s/data/create" % (changeset_id, table_id,),
             method='POST',
             json=data
         )
         return result
 
-    def data_destroy(self, table_id, changeset_id, filters=None):
+    def data_destroy(self, changeset_id, table_id, filters=None):
         result = self.api_request(
-            path="tables/%s/changesets/%s/data/destroy" % (table_id, changeset_id,),
+            path="tables/%s/changesets/%s/data/destroy" % (changeset_id, table_id,),
             method='POST',
             json={
                 'filters': filters,
