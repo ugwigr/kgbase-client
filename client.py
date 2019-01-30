@@ -82,6 +82,14 @@ class Client(object):
         )
         return result
 
+    def data_update(self, changeset_id, table_id, row_id, data):
+        result = self.api_request(
+            path="changesets/%s/tables/%s/data/%s/update" % (changeset_id, table_id, row_id,),
+            method='POST',
+            json=data
+        )
+        return result
+
     def data_destroy(self, changeset_id, table_id, filters=None):
         result = self.api_request(
             path="tables/%s/changesets/%s/data/destroy" % (changeset_id, table_id,),

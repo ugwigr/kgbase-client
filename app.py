@@ -59,7 +59,6 @@ class GithubLoader(object):
 
         return label
 
-
     def find_label_named(self, name):
         labels = self.client.data_list(
             self.changeset_id,
@@ -77,8 +76,24 @@ class GithubLoader(object):
 
     # Issues
 
+    def find_issue_with_number(self, number):
+        issues = self.client.data_list(
+            self.changeset_id,
+            self.issues_table,
+            filters={'Number': number}
+        )
+        return next(iter(issues), None)
+
     def create_issue(self, data):
-        self.client.data_create(self.changeset_id, self.issues_table, data)
+        return self.client.data_create(self.changeset_id, self.issues_table, data)
+
+    def update_issue(self, issue_id, data):
+        self.client.data_update(
+            self.changeset_id,
+            self.issues_table,
+            issue_id,
+            data
+        )
 
 
     # Main load method
@@ -99,7 +114,7 @@ class GithubLoader(object):
                 label = self.find_or_create_label(issue_label.name)
                 label_id = label['id']
 
-            self.create_issue({
+            data = {
                 'Title': issue.title,
                 'Number': issue.number,
                 'Assignees': ', '.join([a.login for a in issue.assignees]),
@@ -107,7 +122,14 @@ class GithubLoader(object):
                 'Updated at': str(issue.updated_at),
                 'Link': issue.html_url,
                 'Label': label_id,
-            })
+            }
+
+            existing_issue = self.find_issue_with_number(issue.number)
+
+            if existing_issue:
+                self.update_issue(existing_issue['id'], data)
+            else:
+                self.create_issue(data)
 
         self.submit_changeset()
 
