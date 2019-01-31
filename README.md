@@ -25,11 +25,10 @@ result = c.project_list()
         {
             "id": 14,
             "is_public": False,
-            "slug": "sangwon-LWOM0kLMCNCMUJPK6Eh",
-            "name": "sangwon",
-            "description": "sangwon"
+            "slug": "client-LWOM0kLMCNCMUJPK6Eh",
+            "name": "client",
+            "description": "client"
         },
-        
     ],
     "public_projects": [
         {
@@ -59,6 +58,7 @@ result = c.project_create(
     description='client-9',
     is_public=True,
 )
+project_id = result['project']['slug']
 ```
 
 ##### Example response
@@ -120,6 +120,7 @@ result = c.table_create(
     name='test3',
     description='test3',
 )
+table_id = result['table']['slug']
 ```
 ##### Example response
 ```
@@ -142,13 +143,22 @@ When creating column for table, project `slug` and table `slug` are necessary.
 ##### Example code
 ```
 result = c.changeset_create(
-    table_id='test3-LXQ3HYMDRjzTYMjY5Js',
+    project_id=project_id,
+    summary='summary'
 )
-changeset_id = result['changeset']['id']
+changeset_id = result['id']
 
 result = c.column_create(
-    table_id='test3-LXKLJd3BMnja_WbNeID',
+    table_id=table_id,
     name='Column1',
+    column_type='text',
+    is_unique=False,
+    changeset_id=changeset_id,
+)
+
+result = c.column_create(
+    table_id=table_id,
+    name='Column2',
     column_type='text',
     is_unique=False,
     changeset_id=changeset_id,
@@ -161,33 +171,163 @@ result = c.column_create(
     "message": "Column created",
     "changeset_id": 71
 }
+{
+    "message": "Column created",
+    "changeset_id": 72
+}
 ```
 
 ***
 # Data
+
 ### Create
 When adding data, project `slug` and table `slug` are necessary.
 
 ##### Example code
 ```
 result = c.changeset_create(
-    table_id='test3-LXQ3HYMDRjzTYMjY5Js',
+    project_id=project_id,
+    summary='summary'
 )
-changeset_id = result['changeset']['id']
+changeset_id = result['id']
 
 result = c.data_create(
-    table_id='test3-LXKLJd3BMnja_WbNeID',
+    table_id=table_id,
     data={'Column1': '1', 'Column2': '2'},
     changeset_id=changeset_id
 )
+print (result)
+
+result = c.data_create(
+    table_id=table_id,
+    data={'Column1': '3', 'Column2': '4'},
+    changeset_id=changeset_id
+)
+print (result)
+
+result = c.data_create(
+    table_id=table_id,
+    data={'Column1': '5', 'Column2': '6'},
+    changeset_id=changeset_id
+)
+print (result)
+
+# Submit changeset
+result = c.changeset_submit(
+    changeset_id=changeset_id,
+    summary='API Test'
+)
+print (result)
+
+# Publish changeset
+result = c.changeset_publish(
+    changeset_id=changeset_id,
+)
+print (result)
 ```
 
 ##### Example response
 ```
 {
-    "message": "Data created",
-    "changeset_id": 74
+    'id': 109, 
+    'branch_name': 'raphaelseo@gmail.com-LXXjKzYnFXEw4TIafXV', 
+    'summary': 'summary'
 }
+{'Column1': '1', 'Column2': '2', 'id': 'row-LXXjKhgZnysClIhLnsf'}
+{'Column1': '3', 'Column2': '4', 'id': 'row-LXXjKkHqzLv6r6zw_N0'}
+{'Column1': '5', 'Column2': '6', 'id': 'row-LXXjKms5_YEzKMYBkcY'}
+```
+
+### List
+##### Example code
+```
+result = c.data_list(
+    changeset_id=changeset_id,
+    table_id=table_id,
+)
+print(result)
+```
+
+##### Example response
+```
+{
+    'rows': [
+        {'Column1': '1', 'Column2': '2', 'id': 'row-LXXjKhgZnysClIhLnsf'},
+        {'Column1': '3', 'Column2': '4', 'id': 'row-LXXjKkHqzLv6r6zw_N0'},
+        {'Column1': '5', 'Column2': '6', 'id': 'row-LXXjKms5_YEzKMYBkcY'}
+    ]
+}
+```
+
+### Update
+##### Example code
+```
+# Create changeset
+result = c.changeset_create(
+    project_id=project_id,
+    summary='summary'
+)
+changeset_id = result['id']
+
+result = c.data_update(
+    changeset_id=changeset_id,
+    table_id=table_id,
+    row_id=row2,
+    data={'Column1': '7', 'Column2': '8'},
+)
+print(result)
+
+# Submit changeset
+result = c.changeset_submit(
+    changeset_id=changeset_id,
+    summary='API Test'
+)
+print (result)
+
+# Publish changeset
+result = c.changeset_publish(
+    changeset_id=changeset_id,
+)
+print (result)
+```
+
+##### Example response
+```
+{'Column1': '7', 'Column2': '8', 'id': 'row-LXXoLJM-J0J2SCN-sma'}
+```
+
+### Delete
+##### Example code
+```
+# Create changeset
+result = c.changeset_create(
+    project_id=project_id,
+    summary='summary'
+)
+changeset_id = result['id']
+
+result = c.data_destroy(
+    changeset_id=changeset_id,
+    table_id=table_id,
+)
+
+# Submit changeset
+result = c.changeset_submit(
+    changeset_id=changeset_id,
+    summary='API Test'
+)
+print (result)
+
+# Publish changeset
+result = c.changeset_publish(
+    changeset_id=changeset_id,
+)
+print (result)
+```
+
+##### Example response
+```
+{}
 ```
 
 ***
