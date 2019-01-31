@@ -2,15 +2,13 @@ import requests
 
 
 class Client(object):
-    def __init__(self, api_key, base=None):
+    def __init__(self, api_key, base='https://kgbase.com/api'):
         '''
         Args:
             api_key - User API Key
+            base - https://kgbase.com/api (default)
         '''
-        if base:
-            self.base = base
-        else:
-            self.base = "http://0.0.0.0:8181/api"
+        self.base = base
         self.api_key = api_key
 
     def create_url(self, path):
@@ -123,7 +121,7 @@ class Client(object):
         )
         return result
 
-    def column_create(self, table_id, name, column_type, is_unique, changeset_id):
+    def column_create(self, table_id, name, column_type, is_unique, changeset_id, target_table=None):
         '''
         Args:
             table_id
@@ -131,6 +129,7 @@ class Client(object):
             column_type
             is_unique
             changeset_id
+            target_table (optional)
         
         Returns:
             changeset_id
@@ -142,6 +141,11 @@ class Client(object):
                 'name': name,
                 'type': column_type,
                 'is_unique': is_unique,
+            } if column_type != 'foreign_key' else {
+                'name': name,
+                'type': column_type,
+                'is_unique': is_unique,
+                'target_table': target_table,
             }
         )
         return result
