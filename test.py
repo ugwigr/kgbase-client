@@ -12,7 +12,7 @@ import client
  Lukas         | ZmKXnldT8R
 '''
 
-c = client.Client('ab')
+c = client.Client("w2gJRyzNwB", base="http://127.0.0.1:8000/api")
 
 # 1. Project
 # List Project
@@ -21,8 +21,8 @@ print (result)
 
 # Create Project
 result = c.project_create(
-    name='client-25',
-    description='client-25',
+    name='client-26',
+    description='client-26',
     is_public=True,
 )
 print(result)
