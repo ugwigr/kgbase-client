@@ -1,1 +1,1 @@
-from client import Client as client
+from kgbase_client.client import Client as client
