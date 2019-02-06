@@ -7,6 +7,6 @@ setup(
     url='https://github.com/thinknum/kgbase-client',
     packages=['kgbase-client'],
     package_dir={
-      'kgbase': 'kgbase-client/',
+      'kgbase-client': 'kgbase-client/',
     },
 )
