@@ -1,18 +1,6 @@
 import client
 
-'''
-     name      |     api_key
----------------+------------------
- Api User      | 20g6qla0yb15qzjz
- Vojtech Rinik | hPipFgouHl
- Api User      | oyzkv4vy3cci5cbw
- Gregory Ugwi  | ttFRvyGBU5
- Api User      | ttsejo1uh45dvf0n
- Sangwon Seo   | w2gJRyzNwB
- Lukas         | ZmKXnldT8R
-'''
-
-c = client.Client("w2gJRyzNwB", base="http://127.0.0.1:8000/api")
+c = client.Client("API_KEY", base="http://127.0.0.1:8000/api")
 
 # 1. Project
 # List Project

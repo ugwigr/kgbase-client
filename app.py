@@ -4,17 +4,6 @@ import time
 
 IS_PROD = False
 
-'''
-     name      |     api_key
----------------+------------------
- Api User      | 20g6qla0yb15qzjz
- Vojtech Rinik | hPipFgouHl
- Api User      | oyzkv4vy3cci5cbw
- Gregory Ugwi  | ttFRvyGBU5
- Api User      | ttsejo1uh45dvf0n
- Sangwon Seo   | w2gJRyzNwB
- Lukas         | ZmKXnldT8R
-'''
 
 class GithubLoader(object):
     def __init__(self):
@@ -22,10 +11,10 @@ class GithubLoader(object):
         self.repo = self.github.get_repo("thinknum/thinknum_base")
 
         if IS_PROD:
-            self.client = Client("20g6qla0yb15qzjz")
+            self.client = Client("API_KEY">)
             self.issues_table = "frontend-issues-LXPEI2mxjV6cI2nGGcn"
         else:
-            self.client = Client("w2gJRyzNwB", base="http://127.0.0.1:8000/api")
+            self.client = Client("API_KEY", base="http://127.0.0.1:8000/api")
             self.project = "test-github-frontend-issue5-LX_Mdum73eyjJGBYvgA"
             self.issues_table = "issues-LX_MeCWsfM7iJSob3gn"
             self.labels_table = "labels-LX_MdvCyqw1HE5n0CGv"
