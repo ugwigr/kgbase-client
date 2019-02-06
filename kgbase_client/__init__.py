@@ -1,1 +1,0 @@
-from kgbase_client.client import Client
