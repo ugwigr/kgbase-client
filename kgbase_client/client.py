@@ -150,7 +150,7 @@ class Client(object):
         )
         return result
 
-    def data_list(self, changeset_id, table_id, filters=None):
+    def record_list(self, changeset_id=None, table_id=None, filters=None):
         '''
         Args:
             changeset_id
@@ -160,52 +160,61 @@ class Client(object):
         Returns:
             rows
         '''
-        result = self.api_request(
-            path="changesets/%s/tables/%s/data/list" % (changeset_id, table_id,),
-            method='POST',
-            json={
-                'filters': filters,
-            }
-        )
+        if not changeset_id:
+            result = self.api_request(
+                path="tables/%s/record/list" % (table_id,),
+                method='POST',
+                json={
+                    'filters': filters,
+                }
+            )
+        else:
+            result = self.api_request(
+                path="changesets/%s/tables/%s/record/list" % (changeset_id, table_id,),
+                method='POST',
+                json={
+                    'filters': filters,
+                }
+            )
         return result
 
-    def data_create(self, changeset_id, table_id, data):
+    def record_create(self, changeset_id, table_id, record):
         '''
         Args:
             changeset_id
             table_id
-            data
+            record
         
         Return
-            data
+            record
             id
         '''
         result = self.api_request(
-            path="changesets/%s/tables/%s/data/create" % (changeset_id, table_id,),
+            path="changesets/%s/tables/%s/record/create" % (changeset_id, table_id,),
             method='POST',
-            json=data
+            json=record
         )
         return result
 
-    def data_update(self, changeset_id, table_id, row_id, data):
+    def record_update(self, changeset_id, table_id, row_id, record):
         '''
         Args:
             changeset_id
             table_id
             row_id
-            data
+            record
         Return
-            data
+            record
             id
         '''
         result = self.api_request(
-            path="changesets/%s/tables/%s/data/%s/update" % (changeset_id, table_id, row_id,),
+            path="changesets/%s/tables/%s/record/%s/update" % (changeset_id, table_id, row_id,),
             method='POST',
-            json=data
+            json=record
         )
         return result
 
-    def data_destroy(self, changeset_id, table_id, filters=None):
+    def record_destroy(self, changeset_id, table_id, filters=None):
         '''
         Args:
             changeset_id
@@ -216,7 +225,7 @@ class Client(object):
         '''
 
         result = self.api_request(
-            path="changesets/%s/tables/%s/data/destroy" % (changeset_id, table_id,),
+            path="changesets/%s/tables/%s/record/destroy" % (changeset_id, table_id,),
             method='POST',
             json={
                 'filters': filters,
