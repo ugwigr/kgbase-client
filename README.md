@@ -20,33 +20,29 @@ result = c.project_list()
 
 ##### Example response
 ```
-{
-    "user_projects": [
-        {
-            "id": 14,
-            "is_public": False,
-            "slug": "client-LWOM0kLMCNCMUJPK6Eh",
-            "name": "client",
-            "description": "client"
-        },
-    ],
-    "public_projects": [
-        {
-            "id": 3,
-            "is_public": True,
-            "slug": "test2-LU7kokaeJ10BZKmtuvJ",
-            "name": "test2",
-            "description": "test2"
-        },
-        {
-            "id": 4,
-            "is_public": True,
-            "slug": "test3-LU7l8JCT3SlKnQYLiu4",
-            "name": "test3",
-            "description": "test3"
-        },
-    ]
-}
+[
+    {
+        "id": 14,
+        "is_public": False,
+        "slug": "client-LWOM0kLMCNCMUJPK6Eh",
+        "name": "client",
+        "description": "client"
+    },
+    {
+        "id": 3,
+        "is_public": True,
+        "slug": "test2-LU7kokaeJ10BZKmtuvJ",
+        "name": "test2",
+        "description": "test2"
+    },
+    {
+        "id": 4,
+        "is_public": True,
+        "slug": "test3-LU7l8JCT3SlKnQYLiu4",
+        "name": "test3",
+        "description": "test3"
+    },
+]
 ```
 
 ### Create
@@ -87,28 +83,26 @@ result = c.table_list(
 ```
 ##### Example response
 ```
-{
-    "tables": [
-        {
-            "repository_name": "test3-LWSJDcerl3f3ZSXECsC",
-            "slug": "test3-LWSJDcerl3f3ZSXECsC",
-            "description": "test3",
-            "name": "test3"
-        },
-        {
-            "repository_name": "test2-LWSInRQSfJkLcySckjN",
-            "slug": "test2-LWSInRQSfJkLcySckjN",
-            "description": "test2",
-            "name": "test2"
-        },
-        {
-            "repository_name": "test1-LWS2_M7GCM-Q2Xx7-kt",
-            "slug": "test1-LWS2_M7GCM-Q2Xx7-kt",
-            "description": "test1",
-            "name": "test1"
-        }
-    ]
-}
+[
+    {
+        "repository_name": "test3-LWSJDcerl3f3ZSXECsC",
+        "slug": "test3-LWSJDcerl3f3ZSXECsC",
+        "description": "test3",
+        "name": "test3"
+    },
+    {
+        "repository_name": "test2-LWSInRQSfJkLcySckjN",
+        "slug": "test2-LWSInRQSfJkLcySckjN",
+        "description": "test2",
+        "name": "test2"
+    },
+    {
+        "repository_name": "test1-LWS2_M7GCM-Q2Xx7-kt",
+        "slug": "test1-LWS2_M7GCM-Q2Xx7-kt",
+        "description": "test1",
+        "name": "test1"
+    }
+]
 ```
 
 ### Create
