@@ -20,33 +20,29 @@ result = c.project_list()
 
 ##### Example response
 ```
-{
-    "user_projects": [
-        {
-            "id": 14,
-            "is_public": False,
-            "slug": "client-LWOM0kLMCNCMUJPK6Eh",
-            "name": "client",
-            "description": "client"
-        },
-    ],
-    "public_projects": [
-        {
-            "id": 3,
-            "is_public": True,
-            "slug": "test2-LU7kokaeJ10BZKmtuvJ",
-            "name": "test2",
-            "description": "test2"
-        },
-        {
-            "id": 4,
-            "is_public": True,
-            "slug": "test3-LU7l8JCT3SlKnQYLiu4",
-            "name": "test3",
-            "description": "test3"
-        },
-    ]
-}
+[
+    {
+        "id": 14,
+        "is_public": False,
+        "slug": "client-LWOM0kLMCNCMUJPK6Eh",
+        "name": "client",
+        "description": "client"
+    },
+    {
+        "id": 3,
+        "is_public": True,
+        "slug": "test2-LU7kokaeJ10BZKmtuvJ",
+        "name": "test2",
+        "description": "test2"
+    },
+    {
+        "id": 4,
+        "is_public": True,
+        "slug": "test3-LU7l8JCT3SlKnQYLiu4",
+        "name": "test3",
+        "description": "test3"
+    },
+]
 ```
 
 ### Create
@@ -87,28 +83,26 @@ result = c.table_list(
 ```
 ##### Example response
 ```
-{
-    "tables": [
-        {
-            "repository_name": "test3-LWSJDcerl3f3ZSXECsC",
-            "slug": "test3-LWSJDcerl3f3ZSXECsC",
-            "description": "test3",
-            "name": "test3"
-        },
-        {
-            "repository_name": "test2-LWSInRQSfJkLcySckjN",
-            "slug": "test2-LWSInRQSfJkLcySckjN",
-            "description": "test2",
-            "name": "test2"
-        },
-        {
-            "repository_name": "test1-LWS2_M7GCM-Q2Xx7-kt",
-            "slug": "test1-LWS2_M7GCM-Q2Xx7-kt",
-            "description": "test1",
-            "name": "test1"
-        }
-    ]
-}
+[
+    {
+        "repository_name": "test3-LWSJDcerl3f3ZSXECsC",
+        "slug": "test3-LWSJDcerl3f3ZSXECsC",
+        "description": "test3",
+        "name": "test3"
+    },
+    {
+        "repository_name": "test2-LWSInRQSfJkLcySckjN",
+        "slug": "test2-LWSInRQSfJkLcySckjN",
+        "description": "test2",
+        "name": "test2"
+    },
+    {
+        "repository_name": "test1-LWS2_M7GCM-Q2Xx7-kt",
+        "slug": "test1-LWS2_M7GCM-Q2Xx7-kt",
+        "description": "test1",
+        "name": "test1"
+    }
+]
 ```
 
 ### Create
@@ -178,10 +172,10 @@ result = c.column_create(
 ```
 
 ***
-# Data
+# Record
 
 ### Create
-When adding data, project `slug` and table `slug` are necessary.
+When adding record, project `slug` and table `slug` are necessary.
 
 ##### Example code
 ```
@@ -191,23 +185,23 @@ result = c.changeset_create(
 )
 changeset_id = result['id']
 
-result = c.data_create(
+result = c.record_create(
     table_id=table_id,
-    data={'Column1': '1', 'Column2': '2'},
+    record={'Column1': '1', 'Column2': '2'},
     changeset_id=changeset_id
 )
 print (result)
 
-result = c.data_create(
+result = c.record_create(
     table_id=table_id,
-    data={'Column1': '3', 'Column2': '4'},
+    record={'Column1': '3', 'Column2': '4'},
     changeset_id=changeset_id
 )
 print (result)
 
-result = c.data_create(
+result = c.record_create(
     table_id=table_id,
-    data={'Column1': '5', 'Column2': '6'},
+    record={'Column1': '5', 'Column2': '6'},
     changeset_id=changeset_id
 )
 print (result)
@@ -241,7 +235,24 @@ print (result)
 ### List
 ##### Example code
 ```
-result = c.data_list(
+result = c.record_list(
+    table_id=table_id,
+)
+print(result)
+
+result = c.record_list(
+    table_id=table_id,
+    filter={'Column1': ['1', '3'], 'Column2': '2'}
+)
+print(result)
+
+result = c.record_list(
+    table_id=table_id,
+    filter={'Column1': '1', 'Column2': '2'}
+)
+print(result)
+
+result = c.record_list(
     changeset_id=changeset_id,
     table_id=table_id,
 )
@@ -250,13 +261,26 @@ print(result)
 
 ##### Example response
 ```
-{
-    'rows': [
-        {'Column1': '1', 'Column2': '2', 'id': 'row-LXXjKhgZnysClIhLnsf'},
-        {'Column1': '3', 'Column2': '4', 'id': 'row-LXXjKkHqzLv6r6zw_N0'},
-        {'Column1': '5', 'Column2': '6', 'id': 'row-LXXjKms5_YEzKMYBkcY'}
-    ]
-}
+[
+    {'Column1': '1', 'Column2': '2', 'id': 'row-LXXjKhgZnysClIhLnsf'},
+    {'Column1': '3', 'Column2': '4', 'id': 'row-LXXjKkHqzLv6r6zw_N0'},
+    {'Column1': '5', 'Column2': '6', 'id': 'row-LXXjKms5_YEzKMYBkcY'}
+]
+
+[
+    {'Column1': '1', 'Column2': '2', 'id': 'row-LYhGvbh4JtiW2fSZE4i'}, 
+    {'Column1': '3', 'Column2': '4', 'id': 'row-LYhGveBDiBtyjd5hMcC'}
+]
+
+[
+    {'Column1': '1', 'Column2': '2', 'id': 'row-LYhGvbh4JtiW2fSZE4i'}, 
+]
+
+[
+    {'Column1': '1', 'Column2': '2', 'id': 'row-LXXjKhgZnysClIhLnsf'},
+    {'Column1': '3', 'Column2': '4', 'id': 'row-LXXjKkHqzLv6r6zw_N0'},
+    {'Column1': '5', 'Column2': '6', 'id': 'row-LXXjKms5_YEzKMYBkcY'}
+]
 ```
 
 ### Update
@@ -269,11 +293,11 @@ result = c.changeset_create(
 )
 changeset_id = result['id']
 
-result = c.data_update(
+result = c.record_update(
     changeset_id=changeset_id,
     table_id=table_id,
     row_id=row2,
-    data={'Column1': '7', 'Column2': '8'},
+    record={'Column1': '7', 'Column2': '8'},
 )
 print(result)
 
@@ -306,7 +330,7 @@ result = c.changeset_create(
 )
 changeset_id = result['id']
 
-result = c.data_destroy(
+result = c.record_destroy(
     changeset_id=changeset_id,
     table_id=table_id,
 )
