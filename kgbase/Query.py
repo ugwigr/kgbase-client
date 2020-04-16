@@ -20,7 +20,7 @@ class Query(object):
         self._verify = verify
 
     def _requests(self, method, data={}, json={}, params={}):
-        if method not in ['post', 'get', 'head']:
+        if method not in ['post', 'get']:
             raise Exception('Not allowed method')
         return getattr(self._session, method)(
             self.BASE_URL,
@@ -43,23 +43,29 @@ class Query(object):
         return f.read()
 
     # User & Authentication
+    # LoginUser
     def login(self, username, password):
         if not username:
             raise Exception('Username required')
         if not password:
             raise Exception('Password required')
-
         operation_name = 'LoginUser'
         response = self._requests(
             method='post',
             json={
                 "query": self._get_query(type='mutation', name=operation_name),
-                "variables": {"data": {"username": username, "password": password}},
+                "variables": {
+                    "data": {
+                        "username": username, 
+                        "password": password
+                    }
+                },
                 "operationName": operation_name
             }
         )
         return response.text
 
+    # GetUserState
     def get_user_state(self):
         operation_name = 'GetUserState'
         response = self._requests(
@@ -72,24 +78,13 @@ class Query(object):
         )
         return response.text
 
+    # LogoutUser
     def logout(self):
         operation_name = 'LogoutUser'
         response = self._requests(
             method='post',
             json={
                 "query": self._get_query(type='mutation', name=operation_name),
-                "variables": None,
-                "operationName": operation_name
-            }
-        )
-        return response.text
-
-    def function_name(self):
-        operation_name = "operation_name"
-        response = self._requests(
-            method='method',
-            json={
-                "query": self._get_query(type='type', name=operation_name),
                 "variables": None,
                 "operationName": operation_name
             }
@@ -149,23 +144,28 @@ class Query(object):
         )
         return response.text
 
-    # CreateProject - {data: {name: "Test2", isPublic: true, color: "gray"}, templateId: null}
+    # CreateProject
     def create_project(self, name, is_public=False, color="gray"):
         if not name:
             raise Exception('Name required')
-
         operation_name = 'CreateProject'
         response = self._requests(
             method='post',
             json={
                 "query": self._get_query(type='mutation', name=operation_name),
-                "variables": {"data": {"name": name, "isPublic": is_public, "color": color}},
+                "variables": {
+                    "data": {
+                        "name": name,
+                        "isPublic": is_public,
+                        "color": color
+                    }
+                },
                 "operationName": operation_name
             }
         )
         return response.text
 
-    # GetProjectState - {projectId: "ctx-M4uQHCKS5WuDm0eeNDt"}
+    # GetProjectState
     def get_project_state(self, project_id):
         if not project_id:
             raise Exception('Project ID required')
@@ -180,7 +180,7 @@ class Query(object):
         )
         return response.text
 
-    # UpdateProject - {projectId: "ctx-M4uQHCKS5WuDm0eeNDt", data: {name: "Test2323", description: "12322", isPublic: false, color: "yellow"}, name: "Test2323", description: "12322", isPublic: false, color: "yellow"}
+    # UpdateProject
     def update_project(self, project_id, name, is_public=False, color="gray"):
         if not project_id:
             raise Exception('Project ID required')
@@ -200,7 +200,7 @@ class Query(object):
         )
         return response.text
 
-    # DestroyProject - {projectId: "ctx-M4uQHCKS5WuDm0eeNDt"}
+    # DestroyProject
     def destroy_project(self, project_id):
         if not project_id:
             raise Exception('Project ID required')
@@ -215,7 +215,7 @@ class Query(object):
         )
         return response.text
 
-    # GetSchema - {context: {contextId: "ctx-M4uQHCKS5WuDm0eeNDt"}}
+    # GetSchema
     def get_schema(self, project_id):
         if not project_id:
             raise Exception('Project ID required')
@@ -229,20 +229,99 @@ class Query(object):
             }
         )
         return response.text
+    
+    # GetTask
+    def get_task(self, task_id):
+        if not task_id:
+            raise Exception('Task ID required')
+        operation_name = 'GetTask'
+        response = self._requests(
+            method='get',
+            json={
+                "query": self._get_query(type='query', name=operation_name),
+                "variables": {"taskId": task_id},
+                "operationName": operation_name
+            }
+        )
+        return response.text
 
-    # GetGraph - variables: {
-    #     context: {contextId: "ctx-M4uaGyFSWy_VCFpwaBZ"}
-    #     contextId: "ctx-M4uaGyFSWy_VCFpwaBZ"
-    #     query: {
-    #         startingVertices: [], 
-    #         labels: ["tab-M4ucjw_tyHUk-S6qayt"], 
-    #         pagination: {
-    #             label: "tab-M4ucjw_tyHUk-S6qayt", 
-    #             offset: 0, 
-    #             limit: 50
-    #         }, 
-    #         filters: []
-    #     }
+    # Table
+    # CreateTable
+    def create_table(self, project_id, display_name, description='', graph_shape="circle"):
+        if not project_id:
+            raise Exception('Project ID required')
+        if not display_name:
+            raise Exception('Display Name required')
+        operation_name = 'CreateTable'
+        response = self._requests(
+            method='post',
+            json={
+                "query": self._get_query(type='mutation', name=operation_name),
+                "variables": {
+                    "context": {"contextId": project_id}, 
+                    "data": {
+                        "displayName": display_name,
+                        "config": {
+                            "graphShape": graph_shape,
+                            "description": description
+                        }
+                    }},
+                "operationName": operation_name
+            }
+        )
+        return response.text
+
+    # UpdateTable
+    def update_table(self, project_id, table_id, display_name, description='', graph_shape="circle"):
+        if not project_id:
+            raise Exception('Project ID required')
+        if not table_id:
+            raise Exception('Table ID required')
+        if not display_name:
+            raise Exception('Display Name required')
+        operation_name = 'UpdateTable'
+        response = self._requests(
+            method='post',
+            json={
+                "query": self._get_query(type='mutation', name=operation_name),
+                "variables": {
+                    "context": {"contextId": project_id}, 
+                    "tableId": table_id,
+                    "data": {
+                        "displayName": display_name,
+                        "config": {
+                            "graphShape": graph_shape,
+                            "description": description
+                        }
+                    }
+                },
+                "operationName": operation_name
+            }
+        )
+        return response.text
+
+    # DeleteTable
+    def delete_table(self, project_id, table_id, preserve_relationships_data=False):
+        if not project_id:
+            raise Exception('Project ID required')
+        if not table_id:
+            raise Exception('Table ID required')
+        operation_name = 'DeleteTable'
+        response = self._requests(
+            method='post',
+            json={
+                "query": self._get_query(type='mutation', name=operation_name),
+                "variables": {
+                    "context": {"contextId": project_id}, 
+                    "tableId": table_id,
+                    "preserveRelationshipsData": preserve_relationships_data
+                },
+                "operationName": operation_name
+            }
+        )
+        return response.text
+
+    # GetGraph
     def get_graph(self, project_id, table_id, offset=0, limit=50):
         if not project_id:
             raise Exception('Project ID required')
@@ -271,94 +350,19 @@ class Query(object):
             }
         )
         return response.text
-    
-    # GetTask - variables: {taskId: "1856"}
-    def get_task(self, task_id):
-        if not task_id:
-            raise Exception('Task ID required')
-        operation_name = 'GetTask'
-        response = self._requests(
-            method='get',
-            json={
-                "query": self._get_query(type='query', name=operation_name),
-                "variables": {"taskId": task_id},
-                "operationName": operation_name
-            }
-        )
-        return response.text
 
-    # CreateTable - variables: {context: {contextId: "ctx-M4uaGyFSWy_VCFpwaBZ"}, data: {displayName: "test1"}}
-    def create_table(self, project_id, display_name, description, graph_shape="circle"):
-        operation_name = 'CreateTable'
-        response = self._requests(
-            method='post',
-            json={
-                "query": self._get_query(type='mutation', name=operation_name),
-                "variables": {
-                    "context": {"contextId": project_id}, 
-                    "data": {
-                        "displayName": display_name,
-                        "config": {
-                            "graphShape": graph_shape,
-                            "description": description
-                        }
-                    }},
-                "operationName": operation_name
-            }
-        )
-        return response.text
-
-    # UpdateTable - variables: {context: {contextId: "ctx-M4uaGyFSWy_VCFpwaBZ"}, tableId: "tab-M4ub7KPXs6hP4A1SUjL", data: {displayName: "test12", config: {graphShape: "circle", labelColumn: "col-0"}}, displayName: "test12", config: {graphShape: "circle", labelColumn: "col-0"}, graphShape: "circle", labelColumn: "col-0"}
-    def update_table(self, project_id, table_id, display_name, description, graph_shape="circle"):
-        operation_name = 'UpdateTable'
-        response = self._requests(
-            method='post',
-            json={
-                "query": self._get_query(type='mutation', name=operation_name),
-                "variables": {
-                    "context": {"contextId": project_id}, 
-                    "tableId": table_id,
-                    "data": {
-                        "displayName": display_name,
-                        "config": {
-                            "graphShape": graph_shape,
-                            "description": description
-                        }
-                    }
-                },
-                "operationName": operation_name
-            }
-        )
-        return response.text
-
-    # DeleteTable - variables: {context: {contextId: "ctx-M4uaGyFSWy_VCFpwaBZ"}, tableId: "tab-M4ub7KPXs6hP4A1SUjL", preserveRelationshipsData: false}
-    def delete_table(self, project_id, table_id, preserve_relationships_data=False):
-        operation_name = 'DeleteTable'
-        response = self._requests(
-            method='post',
-            json={
-                "query": self._get_query(type='mutation', name=operation_name),
-                "variables": {
-                    "context": {"contextId": project_id}, 
-                    "tableId": table_id,
-                    "preserveRelationshipsData": preserve_relationships_data
-                },
-                "operationName": operation_name
-            }
-        )
-        return response.text
-
-    # CreateColumn - variables: {
-    #   context: {contextId: "ctx-M4uaGyFSWy_VCFpwaBZ"}, 
-    #   tableId: "tab-M4ub7KPXs6hP4A1SUjL", 
-    #   data: {displayName: "column1", dataType: "text"}, 
-    #   displayName: "column1", 
-    #   dataType: "text"
-    # }
-    # dataType: "link_one", linkedTable: "tab-M4ucjw_tyHUk-S6qayt"
-    # data_type
-    # text, number, boolean, url, date, date_added
-    def create_column(self, project_id, table_id, display_name, data_type):
+    # CreateColumn
+    def create_column(self, project_id, table_id, display_name, data_type, linked_table=None):
+        if not project_id:
+            raise Exception('Project ID required')
+        if not table_id:
+            raise Exception('Table ID required')
+        if not display_name:
+            raise Exception('Display Name required')
+        if not data_type:
+            raise Exception('Data Type required')
+        if data_type not in ['text', 'number', 'boolean', 'url', 'date', 'date_added', 'link_one', 'link_many']:
+            raise Exception('Invalid Data Type')
         operation_name = 'CreateColumn'
         response = self._requests(
             method='post',
@@ -367,15 +371,34 @@ class Query(object):
                 "variables": {
                     "context": {"contextId": project_id}, 
                     "tableId": table_id,
-                    "data": {"displayName": display_name, "dataType": data_type}
+                    "data": {
+                        "displayName": display_name, 
+                        "dataType": data_type, 
+                        "linkedTable": linked_table
+                    } if data_type in ['link_one', 'link_many'] else {
+                        "displayName": display_name, 
+                        "dataType": data_type
+                    }
                 },
                 "operationName": operation_name
             }
         )
         return response.text
 
-    # UpdateColumn - variables: {context: {contextId: "ctx-M4uaGyFSWy_VCFpwaBZ"}, tableId: "tab-M4ub7KPXs6hP4A1SUjL", columnId: "col-0", data: {displayName: "column12", dataType: "text"}, displayName: "column12", dataType: "text", restoreRelationshipsData: false}
-    def update_column(self, project_id, table_id, column_id, display_name, data_type, restore_relationships_data=False):
+    # UpdateColumn
+    def update_column(self, project_id, table_id, column_id, display_name, data_type, linked_table=None, restore_relationships_data=False):
+        if not project_id:
+            raise Exception('Project ID required')
+        if not table_id:
+            raise Exception('Table ID required')
+        if not column_id:
+            raise Exception('Column ID required')
+        if not display_name:
+            raise Exception('Display Name required')
+        if not data_type:
+            raise Exception('Data Type required')
+        if data_type not in ['text', 'number', 'boolean', 'url', 'date', 'date_added', 'link_one', 'link_many']:
+            raise Exception('Invalid Data Type')
         operation_name = 'UpdateColumn'
         response = self._requests(
             method='post',
@@ -396,8 +419,14 @@ class Query(object):
         )
         return response.text
 
-    # DeleteColumn - variables: {context: {contextId: "ctx-M4uaGyFSWy_VCFpwaBZ"}, tableId: "tab-M4ub7KPXs6hP4A1SUjL", columnId: "col-0"}
+    # DeleteColumn
     def delete_column(self, project_id, table_id, column_id):
+        if not project_id:
+            raise Exception('Project ID required')
+        if not table_id:
+            raise Exception('Table ID required')
+        if not column_id:
+            raise Exception('Column ID required')
         operation_name = 'DeleteColumn'
         response = self._requests(
             method='post',
@@ -413,18 +442,16 @@ class Query(object):
         )
         return response.text
 
-    # CreateVertex - varaiables: {
-    # context: {contextId: "ctx-M4uaGyFSWy_VCFpwaBZ"}, 
-    # contextId: "ctx-M4uaGyFSWy_VCFpwaBZ", 
-    # label: "tab-M4ucjw_tyHUk-S6qayt", 
-    # data: {
-    # values: [
-    # {key: "col-0", value: "sdfsd"}, 
-    # {key: "col-1", value: "123123"}
-    # ], 
-    # edges: []
-    # }}
+    # CreateVertex
     def create_vertex(self, project_id, table_id, column_ids, values):
+        if not project_id:
+            raise Exception('Project ID required')
+        if not table_id:
+            raise Exception('Table ID required')
+        if not column_ids:
+            raise Exception('Column IDs required')
+        if not values:
+            raise Exception('Values required')
         operation_name = 'CreateVertex'
         response = self._requests(
             method='post',
@@ -447,15 +474,18 @@ class Query(object):
         )
         return response.text
 
-    # UpdateVertex - varialbes: {
-    # context: {contextId: "ctx-M4uaGyFSWy_VCFpwaBZ"}
-    #     label: "tab-M4ucjw_tyHUk-S6qayt"
-    #     vertexId: "row-M4udjwvBn25FvmYGcsL"
-    #     data: {
-    #       values: [{key: "col-0", value: "sdsdsdfs"}, 
-    #       {key: "col-1", value: "1231231313123123"}], edges: []}
-    # }
+    # UpdateVertex
     def update_vertex(self, project_id, table_id, vertex_id, column_ids, values):
+        if not project_id:
+            raise Exception('Project ID required')
+        if not table_id:
+            raise Exception('Table ID required')
+        if not vertex_id:
+            raise Exception('Vertex ID required')
+        if not column_ids:
+            raise Exception('Column IDs required')
+        if not values:
+            raise Exception('Values required')
         operation_name = 'UpdateVertex'
         response = self._requests(
             method='post',
@@ -481,6 +511,12 @@ class Query(object):
     
     # DeleteVertex
     def delete_vertex(self, project_id, table_id, vertex_id):
+        if not project_id:
+            raise Exception('Project ID required')
+        if not table_id:
+            raise Exception('Table ID required')
+        if not vertex_id:
+            raise Exception('Vertex ID required')
         operation_name = 'DeleteVertex'
         response = self._requests(
             method='post',
@@ -496,13 +532,14 @@ class Query(object):
         )
         return response.text
 
-    # BulkDeleteVertices - variables: {
-    #     context: {contextId: "ctx-M4uaGyFSWy_VCFpwaBZ"}
-    #     label: "tab-M4ucjw_tyHUk-S6qayt"
-    #     vertexIds: ["row-M4udjwvBn25FvmYGcsL"]
-    #     deleteAll: false
-    # }
+    # BulkDeleteVertices
     def bulk_delete_vertices(self, project_id, table_id, vertex_ids):
+        if not project_id:
+            raise Exception('Project ID required')
+        if not table_id:
+            raise Exception('Table ID required')
+        if not vertex_ids:
+            raise Exception('Vertex IDs required')
         operation_name = 'BulkDeleteVertices'
         response = self._requests(
             method='post',

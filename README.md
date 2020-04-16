@@ -1,4 +1,4 @@
-# metabase
+# Kgbase
 
 ## Installation
 ```
@@ -10,15 +10,16 @@ pip install kgbase
 Import library.
 
 ```
-from thinknum import Query
+from kgbase import Query
 ```
 
-To authenticate, you must first obtain a client_id and client_secret from your assigned Thinknum account manager. Your client_secret must not be shared or exposed via publicly accessible resources (such as browser client-side scripting).
+To authenticate, you must first signup from kgbase website. Your password must not be shared or exposed via publicly accessible resources (such as browser client-side scripting).
 
 ```python
-q = Query(
-    client_id='Your client id',
-    client_secret='Your client secret'
+q = Query()
+q.login(
+    username='Your username',
+    password='Your password'
 )
 ```
 
