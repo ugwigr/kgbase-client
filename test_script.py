@@ -1,5 +1,10 @@
 from kgbase import Query
 
+# TODO
+# filter, group by
+# csv upload
+# raw import
+
 if __name__ == "__main__":
     q = Query()
     result = q.login(
@@ -266,24 +271,7 @@ if __name__ == "__main__":
     }
     '''
 
-    # result = q.get_graph(
-    #     project_id='ctx-M53lgnjpCkc_plt0lqo',
-    #     table_id='tab-M53lgnpTXtQhMqMBXHH',
-    #     offset=1,
-    #     limit=50
-    # )
-    # print (result)
-    '''
-    {
-        "data": {
-            "getGraph": {
-                "vertices": [],
-                "edges": [],
-                "total": 0
-            }
-        }
-    }
-    '''
+    
 
     # result = q.get_task(task_id="1867")
     # print (result)
@@ -477,15 +465,15 @@ if __name__ == "__main__":
     }
     '''
 
-    result = q.bulk_delete_vertices(
-        project_id='ctx-M53pLqASSUmxj5yU7LO',
-        table_id='tab-M53pRIARajeAYTwPIAN',
-        vertex_ids=[
-            "row-M53tmNvBRE-qf7_6nUC",
-            "row-M53tphXYno5UGZgQZlS",
-        ]
-    )
-    print (result)
+    # result = q.bulk_delete_vertices(
+    #     project_id='ctx-M53pLqASSUmxj5yU7LO',
+    #     table_id='tab-M53pRIARajeAYTwPIAN',
+    #     vertex_ids=[
+    #         "row-M53tmNvBRE-qf7_6nUC",
+    #         "row-M53tphXYno5UGZgQZlS",
+    #     ]
+    # )
+    # print (result)
     '''
     {
         "data": {
@@ -503,3 +491,146 @@ if __name__ == "__main__":
     #     limit=50
     # )
     # print (result)
+
+
+    # result = q.get_graph(
+    #     project_id='ctx-M53zulrvmCoNnP7PMEU',
+    #     table_id='tab-M53zumOvT3xKmqkIB_X',
+    #     filters=[],
+    #     offset=1,
+    #     limit=50
+    # )
+    # print (result)
+    '''
+    {
+        "data": {
+            "getGraph": {
+                "vertices": [
+                    {
+                        "id": "row-M54-YHKSk3i_9rXO7cl",
+                        "label": "tab-M53zumOvT3xKmqkIB_X",
+                        "values": [
+                            {
+                                "key": "col-0",
+                                "value": "ipod"
+                            },
+                            {
+                                "key": "col-1",
+                                "value": "10.0"
+                            },
+                            {
+                                "key": "col-2",
+                                "value": "apple"
+                            }
+                        ],
+                        "contextId": null
+                    },
+                    {
+                        "id": "row-M54-akM_ctW_QMTAmd5",
+                        "label": "tab-M53zumOvT3xKmqkIB_X",
+                        "values": [
+                            {
+                                "key": "col-0",
+                                "value": "galaxy s"
+                            },
+                            {
+                                "key": "col-1",
+                                "value": "20.0"
+                            },
+                            {
+                                "key": "col-2",
+                                "value": "samsung"
+                            }
+                        ],
+                        "contextId": null
+                    },
+                    {
+                        "id": "row-M54-e4d-BIwZywV9Qoq",
+                        "label": "tab-M53zumOvT3xKmqkIB_X",
+                        "values": [
+                            {
+                                "key": "col-0",
+                                "value": "galaxy tab"
+                            },
+                            {
+                                "key": "col-1",
+                                "value": "20.0"
+                            },
+                            {
+                                "key": "col-2",
+                                "value": "samusng"
+                            }
+                        ],
+                        "contextId": null
+                    },
+                    {
+                        "id": "row-M54-fbtdB4FLEO_R2xy",
+                        "label": "tab-M53zumOvT3xKmqkIB_X",
+                        "values": [
+                            {
+                                "key": "col-0",
+                                "value": "mac"
+                            },
+                            {
+                                "key": "col-1",
+                                "value": "20.0"
+                            },
+                            {
+                                "key": "col-2",
+                                "value": "apple"
+                            }
+                        ],
+                        "contextId": null
+                    }
+                ],
+                "edges": [],
+                "total": 5
+            }
+        }
+    }
+    '''
+
+    # result = q.get_graph(
+    #     project_id='ctx-M53zulrvmCoNnP7PMEU',
+    #     table_id='tab-M53zumOvT3xKmqkIB_X',
+    #     filters=[
+    #         {
+    #             "property": "col-2",
+    #             "predicate": "=",
+    #             "value": "apple"
+    #         }
+    #     ],
+    #     offset=1,
+    #     limit=50
+    # )
+    # print (result)
+
+    # Summarize Graph
+    # count, sum, mean, max, min
+    result = q.summarize_graph(
+        project_id='ctx-M53zulrvmCoNnP7PMEU',
+        table_id='tab-M53zumOvT3xKmqkIB_X',
+        filters=[
+            # {
+            #     "property": "col-2",
+            #     "predicate": "=",
+            #     "value": "apple"
+            # }
+        ],
+        groups=[{"property": "col-2"}],
+        aggregations=[{"property": "col-1", "function": "sum"}],
+        offset=1,
+        limit=50
+    )
+    print (result)
+    '''
+    {
+        "data": {
+            "getGraph": {
+                "vertices": [],
+                "edges": [],
+                "total": 0
+            }
+        }
+    }
+    '''

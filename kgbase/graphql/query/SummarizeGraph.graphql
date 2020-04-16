@@ -1,0 +1,9 @@
+query SummarizeGraph($context: GraphContextType!, $query: GraphQueryType!) {
+  summarizeGraph(context: $context, query: $query) {
+    groups {
+      group
+      values
+    }
+    total
+  }
+}

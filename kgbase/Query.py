@@ -322,7 +322,7 @@ class Query(object):
         return response.text
 
     # GetGraph
-    def get_graph(self, project_id, table_id, offset=0, limit=50):
+    def get_graph(self, project_id, table_id, filters=[], offset=0, limit=50):
         if not project_id:
             raise Exception('Project ID required')
         if not table_id:
@@ -343,7 +343,42 @@ class Query(object):
                             "offset": offset, 
                             "limit": limit
                         }, 
-                        "filters": []
+                        "filters": [dict({"label": table_id}, **filter) for filter in filters],
+                    }
+                },
+                "operationName": operation_name
+            }
+        )
+        return response.text
+
+    # SummarizeGraph
+    def summarize_graph(self, project_id, table_id, filters=[], groups=[], aggregations=[], offset=0, limit=50):
+        if not project_id:
+            raise Exception('Project ID required')
+        if not table_id:
+            raise Exception('Table ID required')
+        operation_name = 'SummarizeGraph'
+        response = self._requests(
+            method='post',
+            json={
+                "query": self._get_query(type='query', name=operation_name),
+                "variables": {
+                    "context": {"contextId": project_id},
+                    "contextId": project_id,
+                    "query": {
+                        "startingVertices": [],
+                        "labels": [table_id],
+                        "pagination": {
+                            "label": table_id,
+                            "offset": offset,
+                            "limit": limit
+                        },
+                        "filters": [dict({"label": table_id}, **filter) for filter in filters],
+                        "summary": {
+                            "label": table_id,
+                            "groups": groups,
+                            "aggregations": aggregations
+                        }
                     }
                 },
                 "operationName": operation_name
