@@ -1,0 +1,5 @@
+mutation UpdateVertex($context: GraphContextType!, $label: String!, $vertexId: String!, $data: VertexData!) {
+  updateVertex(context: $context, label: $label, vertexId: $vertexId, data: $data) {
+    ok
+  }
+}

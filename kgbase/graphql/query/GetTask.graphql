@@ -1,0 +1,7 @@
+query GetTask($taskId: String!) {
+  getTask(taskId: $taskId) {
+    description
+    status
+    progress
+  }
+}

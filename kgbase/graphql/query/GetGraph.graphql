@@ -1,0 +1,27 @@
+fragment Vertex on VertexType {
+  id
+  label
+  values {
+    key
+    value
+  }
+  contextId
+}
+
+fragment Edge on EdgeType {
+  label
+  fromId
+  toId
+}
+
+query GetGraph($context: GraphContextType!, $query: GraphQueryType!, $limits: GraphQueryLimitsType) {
+  getGraph(context: $context, query: $query, limits: $limits) {
+    vertices {
+      ...Vertex
+    }
+    edges {
+      ...Edge
+    }
+    total
+  }
+}

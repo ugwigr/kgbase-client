@@ -1,0 +1,5 @@
+mutation DeleteColumn($context: GraphContextType!, $tableId: String!, $columnId: String!) {
+  deleteColumn(context: $context, tableId: $tableId, columnId: $columnId) {
+    ok
+  }
+}

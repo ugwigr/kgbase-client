@@ -1,393 +1,236 @@
-# KGbase library reference
+# metabase
 
-To instantiate KGbase client, you will first need an API key. To get an API key for your project, open your project, click on "Collaborators" button in the upper right corner, and add an API user. Save the API key generated for this user.
-
-##### Example code
-
+## Installation
 ```
-import client
-c = client.Client('API_KEY')
+pip install kgbase
 ```
 
-*** 
-# Project
-### List
-Project list that user created and public project will be retrieved.
-##### Example code
+## Query
+
+Import library.
+
 ```
-result = c.project_list()
+from thinknum import Query
 ```
 
-##### Example response
-```
-[
-    {
-        "id": 14,
-        "is_public": False,
-        "slug": "client-LWOM0kLMCNCMUJPK6Eh",
-        "name": "client",
-        "description": "client"
-    },
-    {
-        "id": 3,
-        "is_public": True,
-        "slug": "test2-LU7kokaeJ10BZKmtuvJ",
-        "name": "test2",
-        "description": "test2"
-    },
-    {
-        "id": 4,
-        "is_public": True,
-        "slug": "test3-LU7l8JCT3SlKnQYLiu4",
-        "name": "test3",
-        "description": "test3"
-    },
-]
-```
+To authenticate, you must first obtain a client_id and client_secret from your assigned Thinknum account manager. Your client_secret must not be shared or exposed via publicly accessible resources (such as browser client-side scripting).
 
-### Create
-User can create public or private project.
-##### Example code
-```
-result = c.project_create(
-    name='client-9',
-    description='client-9',
-    is_public=True,
+```python
+q = Query(
+    client_id='Your client id',
+    client_secret='Your client secret'
 )
-project_id = result['project']['slug']
 ```
 
-##### Example response
-```
-{
-    "project": {
-        "id": 15,
-        "is_public": True,
-        "slug": "client-test1111111-LWS2AsRVWYkIaEr9Isq",
-        "name": "client-test1111111",
-        "description": "client-test1111111"
-    },
-    "message": "New project created"
+If you need to use a proxy, you can configure it with the proxies argument.
+
+```python
+proxies = {
+  "http": "http://10.10.1.10:3128",
+  "https": "http://10.10.1.10:1080",
 }
-```
 
-***
-# Table
-### List
-Table list of one particular project will be retrieved. Project `slug` should be passed.
-##### Example code
-```
-result = c.table_list(
-    project_id='client-1-LXKLEQaTfqx-PQhONGE'
+q = Query(
+    client_id='Your client id',
+    client_secret='Your client secret',
+    proxies=proxies
 )
 ```
-##### Example response
+
+Requests can ignore verifying the SSL certficate if you set verify to False. By default, verify is set to True.
+
+```python
+q = Query(
+    client_id='Your client id',
+    client_secret='Your client secret',
+    verify=False
+)
 ```
-[
-    {
-        "repository_name": "test3-LWSJDcerl3f3ZSXECsC",
-        "slug": "test3-LWSJDcerl3f3ZSXECsC",
-        "description": "test3",
-        "name": "test3"
-    },
-    {
-        "repository_name": "test2-LWSInRQSfJkLcySckjN",
-        "slug": "test2-LWSInRQSfJkLcySckjN",
-        "description": "test2",
-        "name": "test2"
-    },
-    {
-        "repository_name": "test1-LWS2_M7GCM-Q2Xx7-kt",
-        "slug": "test1-LWS2_M7GCM-Q2Xx7-kt",
-        "description": "test1",
-        "name": "test1"
+
+You will get a list of datasets, each of which has the dataset id and its display_name.
+```python
+q.get_dataset_list()
+```
+
+You will get dataset's metadata.
+```python
+q.get_dataset_metadata(dataset_id='job_listings')
+```
+
+It's possible to limit the dataset list to a specific ticker by specific a "ticker" query parameter. For example, getting all datasets available for Apple Inc:
+
+```python
+q.get_ticker_dataset_list(query='nasdaq:aapl')
+```
+
+You can search for tickers.
+```python
+q.get_ticker_list(query="tesla")
+```
+
+You can also search for tickers of particular dataset
+```python
+q.get_ticker_list(query="tesla", dataset_id='job_listings')
+```
+
+You can retrieve data for specific dataset and tickers with various filters. For example:
+
+```python
+q.add_ticker('nasdaq:lulu') # Add ticker
+q.add_filter(
+    column='as_of_date',
+    type='>=',
+    value=["2020-01-05"]
+)  # Add filter
+q.add_sort(
+    column='as_of_date',
+    order='asc'
+)   # Add Sort
+q.get_data(dataset_id='job_listings')    # Retrieve data
+```
+
+You can also specify `start` and `limit`. The default values are `1` and `100000`.
+```
+q.get_data(dataset_id='job_listings', start=1, limit=1000)
+```
+
+Sometimes you only need get aggregated results for a dataset. In such cases you can retrieve them through the `addGroup` and `addAggregation` functions.
+
+```python
+q.add_ticker('nasdaq:lulu') # Add ticker
+q.add_group(column='as_of_date') # Add group
+q.add_aggregation(
+    column='dataset__entity__entity_ticker__ticker__ticker',
+    type='count'
+)   # Add aggregation
+q.add_sort(
+    column='as_of_date',
+    order='asc'
+)   # Add sort
+q.get_data(dataset_id='job_listings')
+```
+
+There a few functions that you can apply to queries to gather even more insight into the data. You can retrieve a listing of the available functions in a dataset with the `getDatasetMetadata` function. For example, there is `nearby` function for `store` dataset.
+
+```
+q.add_ticker('nasdaq:lulu')
+q.add_function(
+    function='nearby',
+    parameters={
+        "dataset_type": "dataset",
+        "dataset": "store",
+        "tickers":["nyse:ua"],
+        "entities": [],
+        "distance": 5,
+        "is_include_closed": False
     }
-]
+)
+q.get_data(dataset_id='store')
 ```
 
-### Create
-When creating table, project `slug` should be passed.
-##### Example code
+Also, you can apply `nearest` function to `store` dataset like the following code.
 ```
-result = c.table_create(
-    project_id='client-1-LXKLEQaTfqx-PQhONGE',
-    name='test3',
-    description='test3',
+q.add_ticker('nasdaq:lulu')
+q.add_function(
+    function='nearest',
+    parameters={
+        "dataset_type": "dataset",
+        "dataset": "store",
+        "tickers":["nyse:ua"],
+        "entities": [],
+        "ranks": [1],
+        "is_include_closed": False
+    }
 )
-table_id = result['table']['slug']
+q.get_data(dataset_id='store')
 ```
-##### Example response
+
+## History
+
+Import library.
+
 ```
-{
-    "project": {
-        "repository_name": "test1-LWS2_M7GCM-Q2Xx7-kt",
-        "slug": "test1-LWS2_M7GCM-Q2Xx7-kt",
-        "description": "test1",
-        "name": "test1"
-    },
-    "message": "New table created"
+from thinknum import History
+```
+
+Like the `Query` library, you must authenticate to utilize `History` library.
+
+```python
+h = History(
+    client_id='Your client id',
+    client_secret='Your client secret'
+)
+```
+
+If you need to use a proxy, you can configure it with the proxies argument.
+
+```python
+proxies = {
+  "http": "http://10.10.1.10:3128",
+  "https": "http://10.10.1.10:1080",
 }
-```
 
-***
-# Column
-### Create
-When creating column for table, project `slug` and table `slug` are necessary.
-`type` should be one of `text`, `int`, `float`
-##### Example code
-```
-result = c.changeset_create(
-    project_id=project_id,
-    summary='summary'
-)
-changeset_id = result['id']
-
-result = c.column_create(
-    table_id=table_id,
-    name='Column1',
-    column_type='text',
-    is_unique=False,
-    changeset_id=changeset_id,
-)
-
-result = c.column_create(
-    table_id=table_id,
-    name='Column2',
-    column_type='text',
-    is_unique=False,
-    changeset_id=changeset_id,
+h = History(
+    client_id='Your client id',
+    client_secret='Your client secret',
+    proxies=proxies
 )
 ```
 
-##### Example response
-```
-{
-    "message": "Column created",
-    "changeset_id": 71
-}
-{
-    "message": "Column created",
-    "changeset_id": 72
-}
-```
+Requests can ignore verifying the SSL certficate if you set verify to False. By default, verify is set to True.
 
-***
-# Record
-
-### Create
-When adding record, project `slug` and table `slug` are necessary.
-
-##### Example code
-```
-result = c.changeset_create(
-    project_id=project_id,
-    summary='summary'
-)
-changeset_id = result['id']
-
-result = c.record_create(
-    table_id=table_id,
-    record={'Column1': '1', 'Column2': '2'},
-    changeset_id=changeset_id
-)
-print (result)
-
-result = c.record_create(
-    table_id=table_id,
-    record={'Column1': '3', 'Column2': '4'},
-    changeset_id=changeset_id
-)
-print (result)
-
-result = c.record_create(
-    table_id=table_id,
-    record={'Column1': '5', 'Column2': '6'},
-    changeset_id=changeset_id
-)
-print (result)
-
-# Submit changeset
-result = c.changeset_submit(
-    changeset_id=changeset_id,
-    summary='API Test'
-)
-print (result)
-
-# Publish changeset
-result = c.changeset_publish(
-    changeset_id=changeset_id,
-)
-print (result)
-```
-
-##### Example response
-```
-{
-    'id': 109, 
-    'branch_name': 'raphaelseo@gmail.com-LXXjKzYnFXEw4TIafXV', 
-    'summary': 'summary'
-}
-{'Column1': '1', 'Column2': '2', 'id': 'row-LXXjKhgZnysClIhLnsf'}
-{'Column1': '3', 'Column2': '4', 'id': 'row-LXXjKkHqzLv6r6zw_N0'}
-{'Column1': '5', 'Column2': '6', 'id': 'row-LXXjKms5_YEzKMYBkcY'}
-```
-
-### List
-##### Example code
-```
-result = c.record_list(
-    table_id=table_id,
-)
-print(result)
-
-result = c.record_list(
-    table_id=table_id,
-    filter={'Column1': ['1', '3'], 'Column2': '2'}
-)
-print(result)
-
-result = c.record_list(
-    table_id=table_id,
-    filter={'Column1': '1', 'Column2': '2'}
-)
-print(result)
-
-result = c.record_list(
-    changeset_id=changeset_id,
-    table_id=table_id,
-)
-print(result)
-```
-
-##### Example response
-```
-[
-    {'Column1': '1', 'Column2': '2', 'id': 'row-LXXjKhgZnysClIhLnsf'},
-    {'Column1': '3', 'Column2': '4', 'id': 'row-LXXjKkHqzLv6r6zw_N0'},
-    {'Column1': '5', 'Column2': '6', 'id': 'row-LXXjKms5_YEzKMYBkcY'}
-]
-
-[
-    {'Column1': '1', 'Column2': '2', 'id': 'row-LYhGvbh4JtiW2fSZE4i'}, 
-    {'Column1': '3', 'Column2': '4', 'id': 'row-LYhGveBDiBtyjd5hMcC'}
-]
-
-[
-    {'Column1': '1', 'Column2': '2', 'id': 'row-LYhGvbh4JtiW2fSZE4i'}, 
-]
-
-[
-    {'Column1': '1', 'Column2': '2', 'id': 'row-LXXjKhgZnysClIhLnsf'},
-    {'Column1': '3', 'Column2': '4', 'id': 'row-LXXjKkHqzLv6r6zw_N0'},
-    {'Column1': '5', 'Column2': '6', 'id': 'row-LXXjKms5_YEzKMYBkcY'}
-]
-```
-
-### Update
-##### Example code
-```
-# Create changeset
-result = c.changeset_create(
-    project_id=project_id,
-    summary='summary'
-)
-changeset_id = result['id']
-
-result = c.record_update(
-    changeset_id=changeset_id,
-    table_id=table_id,
-    row_id=row2,
-    record={'Column1': '7', 'Column2': '8'},
-)
-print(result)
-
-# Submit changeset
-result = c.changeset_submit(
-    changeset_id=changeset_id,
-    summary='API Test'
-)
-print (result)
-
-# Publish changeset
-result = c.changeset_publish(
-    changeset_id=changeset_id,
-)
-print (result)
-```
-
-##### Example response
-```
-{'Column1': '7', 'Column2': '8', 'id': 'row-LXXoLJM-J0J2SCN-sma'}
-```
-
-### Delete
-##### Example code
-```
-# Create changeset
-result = c.changeset_create(
-    project_id=project_id,
-    summary='summary'
-)
-changeset_id = result['id']
-
-result = c.record_destroy(
-    changeset_id=changeset_id,
-    table_id=table_id,
-)
-
-# Submit changeset
-result = c.changeset_submit(
-    changeset_id=changeset_id,
-    summary='API Test'
-)
-print (result)
-
-# Publish changeset
-result = c.changeset_publish(
-    changeset_id=changeset_id,
-)
-print (result)
-```
-
-##### Example response
-```
-{}
-```
-
-***
-# Changeset
-### Submit Changeset
-You can submit changeset under the combination of project and table.
-
-##### Example code
-```
-result = c.changeset_submit(
-    table_id='test3-LXKLJd3BMnja_WbNeID',
-    changeset_id=87,
-    summary='API Test'
+```python
+h = History(
+    client_id='Your client id',
+    client_secret='Your client secret',
+    verify=False
 )
 ```
-##### Example response
-```
-{
-    "message": "Changeset submitted",
-    "changeset_id": "74"
-}
+
+To retrieve a list of available history for a dataset:
+
+```python
+h.get_history_list(dataset_id='store')
 ```
 
-### Publish
-You can submit changeset under the combination of project and table.
-##### Example code
-```
-result = c.changeset_publish(
-    table_id='test3-LXKLJd3BMnja_WbNeID',
-    changeset_id=87,
+You can view the metadata for the historical file:
+
+```python
+h.get_history_metadata(
+    dataset_id='store',
+    history_date='2020-03-09'
 )
 ```
-##### Example response
+
+To download a CSV of the historical data:
+
+```python
+h.download(
+    dataset_id='store',
+    history_date='2020-03-09'
+)
 ```
-{
-    "message": "Changeset published",
-    "changeset_id": "74"
-}
+
+You can specify download path:
+
+```python
+h.download(
+    dataset_id='store',
+    history_date='2020-03-09', 
+    download_path='/Users/sangwonseo/Downloads'
+)
 ```
+
+## For more details about Library or API
+Please visit https://docs.thinknum.com/docs
+
+## If you are interested in Thinknum
+Please request demo at https://www.thinknum.com/demo/
+
+## If you have any questions
+Please email at customersuccess@thinknum.com
+
+License
+----
+
+MIT

@@ -1,0 +1,6 @@
+mutation CreateColumn($context: GraphContextType!, $tableId: String!, $data: ColumnData!) {
+  createColumn(context: $context, tableId: $tableId, data: $data) {
+    ok
+    columnId
+  }
+}

@@ -1,0 +1,21 @@
+fragment UserAll on UserType {
+  uuid
+  graphqlId
+  username
+  name
+  avatarUrl
+  nickname
+  apiKey
+  isStaff
+  lastActivityAt
+}
+
+mutation LoginUser($data: LoginInput!) {
+  loginUser(data: $data) {
+    ok
+    user {
+      ...UserAll
+    }
+    error
+  }
+}

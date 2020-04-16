@@ -1,0 +1,6 @@
+mutation DeleteTable($context: GraphContextType!, $tableId: String!, $preserveRelationshipsData: Boolean) {
+  deleteTable(context: $context, tableId: $tableId, preserveRelationshipsData: $preserveRelationshipsData) {
+    ok
+    taskId
+  }
+}

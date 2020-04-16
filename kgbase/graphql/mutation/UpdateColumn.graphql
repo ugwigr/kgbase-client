@@ -1,0 +1,6 @@
+mutation UpdateColumn($context: GraphContextType!, $tableId: String!, $columnId: String!, $data: ColumnData!, $restoreRelationshipsData: Boolean) {
+  updateColumn(context: $context, tableId: $tableId, columnId: $columnId, data: $data, restoreRelationshipsData: $restoreRelationshipsData) {
+    ok
+    taskId
+  }
+}

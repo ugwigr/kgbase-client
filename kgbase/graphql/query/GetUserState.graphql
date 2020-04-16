@@ -1,0 +1,17 @@
+fragment UserAll on UserType {
+  uuid
+  graphqlId
+  username
+  name
+  avatarUrl
+  nickname
+  apiKey
+  isStaff
+  lastActivityAt
+}
+
+query GetUserState {
+  currentUser {
+    ...UserAll
+  }
+}

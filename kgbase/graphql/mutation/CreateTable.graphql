@@ -1,0 +1,6 @@
+mutation CreateTable($context: GraphContextType!, $data: TableData!) {
+  createTable(context: $context, data: $data) {
+    ok
+    tableId
+  }
+}

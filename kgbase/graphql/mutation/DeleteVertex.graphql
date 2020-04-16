@@ -1,0 +1,5 @@
+mutation DeleteVertex($context: GraphContextType!, $label: String!, $vertexId: String!) {
+  deleteVertex(context: $context, label: $label, vertexId: $vertexId) {
+    ok
+  }
+}

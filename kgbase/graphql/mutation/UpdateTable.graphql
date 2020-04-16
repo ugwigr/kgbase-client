@@ -1,0 +1,5 @@
+mutation UpdateTable($context: GraphContextType!, $tableId: String!, $data: TableData!) {
+  updateTable(context: $context, tableId: $tableId, data: $data) {
+    ok
+  }
+}

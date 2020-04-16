@@ -1,0 +1,18 @@
+fragment Vertex on VertexType {
+  id
+  label
+  values {
+    key
+    value
+  }
+  contextId
+}
+
+mutation CreateVertex($context: GraphContextType!, $label: String!, $data: VertexData!) {
+  createVertex(context: $context, label: $label, data: $data) {
+    ok
+    vertex {
+      ...Vertex
+    }
+  }
+}

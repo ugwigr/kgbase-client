@@ -1,0 +1,34 @@
+fragment TableAll on TableType {
+  tableId
+  displayName
+  columns {
+    columnId
+    displayName
+    dataType
+    linkedContext
+    linkedTable
+  }
+  config {
+    graphShape
+    labelColumn
+    imageColumn
+    color
+    description
+  }
+}
+
+query GetSchema($context: GraphContextType!) {
+  getSchema(context: $context) {
+    tables {
+      ...TableAll
+    }
+    links {
+      linkId
+      contextId
+      tableId
+      table {
+        ...TableAll
+      }
+    }
+  }
+}

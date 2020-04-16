@@ -1,0 +1,15 @@
+mutation BulkDeleteVertices(
+  $context: GraphContextType!,
+  $label: String!,
+  $vertexIds: [String!]!,
+  $deleteAll: Boolean!
+) {
+  bulkDeleteVertices(
+    context: $context,
+    label: $label,
+    vertexIds: $vertexIds,
+    deleteAll: $deleteAll
+  ) {
+    ok
+  }
+}

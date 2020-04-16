@@ -1,0 +1,57 @@
+fragment ProjectOwnerAll on ProjectOwnerType {
+  ownerType
+  name
+  slug
+  avatarUrl
+}
+
+fragment UserAll on UserType {
+  uuid
+  graphqlId
+  username
+  name
+  avatarUrl
+  nickname
+  apiKey
+  isStaff
+  lastActivityAt
+}
+
+fragment ProjectAll on ProjectType {
+  uuid
+  graphqlId
+  projectId
+  name
+  description
+  updatedAt
+  dataChangedAt
+  color
+  slug
+  owner {
+    ...ProjectOwnerAll
+  }
+  isPublic
+  collaborators {
+    ...UserAll
+  }
+  apiUsers {
+    ...UserAll
+  }
+  favoritesCount
+  canManage
+}
+
+query GetProjectState($projectId: String!) {
+  project(projectId: $projectId) {
+    ...ProjectAll
+  }
+
+  isOwnerOrMember(projectId: $projectId)
+  canManageProject(projectId: $projectId)
+  canRead(projectId: $projectId)
+  canWrite(projectId: $projectId)
+
+  hasRequestedAccess(projectId: $projectId)
+  isProjectFavorited(projectId: $projectId)
+  wantsNotifications(projectId: $projectId)
+}
