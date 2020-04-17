@@ -183,7 +183,7 @@ The `columnId` is returned from the result.
 }
 ```
 
-The `data_type` should be one of them. `text`, `number`, `boolean`, `url`, `date`, `date_added`, `link_one`, `link_many`,
+The `data_type` should be one of them. `text`, `number`, `boolean`, `url`, `date`, `date_added`, `link_one`, `link_many`.
 
 To create column that data_type is `linke_one` or `link_many`:
 ```python
@@ -338,7 +338,7 @@ q.get_graph(
 ```
 
 You can also add group by and aggregations:
-```
+```python
 q.summarize_graph(
     project_id='ctx-M53zulrvmCoNnP7PMEU',
     table_id='tab-M53zumOvT3xKmqkIB_X',
@@ -349,8 +349,17 @@ q.summarize_graph(
             "value": "apple"
         }
     ],
-    groups=[{"property": "col-2"}],
-    aggregations=[{"property": "col-1", "function": "sum"}],
+    groups=[
+        {
+            "property": "col-2"
+        }
+    ],
+    aggregations=[
+        {
+            "property": "col-1",
+            "function": "sum"
+        }
+    ],
     offset=1,
     limit=50
 )
