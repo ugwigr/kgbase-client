@@ -1,0 +1,5 @@
+mutation BulkStartProcessing($bundleId: String!) {
+  bulkStartProcessing(bundleId: $bundleId) {
+    ok
+  }
+}

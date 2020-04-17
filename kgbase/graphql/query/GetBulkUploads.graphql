@@ -1,0 +1,6 @@
+query GetBulkUploads($bundleId: String!) {
+  getBulkBundleUploads(bundleId: $bundleId) {
+    name
+    status
+  }
+}

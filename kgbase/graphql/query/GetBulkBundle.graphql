@@ -1,0 +1,6 @@
+query GetBulkBundle($bundleId: String!) {
+  getBulkBundle(bundleId: $bundleId) {
+    bundleId
+    status
+  }
+}

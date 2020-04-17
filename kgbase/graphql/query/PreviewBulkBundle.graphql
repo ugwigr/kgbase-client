@@ -1,0 +1,6 @@
+query PreviewBulkBundle($bundleId: String!) {
+  previewBulkBundle(bundleId: $bundleId) {
+    countTotal
+    previewRows
+  }
+}

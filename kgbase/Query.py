@@ -7,7 +7,8 @@ import os
 
 class Query(object):
 
-    BASE_URL = 'http://127.0.0.1:8000/graphql'
+    BASE_URL = 'https://kgbase.com/graphql'
+    BULK_UPLOAD_URL = "https://kgbase.com/bulk/upload"
     HEADERS = {
         "Accept": "application/json",
         "Content-Type": "application/json",
@@ -63,6 +64,7 @@ class Query(object):
                 "operationName": operation_name
             }
         )
+        self._organization_id = json.loads(response.text).get("data", {}).get("loginUser", {}).get("user", {}).get("nickname")
         return response.text
 
     # GetUserState
@@ -591,5 +593,60 @@ class Query(object):
         )
         return response.text
 
-    # Upload
-    # Raw Import - Upload -> BulkStartProcessing
+    # Bulk Upload
+    def bulk_upload(self, project_id, filepaths):
+        if not project_id:
+            raise Exception('Project ID required')
+        if not filepaths:
+            raise Exception('CSV Files required')
+        
+        # Upload
+        multipart_form_data = []
+        for filepath in filepaths:
+            multipart_form_data.append(
+                ('files', (filepath.split('/')[-1], open(filepath, 'rb'))))
+        multipart_form_data = tuple(multipart_form_data)
+
+        response = self._session.post(
+            self.BULK_UPLOAD_URL,
+            files=multipart_form_data,
+            data={
+                "organization_id": self._organization_id,
+                "project_id": project_id,
+                "file_type": "csv"
+            }
+        )
+        if response.status_code != 200:
+            raise Exception('Something went wrong')
+        bundle_id = json.loads(response.content)['bundle_id']
+
+        operation_name = 'BulkStartProcessing'
+        response = self._requests(
+            method='post',
+            json={
+                "query": self._get_query(type='mutation', name=operation_name),
+                "variables": {
+                    "bundleId": bundle_id,
+                },
+                "operationName": operation_name
+            }
+        )
+        if response.status_code != 200:
+            raise Exception('Something went wrong')
+
+        status = 'running'
+        while status != 'finished' and status != 'failed':
+            operation_name = 'GetBulkBundle'
+            response = self._requests(
+                method='post',
+                json={
+                    "query": self._get_query(type='query', name=operation_name),
+                    "variables": {
+                        "bundleId": bundle_id,
+                    },
+                    "operationName": operation_name
+                }
+            )
+            status = json.loads(response.text).get('data', {}).get('getBulkBundle', {}).get('status')
+            time.sleep(5)
+        return response.text

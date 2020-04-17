@@ -1,0 +1,18 @@
+mutation BulkStartImport(
+  $context: GraphContextType!,
+  $tableId: String!,
+  $bundleId: String!,
+  $hasHeader: Boolean!,
+  $columnMap: [ColumnMapItem!]!
+) {
+  bulkStartImport(
+    context: $context,
+    tableId: $tableId,
+    bundleId: $bundleId,
+    hasHeader: $hasHeader,
+    columnMap: $columnMap
+  ) {
+    ok
+    taskId
+  }
+}
