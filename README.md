@@ -7,14 +7,12 @@ pip install kgbase
 
 ## Authentication
 
-Import library.
-
+To import library.
 ```
 from kgbase import Query
 ```
 
-To authenticate, you must first signup from kgbase website. Your password must not be shared or exposed via publicly accessible resources (such as browser client-side scripting).
-
+To authenticate:
 ```python
 q = Query()
 q.login(
@@ -23,8 +21,9 @@ q.login(
 )
 ```
 
-If you need to use a proxy, you can configure it with the proxies argument.
+You must first signup from kgbase website. Your password must not be shared or exposed via publicly accessible resources (such as browser client-side scripting).
 
+To use a proxy:
 ```python
 proxies = {
   "http": "http://10.10.1.10:3128",
@@ -36,12 +35,16 @@ q = Query(
 )
 ```
 
-Requests can ignore verifying the SSL certficate if you set verify to False. By default, verify is set to True.
-
+To ignore verifying the SSL certficate:
 ```python
 q = Query(
     verify=False
 )
+```
+
+To get user state:
+```python
+q.get_user_state()
 ```
 
 To logout:
@@ -79,7 +82,7 @@ q.create_project(
 )
 ```
 
-You can see `projectId` from result.
+The `projectId` is returned from response. You need to know `projectId` when you update or detroy project.
 ```json
 {
     "data": {
@@ -96,7 +99,7 @@ You can see `projectId` from result.
 }
 ```
 
-To see project state:
+To get project state:
 ```python
 q.get_project_state(
     project_id='ctx-M53lgnjpCkc_plt0lqo'
@@ -130,7 +133,7 @@ q.create_table(
 )
 ```
 
-The `tableId` is returned from the result.
+The `tableId` is returned from the response. You need to know `tableId` when you update or delete table.
 ```json
 {
     "data": {
@@ -171,7 +174,9 @@ q.create_column(
 )
 ```
 
-The `columnId` is returned from the result.
+The `data_type` should be one of `text`, `number`, `boolean`, `url`, `date`, `date_added`, `link_one`, `link_many`.
+
+The `columnId` is returned from the response. You need to know `columnId` when you update or delete column.
 ```json
 {
     "data": {
@@ -183,15 +188,12 @@ The `columnId` is returned from the result.
 }
 ```
 
-The `data_type` should be one of them. `text`, `number`, `boolean`, `url`, `date`, `date_added`, `link_one`, `link_many`.
-
-To create column that data_type is `linke_one` or `link_many`:
+To create `linke_one` or `link_many` column:
 ```python
-result = q.update_column(
+result = q.create_column(
     project_id='ctx-M53lgnjpCkc_plt0lqo',
     table_id='tab-M53nDu1y1SXMVA_ny97'
-    column_id='col-1',
-    display_name='company',
+    display_name='manufacturer',
     data_type='link_one',
     linked_table='tab-dfj23eijSFdfewf'
 )
@@ -203,8 +205,20 @@ q.update_column(
     project_id='ctx-M53pLqASSUmxj5yU7LO',
     table_id='tab-M53pRIARajeAYTwPIAN',
     column_id='col-1',
-    display_name='company',
-    data_type='text'
+    display_name='price',
+    data_type='number',
+)
+```
+
+To update column to link to table:
+```python
+q.update_column(
+    project_id='ctx-M53pLqASSUmxj5yU7LO',
+    table_id='tab-M53pRIARajeAYTwPIAN',
+    column_id='col-2',
+    display_name='product',
+    data_type='link_many',
+    linked_table='tab-dfj23eijSFdfewf'
 )
 ```
 
@@ -242,7 +256,9 @@ q.create_vertex(
 )
 ```
 
-The `vertexId` is returned from the result.
+Note that you don't have to set `date_added` type column in creating vertex. Since the value is automatically set by today. Also `column_ids` and `values` lists should have same size, and each value in list should match with each data type of columns that you defined before.
+
+The `vertexId` is returned from the result. You need to know `vertexId` when you update or delete vertex.
 
 ```json
 {
@@ -269,9 +285,7 @@ The `vertexId` is returned from the result.
 }
 ```
 
-Note that you don't have to set `date_added` type column in creating vertex. The default value is today. Also `column_ids` and `values` lists should have same size. Values in list should match with data types of columns that you defined before.
-
-If you want to add vertex linking to another table vertex. The `edges` is a list of tuples which includes `column label` and a `vertex id` that is linked to.
+To create vertex linking to another table's vertex:
 ```python
 q.create_vertex(
     project_id='ctx-M57S8onUVXwdNMRgHPf',
@@ -293,6 +307,9 @@ q.create_vertex(
 )
 ```
 
+The `edges` is a list of tuples which includes `Column Label` and a `vertexId` that is linked to.
+
+
 To update vertex:
 ```python
 q.update_vertex(
@@ -304,7 +321,7 @@ q.update_vertex(
 )
 ```
 
-If you want to create edge from existing vertex:
+To create edge to existing vertex:
 ```python
 result = q.update_vertex(
     project_id='ctx-M57S8onUVXwdNMRgHPf',
@@ -338,7 +355,7 @@ q.delete_vertex(
 
 ## Schema
 
-To see schema of project:
+To get schema of project:
 ```python
 q.get_schema(
     project_id='ctx-M53lgnjpCkc_plt0lqo'
@@ -346,7 +363,6 @@ q.get_schema(
 ```
 
 You can see tables and columns belonging to the project.
-
 ```json
 {
     "data": {
@@ -367,7 +383,7 @@ You can see tables and columns belonging to the project.
 
 ## Graph
 
-To see vertex:
+To get vertices:
 ```python
 q.get_graph(
     project_id='ctx-M53zulrvmCoNnP7PMEU',
@@ -378,8 +394,7 @@ q.get_graph(
 )
 ```
 
-You can add filtering to vertex:
-
+To add filtering:
 ```python
 q.get_graph(
     project_id='ctx-M53zulrvmCoNnP7PMEU',
@@ -396,7 +411,7 @@ q.get_graph(
 )
 ```
 
-You can also add group by and aggregations:
+To add group by and aggregations:
 ```python
 q.summarize_graph(
     project_id='ctx-M53zulrvmCoNnP7PMEU',
@@ -424,7 +439,7 @@ q.summarize_graph(
 )
 ```
 
-The `function` should be one of them. `count`, `sum`, `mean`, `max`, `min`.
+The `function` should be one of `count`, `sum`, `mean`, `max`, `min`.
 
 ## Bulk Upload
 
@@ -439,7 +454,7 @@ q.bulk_upload(
 )
 ```
 
-Please note that csv files should follow Amazon neptune format. For more details, please refer to the documentation. https://docs.aws.amazon.com/neptune/latest/userguide/bulk-load-tutorial-format-gremlin.html
+Note that csv files should follow Amazon neptune csv format. For more details, please refer to the documentation. https://docs.aws.amazon.com/neptune/latest/userguide/bulk-load-tutorial-format-gremlin.html
 
 ## For more details about Kgbase
 Please visit https://kgbase.com/pages/learn

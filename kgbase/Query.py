@@ -94,6 +94,101 @@ class Query(object):
         )
         return response.text
 
+    # GetSchema
+    def get_schema(self, project_id):
+        if not project_id:
+            raise Exception('Project ID required')
+        operation_name = 'GetSchema'
+        response = self._requests(
+            method='get',
+            json={
+                "query": self._get_query(type='query', name=operation_name),
+                "variables": {"context": {"contextId": project_id}},
+                "operationName": operation_name
+            }
+        )
+        return response.text
+
+    # GetGraph
+    def get_graph(self, project_id, table_id, filters=[], offset=0, limit=50):
+        if not project_id:
+            raise Exception('Project ID required')
+        if not table_id:
+            raise Exception('Table ID required')
+        operation_name = 'GetGraph'
+        response = self._requests(
+            method='post',
+            json={
+                "query": self._get_query(type='query', name=operation_name),
+                "variables": {
+                    "context": {"contextId": project_id},
+                    "contextId": project_id,
+                    "query": {
+                        "startingVertices": [], 
+                        "labels": [table_id], 
+                        "pagination": {
+                            "label": table_id, 
+                            "offset": offset, 
+                            "limit": limit
+                        }, 
+                        "filters": [dict({"label": table_id}, **filter) for filter in filters],
+                    }
+                },
+                "operationName": operation_name
+            }
+        )
+        return response.text
+
+    # SummarizeGraph
+    def summarize_graph(self, project_id, table_id, filters=[], groups=[], aggregations=[], offset=0, limit=50):
+        if not project_id:
+            raise Exception('Project ID required')
+        if not table_id:
+            raise Exception('Table ID required')
+        operation_name = 'SummarizeGraph'
+        response = self._requests(
+            method='post',
+            json={
+                "query": self._get_query(type='query', name=operation_name),
+                "variables": {
+                    "context": {"contextId": project_id},
+                    "contextId": project_id,
+                    "query": {
+                        "startingVertices": [],
+                        "labels": [table_id],
+                        "pagination": {
+                            "label": table_id,
+                            "offset": offset,
+                            "limit": limit
+                        },
+                        "filters": [dict({"label": table_id}, **filter) for filter in filters],
+                        "summary": {
+                            "label": table_id,
+                            "groups": groups,
+                            "aggregations": aggregations
+                        }
+                    }
+                },
+                "operationName": operation_name
+            }
+        )
+        return response.text
+    
+    # GetTask
+    def get_task(self, task_id):
+        if not task_id:
+            raise Exception('Task ID required')
+        operation_name = 'GetTask'
+        response = self._requests(
+            method='get',
+            json={
+                "query": self._get_query(type='query', name=operation_name),
+                "variables": {"taskId": task_id},
+                "operationName": operation_name
+            }
+        )
+        return response.text
+
     # Projects
     # GetPublicProjects
     def get_public_projects(self):
@@ -218,36 +313,6 @@ class Query(object):
         )
         return response.text
 
-    # GetSchema
-    def get_schema(self, project_id):
-        if not project_id:
-            raise Exception('Project ID required')
-        operation_name = 'GetSchema'
-        response = self._requests(
-            method='get',
-            json={
-                "query": self._get_query(type='query', name=operation_name),
-                "variables": {"context": {"contextId": project_id}},
-                "operationName": operation_name
-            }
-        )
-        return response.text
-    
-    # GetTask
-    def get_task(self, task_id):
-        if not task_id:
-            raise Exception('Task ID required')
-        operation_name = 'GetTask'
-        response = self._requests(
-            method='get',
-            json={
-                "query": self._get_query(type='query', name=operation_name),
-                "variables": {"taskId": task_id},
-                "operationName": operation_name
-            }
-        )
-        return response.text
-
     # Table
     # CreateTable
     def create_table(self, project_id, display_name, description='', graph_shape="circle"):
@@ -318,71 +383,6 @@ class Query(object):
                     "context": {"contextId": project_id}, 
                     "tableId": table_id,
                     "preserveRelationshipsData": preserve_relationships_data
-                },
-                "operationName": operation_name
-            }
-        )
-        return response.text
-
-    # GetGraph
-    def get_graph(self, project_id, table_id, filters=[], offset=0, limit=50):
-        if not project_id:
-            raise Exception('Project ID required')
-        if not table_id:
-            raise Exception('Table ID required')
-        operation_name = 'GetGraph'
-        response = self._requests(
-            method='post',
-            json={
-                "query": self._get_query(type='query', name=operation_name),
-                "variables": {
-                    "context": {"contextId": project_id},
-                    "contextId": project_id,
-                    "query": {
-                        "startingVertices": [], 
-                        "labels": [table_id], 
-                        "pagination": {
-                            "label": table_id, 
-                            "offset": offset, 
-                            "limit": limit
-                        }, 
-                        "filters": [dict({"label": table_id}, **filter) for filter in filters],
-                    }
-                },
-                "operationName": operation_name
-            }
-        )
-        return response.text
-
-    # SummarizeGraph
-    def summarize_graph(self, project_id, table_id, filters=[], groups=[], aggregations=[], offset=0, limit=50):
-        if not project_id:
-            raise Exception('Project ID required')
-        if not table_id:
-            raise Exception('Table ID required')
-        operation_name = 'SummarizeGraph'
-        response = self._requests(
-            method='post',
-            json={
-                "query": self._get_query(type='query', name=operation_name),
-                "variables": {
-                    "context": {"contextId": project_id},
-                    "contextId": project_id,
-                    "query": {
-                        "startingVertices": [],
-                        "labels": [table_id],
-                        "pagination": {
-                            "label": table_id,
-                            "offset": offset,
-                            "limit": limit
-                        },
-                        "filters": [dict({"label": table_id}, **filter) for filter in filters],
-                        "summary": {
-                            "label": table_id,
-                            "groups": groups,
-                            "aggregations": aggregations
-                        }
-                    }
                 },
                 "operationName": operation_name
             }
