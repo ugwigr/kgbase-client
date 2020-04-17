@@ -80,7 +80,7 @@ q.create_project(
 ```
 
 You can see `projectId` from result.
-```
+```json
 {
     "data": {
         "createProject": {
@@ -131,7 +131,7 @@ q.create_table(
 ```
 
 The `tableId` is returned from the result.
-```
+```json
 {
     "data": {
         "createTable": {
@@ -172,7 +172,7 @@ q.create_column(
 ```
 
 The `columnId` is returned from the result.
-```python
+```json
 {
     "data": {
         "createColumn": {
@@ -219,7 +219,7 @@ q.delete_column(
 
 ## Vertex
 To create vertex:
-```
+```python
 q.create_vertex(
     project_id='ctx-M53pLqASSUmxj5yU7LO',
     table_id='tab-M53pRIARajeAYTwPIAN',
@@ -244,7 +244,7 @@ q.create_vertex(
 
 The `vertexId` is returned from the result.
 
-```python
+```json
 {
     "data": {
         "createVertex": {
@@ -347,7 +347,7 @@ q.get_schema(
 
 You can see tables and columns belonging to the project.
 
-```
+```json
 {
     "data": {
         "getSchema": {
