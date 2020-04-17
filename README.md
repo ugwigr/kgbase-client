@@ -223,10 +223,26 @@ To create vertex:
 q.create_vertex(
     project_id='ctx-M53pLqASSUmxj5yU7LO',
     table_id='tab-M53pRIARajeAYTwPIAN',
-    column_ids=['col-1', 'col-2'],
-    values=['Google', 'Pixel 3A']
+    column_ids=[
+        'col-0',    # text
+        'col-1',    # number
+        'col-2',    # boolean
+        'col-3',    # url
+        'col-4',    # date
+        # 'col-5'     # date_added
+    ],
+    values=[
+        'Google',
+        10.5,
+        False,
+        'https://google.com',
+        datetime.datetime.today(),
+        # ''
+    ]
 )
 ```
+
+Please note that you don't have to add `date_added` type column in creating vertex. The default value is today. Also `column_ids` and `values` should have same length of list in request. Value in list should match with data type of columns that you defined before.
 
 The `vertexId` is returned from the result.
 
@@ -255,7 +271,27 @@ The `vertexId` is returned from the result.
 }
 ```
 
-Please note that `column_ids` and `values` should have same length of list in request. Value in list should match with data type of columns that you defined before.
+If you want to add vertex linking to another table vertex. The edges is a list of tuples which includes column label and a vertex id that is linked to.
+
+```python
+q.create_vertex(
+    project_id='ctx-M57S8onUVXwdNMRgHPf',
+    table_id='tab-M57wxxBqH0D7aKgYhhH',
+    column_ids=[
+        'col-0',
+        'col-1',
+        'col-2',
+    ],
+    values=[
+        'Google',
+        True,
+        ''
+    ],
+    edges=[
+        ("column3", "row-M584gLykTjFpGaD9T9j")
+    ]
+)
+```
 
 To update vertex:
 ```python
@@ -265,6 +301,28 @@ q.update_vertex(
     vertex_id='row-M53tT_jTviJ50qyzgsL',
     column_ids=['col-1', 'col-2'],
     values=['Google', 'Pixel 3'] 
+)
+```
+
+If you want to link another table vertex:
+```python
+result = q.update_vertex(
+    project_id='ctx-M57S8onUVXwdNMRgHPf',
+    table_id='tab-M57wxxBqH0D7aKgYhhH',
+    vertex_id='row-M588L2W5S9WZJ5t2Spn',
+    column_ids=[
+        'col-0',
+        'col-1',
+        'col-2',
+    ],
+    values=[
+        'Google',
+        True,
+        ''
+    ],
+    edges=[
+        ("column3", "row-M587jZETRpuCBIXUfw6")
+    ]
 )
 ```
 

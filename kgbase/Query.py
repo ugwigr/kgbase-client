@@ -3,6 +3,7 @@ import json
 import time
 import sys
 import os
+import datetime
 
 
 class Query(object):
@@ -480,7 +481,7 @@ class Query(object):
         return response.text
 
     # CreateVertex
-    def create_vertex(self, project_id, table_id, column_ids, values):
+    def create_vertex(self, project_id, table_id, column_ids, values, edges):
         if not project_id:
             raise Exception('Project ID required')
         if not table_id:
@@ -489,6 +490,27 @@ class Query(object):
             raise Exception('Column IDs required')
         if not values:
             raise Exception('Values required')
+
+        data_values = []
+        for index, column_id in enumerate(column_ids):
+            if isinstance(values[index], bool):
+                value = str(values[index]).lower()
+            elif isinstance(values[index], (datetime.datetime, datetime.date)):
+                value = values[index].strftime('%Y%m%dT%H%M%S')
+            else:
+                value = str(values[index])
+            data_values.append({
+                "key": column_id,
+                "value": value
+            })
+
+        data_edges = []
+        for label, to_id in edges:
+            data_edges.append({
+                "label": label,
+                "toId": to_id
+            })
+
         operation_name = 'CreateVertex'
         response = self._requests(
             method='post',
@@ -498,12 +520,8 @@ class Query(object):
                     "context": {"contextId": project_id}, 
                     "label": table_id,
                     "data": {
-                        "values": [
-                            {
-                                "key": column_id, "value": values[index]
-                            } for index, column_id in enumerate(column_ids)
-                        ],
-                        "edges": []
+                        "values": data_values,
+                        "edges": data_edges,
                     }
                 },
                 "operationName": operation_name
@@ -512,7 +530,7 @@ class Query(object):
         return response.text
 
     # UpdateVertex
-    def update_vertex(self, project_id, table_id, vertex_id, column_ids, values):
+    def update_vertex(self, project_id, table_id, vertex_id, column_ids, values, edges):
         if not project_id:
             raise Exception('Project ID required')
         if not table_id:
@@ -523,6 +541,27 @@ class Query(object):
             raise Exception('Column IDs required')
         if not values:
             raise Exception('Values required')
+
+        data_values = []
+        for index, column_id in enumerate(column_ids):
+            if isinstance(values[index], bool):
+                value = str(values[index]).lower()
+            elif isinstance(values[index], (datetime.datetime, datetime.date)):
+                value = values[index].strftime('%Y%m%dT%H%M%S')
+            else:
+                value = str(values[index])
+            data_values.append({
+                "key": column_id,
+                "value": value
+            })
+
+        data_edges = []
+        for label, to_id in edges:
+            data_edges.append({
+                "label": label,
+                "toId": to_id
+            })
+
         operation_name = 'UpdateVertex'
         response = self._requests(
             method='post',
@@ -533,12 +572,8 @@ class Query(object):
                     "label": table_id,
                     "vertexId": vertex_id,
                     "data": {
-                        "values": [
-                            {
-                                "key": column_id, "value": values[index]
-                            } for index, column_id in enumerate(column_ids)
-                        ],
-                        "edges": []
+                        "values": data_values,
+                        "edges": data_edges
                     }
                 },
                 "operationName": operation_name
