@@ -89,7 +89,7 @@ You can see `projectId` from result.
                 "uuid": "a0406c6d-122a-4ff2-af7f-976ba5cbca01",
                 "graphqlId": "Project/1509",
                 "projectId": "ctx-M53lgnjpCkc_plt0lqo",
-                ...
+                "...": "..."
             }
         }
     }
