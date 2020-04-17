@@ -242,8 +242,6 @@ q.create_vertex(
 )
 ```
 
-Please note that you don't have to add `date_added` type column in creating vertex. The default value is today. Also `column_ids` and `values` should have same length of list in request. Value in list should match with data type of columns that you defined before.
-
 The `vertexId` is returned from the result.
 
 ```python
@@ -271,8 +269,9 @@ The `vertexId` is returned from the result.
 }
 ```
 
-If you want to add vertex linking to another table vertex. The edges is a list of tuples which includes column label and a vertex id that is linked to.
+Note that you don't have to set `date_added` type column in creating vertex. The default value is today. Also `column_ids` and `values` lists should have same size. Values in list should match with data types of columns that you defined before.
 
+If you want to add vertex linking to another table vertex. The `edges` is a list of tuples which includes `column label` and a `vertex id` that is linked to.
 ```python
 q.create_vertex(
     project_id='ctx-M57S8onUVXwdNMRgHPf',
@@ -288,7 +287,8 @@ q.create_vertex(
         ''
     ],
     edges=[
-        ("column3", "row-M584gLykTjFpGaD9T9j")
+        ("column3", "row-M584gLykTjFpGaD9T9j"),
+        ("column3", "row-M58Ac6n8CjPhqp8-u7M")
     ]
 )
 ```
@@ -304,7 +304,7 @@ q.update_vertex(
 )
 ```
 
-If you want to link another table vertex:
+If you want to create edge from existing vertex:
 ```python
 result = q.update_vertex(
     project_id='ctx-M57S8onUVXwdNMRgHPf',
@@ -321,7 +321,8 @@ result = q.update_vertex(
         ''
     ],
     edges=[
-        ("column3", "row-M587jZETRpuCBIXUfw6")
+        ("column3", "row-M587jZETRpuCBIXUfw6"),
+        ("column3", "row-M58A84uaVMbCC16pSUA")
     ]
 )
 ```

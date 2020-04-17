@@ -1,4 +1,6 @@
 from kgbase import Query
+import datetime
+
 
 # TODO
 # csv upload
@@ -7,8 +9,8 @@ from kgbase import Query
 if __name__ == "__main__":
     q = Query()
     result = q.login(
-        username='a',
-        password='1'
+        username='username',
+        password='password'
     )
     print (q._organization_id)
     print (result)
@@ -235,10 +237,10 @@ if __name__ == "__main__":
     }
     '''
 
-    result = q.destroy_project(
-        project_id='ctx-M53mQIDEperhJx4e7J0'
-    )
-    print (result)
+    # result = q.destroy_project(
+    #     project_id='ctx-M53mQIDEperhJx4e7J0'
+    # )
+    # print (result)
     '''
     {
         "data": {
@@ -249,12 +251,12 @@ if __name__ == "__main__":
     }
     '''
 
-    result = q.create_table(
-        project_id='ctx-M53pLqASSUmxj5yU7LO',
-        display_name='api-test',
-        description='Api test'
-    )
-    print (result)
+    # result = q.create_table(
+    #     project_id='ctx-M53pLqASSUmxj5yU7LO',
+    #     display_name='api-test',
+    #     description='Api test'
+    # )
+    # print (result)
     '''
     {
         "data": {
@@ -266,13 +268,13 @@ if __name__ == "__main__":
     }
     '''
 
-    result = q.update_table(
-        project_id='ctx-M53lgnjpCkc_plt0lqo',
-        table_id='tab-M53nDu1y1SXMVA_ny97',
-        display_name='api-table2',
-        description='asdfsdfs',
-    )
-    print (result)
+    # result = q.update_table(
+    #     project_id='ctx-M53lgnjpCkc_plt0lqo',
+    #     table_id='tab-M53nDu1y1SXMVA_ny97',
+    #     display_name='api-table2',
+    #     description='asdfsdfs',
+    # )
+    # print (result)
     '''
     {
         "data": {
@@ -283,11 +285,11 @@ if __name__ == "__main__":
     }
     '''
 
-    result = q.delete_table(
-        project_id='ctx-M53lgnjpCkc_plt0lqo',
-        table_id='tab-M53nDu1y1SXMVA_ny97'
-    )
-    print (result)
+    # result = q.delete_table(
+    #     project_id='ctx-M53lgnjpCkc_plt0lqo',
+    #     table_id='tab-M53nDu1y1SXMVA_ny97'
+    # )
+    # print (result)
     '''
     {
         "data": {
@@ -299,12 +301,12 @@ if __name__ == "__main__":
     }
     '''
 
-    result = q.create_column(
-        project_id='ctx-M53pLqASSUmxj5yU7LO',
-        table_id='tab-M53pRIARajeAYTwPIAN',
-        display_name='api_column',
-        data_type='number'
-    )
+    # result = q.create_column(
+    #     project_id='ctx-M53pLqASSUmxj5yU7LO',
+    #     table_id='tab-M53pRIARajeAYTwPIAN',
+    #     display_name='api_column',
+    #     data_type='number'
+    # )
     # result = q.update_column(
     #     project_id='ctx-M53pLqASSUmxj5yU7LO',
     #     table_id='tab-M53pRIARajeAYTwPIAN',
@@ -326,21 +328,21 @@ if __name__ == "__main__":
     '''
 
     # text, number, boolean, url, date, date_added, link_one, link_many
-    result = q.update_column(
-        project_id='ctx-M53pLqASSUmxj5yU7LO',
-        table_id='tab-M53pRIARajeAYTwPIAN',
-        column_id='col-1',
-        display_name='api-column10',
-        data_type='number'
-    )
-    result = q.update_column(
-        project_id='ctx-M53pLqASSUmxj5yU7LO',
-        table_id='tab-M53pRIARajeAYTwPIAN',
-        column_id='col-10',
-        display_name='api-column10',
-        data_type='link_one',
-        linked_table='tab-dfj23eijSFdfewf'
-    )
+    # result = q.update_column(
+    #     project_id='ctx-M53pLqASSUmxj5yU7LO',
+    #     table_id='tab-M53pRIARajeAYTwPIAN',
+    #     column_id='col-1',
+    #     display_name='api-column10',
+    #     data_type='number'
+    # )
+    # result = q.update_column(
+    #     project_id='ctx-M53pLqASSUmxj5yU7LO',
+    #     table_id='tab-M53pRIARajeAYTwPIAN',
+    #     column_id='col-10',
+    #     display_name='api-column10',
+    #     data_type='link_one',
+    #     linked_table='tab-dfj23eijSFdfewf'
+    # )
     # print (result)
     '''
     {
@@ -353,11 +355,11 @@ if __name__ == "__main__":
     }
     '''
     
-    result = q.delete_column(
-        project_id='ctx-M53pLqASSUmxj5yU7LO',
-        table_id='tab-M53pRIARajeAYTwPIAN',
-        column_id='col-0',
-    )
+    # result = q.delete_column(
+    #     project_id='ctx-M53pLqASSUmxj5yU7LO',
+    #     table_id='tab-M53pRIARajeAYTwPIAN',
+    #     column_id='col-0',
+    # )
     # print (result)
     '''
     {
@@ -369,13 +371,85 @@ if __name__ == "__main__":
     }
     '''
 
+    # result = q.create_vertex(
+    #     project_id='ctx-M57S8onUVXwdNMRgHPf',
+    #     table_id='tab-M57wnf1XcRbRMQImL6W',
+    #     column_ids=[
+    #         'col-0',    # text
+    #         'col-1',    # number
+    #         'col-2',    # boolean
+    #         'col-3',    # url
+    #         'col-4',    # date
+    #         # 'col-5'     # date_added
+    #     ],
+    #     values=[
+    #         'Google',
+    #         10.5,
+    #         False,
+    #         'https://google.com',
+    #         datetime.datetime.today(),
+    #         # datetime.datetime(2020, 4, 15)
+    #     ]
+    # )
+    # print (result)
+
+    # result = q.get_graph(
+    #     project_id='ctx-M57S8onUVXwdNMRgHPf',
+    #     table_id='tab-M584TGE_0VrWcHCHCTO',
+    #     filters=[],
+    #     offset=1,
+    #     limit=50
+    # )
+    # print (result)
+
     result = q.create_vertex(
-        project_id='ctx-M53pLqASSUmxj5yU7LO',
-        table_id='tab-M53pRIARajeAYTwPIAN',
-        column_ids=['col-1', 'col-3'],
-        values=['test', 1]
+        project_id='ctx-M57S8onUVXwdNMRgHPf',
+        table_id='tab-M57wxxBqH0D7aKgYhhH',
+        column_ids=[
+            'col-0',
+            'col-1',
+            'col-2',
+        ],
+        values=[
+            'Apple',
+            True,
+            ''
+        ],
+        edges=[
+            ("column3", "row-M587jZETRpuCBIXUfw6"),
+            ("column3", "row-M58Ac6n8CjPhqp8-u7M")
+        ]
+    )
+
+    result = q.update_vertex(
+        project_id='ctx-M57S8onUVXwdNMRgHPf',
+        table_id='tab-M57wxxBqH0D7aKgYhhH',
+        vertex_id='row-M58Avey3PjxPOnz2_nz',
+        column_ids=[
+            'col-0',
+            'col-1',
+            'col-2',
+        ],
+        values=[
+            'Google',
+            True,
+            ''
+        ],
+        edges=[
+            ("column3", "row-M587jZETRpuCBIXUfw6"),
+            ("column3", "row-M58Ac6n8CjPhqp8-u7M")
+        ]
     )
     print (result)
+
+    # result = q.get_graph(
+    #     project_id='ctx-M57S8onUVXwdNMRgHPf',
+    #     table_id='tab-M57wnf1XcRbRMQImL6W',
+    #     filters=[],
+    #     offset=1,
+    #     limit=50
+    # )
+    # print (result)
     '''
     {
         "data": {
@@ -401,14 +475,14 @@ if __name__ == "__main__":
     }
     '''
 
-    result = q.update_vertex(
-        project_id='ctx-M53pLqASSUmxj5yU7LO',
-        table_id='tab-M53pRIARajeAYTwPIAN',
-        vertex_id='row-M53tT_jTviJ50qyzgsL',
-        column_ids=['col-1', 'col-3'],
-        values=['test', 7] 
-    )
-    print (result)
+    # result = q.update_vertex(
+    #     project_id='ctx-M53pLqASSUmxj5yU7LO',
+    #     table_id='tab-M53pRIARajeAYTwPIAN',
+    #     vertex_id='row-M53tT_jTviJ50qyzgsL',
+    #     column_ids=['col-1', 'col-3'],
+    #     values=['test', 7]
+    # )
+    # print (result)
     '''
     {
         "data": {
@@ -419,12 +493,12 @@ if __name__ == "__main__":
     }
     '''
 
-    result = q.delete_vertex(
-        project_id='ctx-M53pLqASSUmxj5yU7LO',
-        table_id='tab-M53pRIARajeAYTwPIAN',
-        vertex_id='row-M53tiVvmOZ451AuBIUJ',
-    )
-    print (result)
+    # result = q.delete_vertex(
+    #     project_id='ctx-M53pLqASSUmxj5yU7LO',
+    #     table_id='tab-M53pRIARajeAYTwPIAN',
+    #     vertex_id='row-M53tiVvmOZ451AuBIUJ',
+    # )
+    # print (result)
     '''
     {
         "data": {
@@ -455,9 +529,9 @@ if __name__ == "__main__":
     '''
 
 
-    result = q.get_schema(
-        project_id='ctx-M53lgnjpCkc_plt0lqo'
-    )
+    # result = q.get_schema(
+    #     project_id='ctx-M53lgnjpCkc_plt0lqo'
+    # )
     # print (result)
     '''
     {
@@ -488,14 +562,14 @@ if __name__ == "__main__":
     # print (result)
 
 
-    result = q.get_graph(
-        project_id='ctx-M53zulrvmCoNnP7PMEU',
-        table_id='tab-M53zumOvT3xKmqkIB_X',
-        filters=[],
-        offset=1,
-        limit=50
-    )
-    print (result)
+    # result = q.get_graph(
+    #     project_id='ctx-M53zulrvmCoNnP7PMEU',
+    #     table_id='tab-M53zumOvT3xKmqkIB_X',
+    #     filters=[],
+    #     offset=1,
+    #     limit=50
+    # )
+    # print (result)
     '''
     {
         "data": {
@@ -585,39 +659,39 @@ if __name__ == "__main__":
     }
     '''
 
-    result = q.get_graph(
-        project_id='ctx-M53zulrvmCoNnP7PMEU',
-        table_id='tab-M53zumOvT3xKmqkIB_X',
-        filters=[
-            {
-                "property": "col-2",
-                "predicate": "=",
-                "value": "apple"
-            }
-        ],
-        offset=1,
-        limit=50
-    )
+    # result = q.get_graph(
+    #     project_id='ctx-M53zulrvmCoNnP7PMEU',
+    #     table_id='tab-M53zumOvT3xKmqkIB_X',
+    #     filters=[
+    #         {
+    #             "property": "col-2",
+    #             "predicate": "=",
+    #             "value": "apple"
+    #         }
+    #     ],
+    #     offset=1,
+    #     limit=50
+    # )
     # print (result)
 
     # Summarize Graph
     # count, sum, mean, max, min
-    result = q.summarize_graph(
-        project_id='ctx-M53zulrvmCoNnP7PMEU',
-        table_id='tab-M53zumOvT3xKmqkIB_X',
-        filters=[
-            {
-                "property": "col-2",
-                "predicate": "=",
-                "value": "apple"
-            }
-        ],
-        groups=[{"property": "col-2"}],
-        aggregations=[{"property": "col-1", "function": "sum"}],
-        offset=1,
-        limit=50
-    )
-    print (result)
+    # result = q.summarize_graph(
+    #     project_id='ctx-M53zulrvmCoNnP7PMEU',
+    #     table_id='tab-M53zumOvT3xKmqkIB_X',
+    #     filters=[
+    #         {
+    #             "property": "col-2",
+    #             "predicate": "=",
+    #             "value": "apple"
+    #         }
+    #     ],
+    #     groups=[{"property": "col-2"}],
+    #     aggregations=[{"property": "col-1", "function": "sum"}],
+    #     offset=1,
+    #     limit=50
+    # )
+    # print (result)
     '''
     {
         "data": {
@@ -633,13 +707,13 @@ if __name__ == "__main__":
     # result = q.get_task(task_id="1867")
     # print (result)
 
-    q.bulk_upload(
-        project_id='ctx-M57S8onUVXwdNMRgHPf',
-        filepaths=[
-            '/Users/sangwonseo/Downloads/company1.csv',
-            '/Users/sangwonseo/Downloads/company2.csv',
-        ]
-    )
+    # q.bulk_upload(
+    #     project_id='ctx-M57S8onUVXwdNMRgHPf',
+    #     filepaths=[
+    #         '/Users/sangwonseo/Downloads/company1.csv',
+    #         '/Users/sangwonseo/Downloads/company2.csv',
+    #     ]
+    # )
     '''
     {
         "data": {
