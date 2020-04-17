@@ -7,8 +7,8 @@ from kgbase import Query
 if __name__ == "__main__":
     q = Query()
     result = q.login(
-        username='sangwon.seo@thinknum.com',
-        password='worldcup'
+        username='a',
+        password='1'
     )
     print (q._organization_id)
     print (result)
