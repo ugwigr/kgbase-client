@@ -481,24 +481,22 @@ class Query(object):
         return response.text
 
     # CreateVertex
-    def create_vertex(self, project_id, table_id, column_ids, values, edges):
+    def create_vertex(self, project_id, table_id, values, edges):
         if not project_id:
             raise Exception('Project ID required')
         if not table_id:
             raise Exception('Table ID required')
-        if not column_ids:
-            raise Exception('Column IDs required')
         if not values:
             raise Exception('Values required')
 
         data_values = []
-        for index, column_id in enumerate(column_ids):
-            if isinstance(values[index], bool):
-                value = str(values[index]).lower()
-            elif isinstance(values[index], (datetime.datetime, datetime.date)):
-                value = values[index].strftime('%Y%m%dT%H%M%S')
+        for column_id, value in values.items():
+            if isinstance(value, bool):
+                value = str(value).lower()
+            elif isinstance(value, (datetime.datetime, datetime.date)):
+                value = value.strftime('%Y%m%dT%H%M%S')
             else:
-                value = str(values[index])
+                value = str(value)
             data_values.append({
                 "key": column_id,
                 "value": value
@@ -530,26 +528,24 @@ class Query(object):
         return response.text
 
     # UpdateVertex
-    def update_vertex(self, project_id, table_id, vertex_id, column_ids, values, edges):
+    def update_vertex(self, project_id, table_id, vertex_id, values, edges):
         if not project_id:
             raise Exception('Project ID required')
         if not table_id:
             raise Exception('Table ID required')
         if not vertex_id:
             raise Exception('Vertex ID required')
-        if not column_ids:
-            raise Exception('Column IDs required')
         if not values:
             raise Exception('Values required')
 
         data_values = []
-        for index, column_id in enumerate(column_ids):
-            if isinstance(values[index], bool):
-                value = str(values[index]).lower()
-            elif isinstance(values[index], (datetime.datetime, datetime.date)):
-                value = values[index].strftime('%Y%m%dT%H%M%S')
+        for column_id, value in values.items():
+            if isinstance(value, bool):
+                value = str(value).lower()
+            elif isinstance(value, (datetime.datetime, datetime.date)):
+                value = value.strftime('%Y%m%dT%H%M%S')
             else:
-                value = str(values[index])
+                value = str(value)
             data_values.append({
                 "key": column_id,
                 "value": value

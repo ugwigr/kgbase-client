@@ -237,22 +237,15 @@ To create vertex:
 q.create_vertex(
     project_id='ctx-M53pLqASSUmxj5yU7LO',
     table_id='tab-M53pRIARajeAYTwPIAN',
-    column_ids=[
-        'col-0',    # text
-        'col-1',    # number
-        'col-2',    # boolean
-        'col-3',    # url
-        'col-4',    # date
+    values={
+        'col-0': 'Google',                  # text
+        'col-1': 10.5,                      # number
+        'col-2': False,                     # boolean
+        'col-3': 'https://google.com',      # url
+        'col-4': datetime.datetime.today()  # date
         # 'col-5'     # date_added
-    ],
-    values=[
-        'Google',
-        10.5,
-        False,
-        'https://google.com',
-        datetime.datetime.today(),
-        # ''
-    ]
+    },
+    edges=[]
 )
 ```
 
@@ -290,18 +283,13 @@ To create vertex linking to another table's vertex:
 q.create_vertex(
     project_id='ctx-M57S8onUVXwdNMRgHPf',
     table_id='tab-M57wxxBqH0D7aKgYhhH',
-    column_ids=[
-        'col-0',
-        'col-1',
-        'col-2',
-    ],
-    values=[
-        'Google',
-        True,
-        ''
-    ],
+    values={
+        'col-0': 'Apple7',
+        'col-1': True,
+        'col-2': ''
+    },
     edges=[
-        ("column3", "row-M584gLykTjFpGaD9T9j"),
+        ("column3", "row-M587jZETRpuCBIXUfw6"),
         ("column3", "row-M58Ac6n8CjPhqp8-u7M")
     ]
 )
@@ -316,8 +304,11 @@ q.update_vertex(
     project_id='ctx-M53pLqASSUmxj5yU7LO',
     table_id='tab-M53pRIARajeAYTwPIAN',
     vertex_id='row-M53tT_jTviJ50qyzgsL',
-    column_ids=['col-1', 'col-2'],
-    values=['Google', 'Pixel 3'] 
+    values={
+        'col-1': 'Google', 
+        'col-2': 'Pixel 3'
+    },
+    edges= []
 )
 ```
 
@@ -327,16 +318,11 @@ result = q.update_vertex(
     project_id='ctx-M57S8onUVXwdNMRgHPf',
     table_id='tab-M57wxxBqH0D7aKgYhhH',
     vertex_id='row-M588L2W5S9WZJ5t2Spn',
-    column_ids=[
-        'col-0',
-        'col-1',
-        'col-2',
-    ],
-    values=[
-        'Google',
-        True,
-        ''
-    ],
+    values={
+        'col-0': 'Google',
+        'col-1': True,
+        'col-2': ''
+    },
     edges=[
         ("column3", "row-M587jZETRpuCBIXUfw6"),
         ("column3", "row-M58A84uaVMbCC16pSUA")
