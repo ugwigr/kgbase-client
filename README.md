@@ -85,16 +85,12 @@ q.create_project(
 The `projectId` is returned from response. You need to know `projectId` when you update or detroy project.
 ```json
 {
-    "data": {
-        "createProject": {
-            "ok": true,
-            "project": {
-                "uuid": "a0406c6d-122a-4ff2-af7f-976ba5cbca01",
-                "graphqlId": "Project/1509",
-                "projectId": "ctx-M53lgnjpCkc_plt0lqo",
-                "...": "..."
-            }
-        }
+    "ok": true,
+    "project": {
+        "uuid": "a0406c6d-122a-4ff2-af7f-976ba5cbca01",
+        "graphqlId": "Project/1509",
+        "projectId": "ctx-M53lgnjpCkc_plt0lqo",
+        "...": "..."
     }
 }
 ```
@@ -136,12 +132,8 @@ q.create_table(
 The `tableId` is returned from the response. You need to know `tableId` when you update or delete table.
 ```json
 {
-    "data": {
-        "createTable": {
-            "ok": true,
-            "tableId": "tab-M53nDu1y1SXMVA_ny97"
-        }
-    }
+    "ok": true,
+    "tableId": "tab-M53nDu1y1SXMVA_ny97"
 }
 ```
 
@@ -179,12 +171,8 @@ The `data_type` should be one of `text`, `number`, `boolean`, `url`, `date`, `da
 The `columnId` is returned from the response. You need to know `columnId` when you update or delete column.
 ```json
 {
-    "data": {
-        "createColumn": {
-            "ok": true,
-            "columnId": "col-1"
-        }
-    }
+    "ok": true,
+    "columnId": "col-1"
 }
 ```
 
@@ -255,25 +243,21 @@ The `vertexId` is returned from the result. You need to know `vertexId` when you
 
 ```json
 {
-    "data": {
-        "createVertex": {
-            "ok": true,
-            "vertex": {
-                "id": "row-M53tT_jTviJ50qyzgsL",
-                "label": "tab-M53pRIARajeAYTwPIAN",
-                "values": [
-                    {
-                        "key": "col-1",
-                        "value": "Google"
-                    },
-                    {
-                        "key": "col-2",
-                        "value": "Pixel 3A"
-                    }
-                ],
-                "contextId": null
+    "ok": true,
+    "vertex": {
+        "id": "row-M53tT_jTviJ50qyzgsL",
+        "label": "tab-M53pRIARajeAYTwPIAN",
+        "values": [
+            {
+                "key": "col-1",
+                "value": "Google"
+            },
+            {
+                "key": "col-2",
+                "value": "Pixel 3A"
             }
-        }
+        ],
+        "contextId": null
     }
 }
 ```
@@ -351,19 +335,15 @@ q.get_schema(
 You can see tables and columns belonging to the project.
 ```json
 {
-    "data": {
-        "getSchema": {
-            "tables": [
-                {
-                    "tableId": "tab-M53lgnpTXtQhMqMBXHH",
-                    "displayName": "Table 1",
-                    "columns": [],
-                    "config": null
-                }
-            ],
-            "links": []
+    "tables": [
+        {
+            "tableId": "tab-M53lgnpTXtQhMqMBXHH",
+            "displayName": "Table 1",
+            "columns": [],
+            "config": null
         }
-    }
+    ],
+    "links": []
 }
 ```
 

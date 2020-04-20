@@ -1,5 +1,6 @@
 from kgbase import Query
 import datetime
+import json
 
 
 # TODO
@@ -9,10 +10,9 @@ import datetime
 if __name__ == "__main__":
     q = Query()
     result = q.login(
-        username='username',
-        password='password'
+        username='sangwon.seo@thinknum.com',
+        password='1'
     )
-    print (q._organization_id)
     print (result)
     '''
     {
@@ -36,8 +36,8 @@ if __name__ == "__main__":
     }
     '''
 
-    # result = q.get_user_state()
-    # print (result)
+    result = q.get_user_state()
+    print (result)
     '''
     {
         "data": {
@@ -68,17 +68,17 @@ if __name__ == "__main__":
     }
     '''
 
-    # result = q.get_public_projects()
-    # print (result)
+    result = q.get_public_projects()
+    print (result)
 
-    # result = q.get_team_projects()
-    # print (result)
+    result = q.get_team_projects()
+    print (result)
 
-    # result = q.get_favorite_projects()
-    # print (result)
+    result = q.get_favorite_projects()
+    print (result)
 
-    # result = q.get_user_projects()
-    # print (result)
+    result = q.get_user_projects()
+    print (result)
     '''
     {
         "data": {
@@ -159,10 +159,10 @@ if __name__ == "__main__":
     }
     '''
 
-    # result = q.get_project_state(
-    #     project_id='ctx-M53lgnjpCkc_plt0lqo'
-    # )
-    # print (result)
+    result = q.get_project_state(
+        project_id='ctx-M5NlqLGwLrSmOQ_Uyny'
+    )
+    print (result)
     '''
     {
         "data": {
@@ -200,7 +200,7 @@ if __name__ == "__main__":
     '''
 
     # result = q.update_project(
-    #     project_id='ctx-M53lgnjpCkc_plt0lqo', 
+    #     project_id='ctx-M5NlqLGwLrSmOQ_Uyny', 
     #     name='test-api-v2', 
     #     is_public=False
     # )
@@ -238,7 +238,7 @@ if __name__ == "__main__":
     '''
 
     # result = q.destroy_project(
-    #     project_id='ctx-M53mQIDEperhJx4e7J0'
+    #     project_id='ctx-M5NlNNGLbXKm8dWTXRm'
     # )
     # print (result)
     '''
@@ -252,7 +252,7 @@ if __name__ == "__main__":
     '''
 
     # result = q.create_table(
-    #     project_id='ctx-M53pLqASSUmxj5yU7LO',
+    #     project_id='ctx-M5NlqLGwLrSmOQ_Uyny',
     #     display_name='api-test',
     #     description='Api test'
     # )
@@ -269,8 +269,8 @@ if __name__ == "__main__":
     '''
 
     # result = q.update_table(
-    #     project_id='ctx-M53lgnjpCkc_plt0lqo',
-    #     table_id='tab-M53nDu1y1SXMVA_ny97',
+    #     project_id='ctx-M5NlqLGwLrSmOQ_Uyny',
+    #     table_id='tab-M5Nm23_krbcQHdBqWh-',
     #     display_name='api-table2',
     #     description='asdfsdfs',
     # )
@@ -286,8 +286,8 @@ if __name__ == "__main__":
     '''
 
     # result = q.delete_table(
-    #     project_id='ctx-M53lgnjpCkc_plt0lqo',
-    #     table_id='tab-M53nDu1y1SXMVA_ny97'
+    #     project_id='ctx-M5Na8A_zgK3m455pp-r',
+    #     table_id='tab-M5NaEx_pBg25HdhXvmG',
     # )
     # print (result)
     '''
@@ -302,18 +302,20 @@ if __name__ == "__main__":
     '''
 
     # result = q.create_column(
-    #     project_id='ctx-M53pLqASSUmxj5yU7LO',
-    #     table_id='tab-M53pRIARajeAYTwPIAN',
+    #     project_id='ctx-M5NlqLGwLrSmOQ_Uyny',
+    #     table_id='tab-M5Nm23_krbcQHdBqWh-',
     #     display_name='api_column',
-    #     data_type='number'
+    #     data_type='text'
     # )
+
     # result = q.update_column(
-    #     project_id='ctx-M53pLqASSUmxj5yU7LO',
-    #     table_id='tab-M53pRIARajeAYTwPIAN',
-    #     column_id='col-10',
-    #     display_name='api-column10',
-    #     data_type='link_one',
-    #     linked_table='tab-dfj23eijSFdfewf'
+    #     project_id='ctx-M5NlqLGwLrSmOQ_Uyny',
+    #     table_id='tab-M5NlqLNJdGIrk5uFI4m',
+    #     column_id='col-0',
+    #     display_name='api-column0',
+    #     data_type='text'
+    #     # data_type='link_one',
+    #     # linked_table='tab-dfj23eijSFdfewf'
     # )
     # print (result)
     '''
@@ -336,9 +338,9 @@ if __name__ == "__main__":
     #     data_type='number'
     # )
     # result = q.update_column(
-    #     project_id='ctx-M53pLqASSUmxj5yU7LO',
-    #     table_id='tab-M53pRIARajeAYTwPIAN',
-    #     column_id='col-10',
+    #     project_id='ctx-M5NlqLGwLrSmOQ_Uyny',
+    #     table_id='tab-M5NlqLNJdGIrk5uFI4m',
+    #     column_id='col-0',
     #     display_name='api-column10',
     #     data_type='link_one',
     #     linked_table='tab-dfj23eijSFdfewf'
@@ -356,95 +358,105 @@ if __name__ == "__main__":
     '''
     
     # result = q.delete_column(
-    #     project_id='ctx-M53pLqASSUmxj5yU7LO',
-    #     table_id='tab-M53pRIARajeAYTwPIAN',
+    #     project_id='ctx-M5Na8A_zgK3m455pp-r',
+    #     table_id='tab-M5Nb1-JqUtsb-SwpnH3',
     #     column_id='col-0',
     # )
     # print (result)
-    '''
-    {
-        "data": {
-            "deleteColumn": {
-                "ok": true
-            }
-        }
-    }
-    '''
+    # '''
+    # {
+    #     "data": {
+    #         "deleteColumn": {
+    #             "ok": true
+    #         }
+    #     }
+    # }
+    # '''
+
+    result = q.create_vertex(
+        project_id='ctx-M5NlqLGwLrSmOQ_Uyny',
+        table_id='tab-M5Nm23_krbcQHdBqWh-',
+        values={
+            'col-0': 'Samsung',                  # text
+            # 'col-1': 1,                      # number
+            # 'col-2': False,                     # boolean
+            # 'col-3': 'https://google.com',      # url
+            # 'col-4': datetime.datetime.today()  # date
+            # 'col-5'     # date_added
+        },
+        edges=[]
+    )
+    print (result)
+
+    result = q.create_vertex(
+        project_id='ctx-M5NlqLGwLrSmOQ_Uyny',
+        table_id='tab-M5Nm23_krbcQHdBqWh-',
+        values={
+            # 'col-0': 'Google',                  # text
+            'col-0': 'Shopify',                      # number
+            # 'col-2': False,                     # boolean
+            # 'col-3': 'https://google.com',      # url
+            # 'col-4': datetime.datetime.today()  # date
+            # 'col-5'     # date_added
+        },
+        edges=[]
+    )
+    print (result)
 
     # result = q.create_vertex(
-    #     project_id='ctx-M57S8onUVXwdNMRgHPf',
-    #     table_id='tab-M57wnf1XcRbRMQImL6W',
-    #     column_ids=[
-    #         'col-0',    # text
-    #         'col-1',    # number
-    #         'col-2',    # boolean
-    #         'col-3',    # url
-    #         'col-4',    # date
+    #     project_id='ctx-M5Na8A_zgK3m455pp-r',
+    #     table_id='tab-M5Nb1-JqUtsb-SwpnH3',
+    #     values={
+    #         # 'col-0': 'Google',                  # text
+    #         'col-1': 'Tesla',                      # number
+    #         # 'col-2': False,                     # boolean
+    #         # 'col-3': 'https://google.com',      # url
+    #         # 'col-4': datetime.datetime.today()  # date
     #         # 'col-5'     # date_added
-    #     ],
-    #     values=[
-    #         'Google',
-    #         10.5,
-    #         False,
-    #         'https://google.com',
-    #         datetime.datetime.today(),
-    #         # datetime.datetime(2020, 4, 15)
-    #     ]
+    #     },
+    #     edges=[]
     # )
     # print (result)
 
     # result = q.get_graph(
-    #     project_id='ctx-M57S8onUVXwdNMRgHPf',
-    #     table_id='tab-M584TGE_0VrWcHCHCTO',
+    #     project_id='ctx-M5NlqLGwLrSmOQ_Uyny',
+    #     table_id='tab-M5Nm23_krbcQHdBqWh-',
     #     filters=[],
     #     offset=1,
     #     limit=50
     # )
     # print (result)
 
-    result = q.create_vertex(
-        project_id='ctx-M57S8onUVXwdNMRgHPf',
-        table_id='tab-M57wxxBqH0D7aKgYhhH',
-        column_ids=[
-            'col-0',
-            'col-1',
-            'col-2',
-        ],
-        values=[
-            'Apple',
-            True,
-            ''
-        ],
-        edges=[
-            ("column3", "row-M587jZETRpuCBIXUfw6"),
-            ("column3", "row-M58Ac6n8CjPhqp8-u7M")
-        ]
-    )
+    # result = q.create_vertex(
+    #     project_id='ctx-M57S8onUVXwdNMRgHPf',
+    #     table_id='tab-M57wxxBqH0D7aKgYhhH',
+    #     values={
+    #         'col-0': 'Apple7',
+    #         'col-1': True,
+    #         'col-2': ''
+    #     },
+    #     edges=[
+    #         ("column3", "row-M587jZETRpuCBIXUfw6"),
+    #         ("column3", "row-M58Ac6n8CjPhqp8-u7M")
+    #     ]
+    # )
+    # print (result)
 
-    result = q.update_vertex(
-        project_id='ctx-M57S8onUVXwdNMRgHPf',
-        table_id='tab-M57wxxBqH0D7aKgYhhH',
-        vertex_id='row-M58Avey3PjxPOnz2_nz',
-        column_ids=[
-            'col-0',
-            'col-1',
-            'col-2',
-        ],
-        values=[
-            'Google',
-            True,
-            ''
-        ],
-        edges=[
-            ("column3", "row-M587jZETRpuCBIXUfw6"),
-            ("column3", "row-M58Ac6n8CjPhqp8-u7M")
-        ]
-    )
-    print (result)
+    # result = q.update_vertex(
+    #     project_id='ctx-M5NlqLGwLrSmOQ_Uyny',
+    #     table_id='tab-M5Nm23_krbcQHdBqWh-',
+    #     vertex_id='row-M5NnwDXIN6tZVOWOCuR',
+    #     values={
+    #         'col-0': 'SW',
+    #     },
+    #     edges=[
+    #     ]
+    # )
+    # print (result)
 
     # result = q.get_graph(
-    #     project_id='ctx-M57S8onUVXwdNMRgHPf',
-    #     table_id='tab-M57wnf1XcRbRMQImL6W',
+    #     project_id='ctx-M5NlqLGwLrSmOQ_Uyny',
+    #     table_id='tab-M5Nm23_krbcQHdBqWh-',
     #     filters=[],
     #     offset=1,
     #     limit=50
@@ -476,11 +488,13 @@ if __name__ == "__main__":
     '''
 
     # result = q.update_vertex(
-    #     project_id='ctx-M53pLqASSUmxj5yU7LO',
-    #     table_id='tab-M53pRIARajeAYTwPIAN',
-    #     vertex_id='row-M53tT_jTviJ50qyzgsL',
-    #     column_ids=['col-1', 'col-3'],
-    #     values=['test', 7]
+    #     project_id='ctx-M5NlqLGwLrSmOQ_Uyny',
+    #     table_id='tab-M5Nm23_krbcQHdBqWh-',
+    #     vertex_id='row-M5NnwDXIN6tZVOWOCuR',
+    #     values={
+    #         'col-0': 'Samsung',
+    #     },
+    #     edges=[]
     # )
     # print (result)
     '''
@@ -494,9 +508,9 @@ if __name__ == "__main__":
     '''
 
     # result = q.delete_vertex(
-    #     project_id='ctx-M53pLqASSUmxj5yU7LO',
-    #     table_id='tab-M53pRIARajeAYTwPIAN',
-    #     vertex_id='row-M53tiVvmOZ451AuBIUJ',
+    #     project_id='ctx-M5NlqLGwLrSmOQ_Uyny',
+    #     table_id='tab-M5Nm23_krbcQHdBqWh-',
+    #     vertex_id='row-M5NnwDXIN6tZVOWOCuR',
     # )
     # print (result)
     '''
@@ -510,11 +524,11 @@ if __name__ == "__main__":
     '''
 
     # result = q.bulk_delete_vertices(
-    #     project_id='ctx-M53pLqASSUmxj5yU7LO',
-    #     table_id='tab-M53pRIARajeAYTwPIAN',
+    #     project_id='ctx-M5NlqLGwLrSmOQ_Uyny',
+    #     table_id='tab-M5Nm23_krbcQHdBqWh-',
     #     vertex_ids=[
-    #         "row-M53tmNvBRE-qf7_6nUC",
-    #         "row-M53tphXYno5UGZgQZlS",
+    #         "row-M5No6RXI2HjHHzCJkOk",
+    #         "row-M5No8K_rpM0MEKB9KGy"
     #     ]
     # )
     # print (result)
@@ -530,7 +544,7 @@ if __name__ == "__main__":
 
 
     # result = q.get_schema(
-    #     project_id='ctx-M53lgnjpCkc_plt0lqo'
+    #     project_id='ctx-M5Na8A_zgK3m455pp-r'
     # )
     # print (result)
     '''
@@ -553,18 +567,18 @@ if __name__ == "__main__":
 
 
 
-    # result = q.get_graph(
-        # project_id='ctx-M53pLqASSUmxj5yU7LO',
-        # table_id='tab-M53pRIARajeAYTwPIAN',
-    #     offset=1,
-    #     limit=50
-    # )
-    # print (result)
+    result = q.get_graph(
+        project_id='ctx-M5NlqLGwLrSmOQ_Uyny',
+        table_id='tab-M5Nm23_krbcQHdBqWh-',
+        offset=1,
+        limit=50
+    )
+    print (result)
 
 
     # result = q.get_graph(
-    #     project_id='ctx-M53zulrvmCoNnP7PMEU',
-    #     table_id='tab-M53zumOvT3xKmqkIB_X',
+    #     project_id='ctx-M5Na8A_zgK3m455pp-r',
+    #     table_id='tab-M5Nb1-JqUtsb-SwpnH3',
     #     filters=[],
     #     offset=1,
     #     limit=50
@@ -659,39 +673,39 @@ if __name__ == "__main__":
     }
     '''
 
-    # result = q.get_graph(
-    #     project_id='ctx-M53zulrvmCoNnP7PMEU',
-    #     table_id='tab-M53zumOvT3xKmqkIB_X',
-    #     filters=[
-    #         {
-    #             "property": "col-2",
-    #             "predicate": "=",
-    #             "value": "apple"
-    #         }
-    #     ],
-    #     offset=1,
-    #     limit=50
-    # )
-    # print (result)
+    result = q.get_graph(
+        project_id='ctx-M5NlqLGwLrSmOQ_Uyny',
+        table_id='tab-M5Nm23_krbcQHdBqWh-',
+        filters=[
+            {
+                "property": "col-0",
+                "predicate": "=",
+                "value": "Samsung"
+            }
+        ],
+        offset=1,
+        limit=50
+    )
+    print (result)
 
     # Summarize Graph
     # count, sum, mean, max, min
-    # result = q.summarize_graph(
-    #     project_id='ctx-M53zulrvmCoNnP7PMEU',
-    #     table_id='tab-M53zumOvT3xKmqkIB_X',
-    #     filters=[
-    #         {
-    #             "property": "col-2",
-    #             "predicate": "=",
-    #             "value": "apple"
-    #         }
-    #     ],
-    #     groups=[{"property": "col-2"}],
-    #     aggregations=[{"property": "col-1", "function": "sum"}],
-    #     offset=1,
-    #     limit=50
-    # )
-    # print (result)
+    result = q.summarize_graph(
+        project_id='ctx-M5NlqLGwLrSmOQ_Uyny',
+        table_id='tab-M5Nm23_krbcQHdBqWh-',
+        filters=[
+            {
+                "property": "col-0",
+                "predicate": "=",
+                "value": "Samsung"
+            }
+        ],
+        groups=[{"property": "col-0"}],
+        aggregations=[{"property": "col-0", "function": "count"}],
+        offset=1,
+        limit=50
+    )
+    print (result)
     '''
     {
         "data": {
@@ -704,16 +718,14 @@ if __name__ == "__main__":
     }
     '''
 
-    # result = q.get_task(task_id="1867")
-    # print (result)
-
-    # q.bulk_upload(
-    #     project_id='ctx-M57S8onUVXwdNMRgHPf',
+    # result = q.bulk_upload(
+    #     project_id='ctx-M5Na8A_zgK3m455pp-r',
     #     filepaths=[
     #         '/Users/sangwonseo/Downloads/company1.csv',
     #         '/Users/sangwonseo/Downloads/company2.csv',
     #     ]
     # )
+    # print (result)
     '''
     {
         "data": {

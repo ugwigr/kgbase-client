@@ -44,6 +44,16 @@ class Query(object):
         f = open(file_path, 'r')
         return f.read()
 
+    def _validate_response(self, response_text, operation_name):
+        json_response = json.loads(response_text)
+        if json_response.get("errors"):
+            raise Exception(json_response["errors"][0]["message"])
+        if json_response.get("data").get(operation_name).get("error"):
+            raise Exception(json_response["data"][operation_name]["error"])
+
+    def _parse_response(self, response_text, operation_name):
+        return json.loads(response_text).get("data").get(operation_name)
+
     # User & Authentication
     # LoginUser
     def login(self, username, password):
@@ -65,8 +75,9 @@ class Query(object):
                 "operationName": operation_name
             }
         )
+        self._validate_response(response.text, 'loginUser')
         self._organization_id = json.loads(response.text).get("data", {}).get("loginUser", {}).get("user", {}).get("nickname")
-        return response.text
+        return self._parse_response(response.text, 'loginUser')
 
     # GetUserState
     def get_user_state(self):
@@ -79,7 +90,8 @@ class Query(object):
                 "operationName": operation_name
             }
         )
-        return response.text
+        self._validate_response(response.text, 'currentUser')
+        return self._parse_response(response.text, 'currentUser')
 
     # LogoutUser
     def logout(self):
@@ -92,7 +104,8 @@ class Query(object):
                 "operationName": operation_name
             }
         )
-        return response.text
+        self._validate_response(response.text, 'logoutUser')
+        return self._parse_response(response.text, 'logoutUser')
 
     # GetSchema
     def get_schema(self, project_id):
@@ -107,7 +120,7 @@ class Query(object):
                 "operationName": operation_name
             }
         )
-        return response.text
+        return self._parse_response(response.text, 'getSchema')
 
     # GetGraph
     def get_graph(self, project_id, table_id, filters=[], offset=0, limit=50):
@@ -137,7 +150,7 @@ class Query(object):
                 "operationName": operation_name
             }
         )
-        return response.text
+        return self._parse_response(response.text, 'getGraph')
 
     # SummarizeGraph
     def summarize_graph(self, project_id, table_id, filters=[], groups=[], aggregations=[], offset=0, limit=50):
@@ -172,7 +185,7 @@ class Query(object):
                 "operationName": operation_name
             }
         )
-        return response.text
+        return self._parse_response(response.text, 'summarizeGraph')
     
     # GetTask
     def get_task(self, task_id):
@@ -187,7 +200,7 @@ class Query(object):
                 "operationName": operation_name
             }
         )
-        return response.text
+        return self._parse_response(response.text, 'getTask')
 
     # Projects
     # GetPublicProjects
@@ -201,7 +214,7 @@ class Query(object):
                 "operationName": operation_name
             }
         )
-        return response.text
+        return self._parse_response(response.text, 'publicProjects')
 
     # GetTeamProjects
     def get_team_projects(self):
@@ -214,7 +227,7 @@ class Query(object):
                 "operationName": operation_name
             }
         )
-        return response.text
+        return self._parse_response(response.text, 'teamProjects')
 
     # GetFavoriteProjects
     def get_favorite_projects(self):
@@ -227,7 +240,7 @@ class Query(object):
                 "operationName": operation_name
             }
         )
-        return response.text
+        return self._parse_response(response.text, 'favoriteProjects')
 
     # GetUserProjects
     def get_user_projects(self):
@@ -240,7 +253,7 @@ class Query(object):
                 "operationName": operation_name
             }
         )
-        return response.text
+        return self._parse_response(response.text, 'userProjects')
 
     # CreateProject
     def create_project(self, name, is_public=False, color="gray"):
@@ -261,7 +274,8 @@ class Query(object):
                 "operationName": operation_name
             }
         )
-        return response.text
+        self._validate_response(response.text, 'createProject')
+        return self._parse_response(response.text, 'createProject')
 
     # GetProjectState
     def get_project_state(self, project_id):
@@ -276,7 +290,8 @@ class Query(object):
                 "operationName": operation_name
             }
         )
-        return response.text
+        self._validate_response(response.text, 'project')
+        return self._parse_response(response.text, 'project')
 
     # UpdateProject
     def update_project(self, project_id, name, is_public=False, color="gray"):
@@ -296,7 +311,8 @@ class Query(object):
                 "operationName": operation_name
             }
         )
-        return response.text
+        self._validate_response(response.text, 'updateProject')
+        return self._parse_response(response.text, 'updateProject')
 
     # DestroyProject
     def destroy_project(self, project_id):
@@ -311,7 +327,8 @@ class Query(object):
                 "operationName": operation_name
             }
         )
-        return response.text
+        self._validate_response(response.text, 'destroyProject')
+        return self._parse_response(response.text, 'destroyProject')
 
     # Table
     # CreateTable
@@ -337,7 +354,8 @@ class Query(object):
                 "operationName": operation_name
             }
         )
-        return response.text
+        self._validate_response(response.text, 'createTable')
+        return self._parse_response(response.text, 'createTable')
 
     # UpdateTable
     def update_table(self, project_id, table_id, display_name, description='', graph_shape="circle"):
@@ -366,7 +384,8 @@ class Query(object):
                 "operationName": operation_name
             }
         )
-        return response.text
+        self._validate_response(response.text, 'updateTable')
+        return self._parse_response(response.text, 'updateTable')
 
     # DeleteTable
     def delete_table(self, project_id, table_id, preserve_relationships_data=False):
@@ -387,7 +406,8 @@ class Query(object):
                 "operationName": operation_name
             }
         )
-        return response.text
+        self._validate_response(response.text, 'deleteTable')
+        return self._parse_response(response.text, 'deleteTable')
 
     # CreateColumn
     def create_column(self, project_id, table_id, display_name, data_type, linked_table=None):
@@ -421,7 +441,8 @@ class Query(object):
                 "operationName": operation_name
             }
         )
-        return response.text
+        self._validate_response(response.text, 'createColumn')
+        return self._parse_response(response.text, 'createColumn')
 
     # UpdateColumn
     def update_column(self, project_id, table_id, column_id, display_name, data_type, linked_table=None, restore_relationships_data=False):
@@ -455,7 +476,8 @@ class Query(object):
                 "operationName": operation_name
             }
         )
-        return response.text
+        self._validate_response(response.text, 'updateColumn')
+        return self._parse_response(response.text, 'updateColumn')
 
     # DeleteColumn
     def delete_column(self, project_id, table_id, column_id):
@@ -478,7 +500,8 @@ class Query(object):
                 "operationName": operation_name
             }
         )
-        return response.text
+        self._validate_response(response.text, 'deleteColumn')
+        return self._parse_response(response.text, 'deleteColumn')
 
     # CreateVertex
     def create_vertex(self, project_id, table_id, values, edges):
@@ -525,7 +548,8 @@ class Query(object):
                 "operationName": operation_name
             }
         )
-        return response.text
+        self._validate_response(response.text, 'createVertex')
+        return self._parse_response(response.text, 'createVertex')
 
     # UpdateVertex
     def update_vertex(self, project_id, table_id, vertex_id, values, edges):
@@ -575,7 +599,8 @@ class Query(object):
                 "operationName": operation_name
             }
         )
-        return response.text
+        self._validate_response(response.text, 'updateVertex')
+        return self._parse_response(response.text, 'updateVertex')
     
     # DeleteVertex
     def delete_vertex(self, project_id, table_id, vertex_id):
@@ -598,7 +623,8 @@ class Query(object):
                 "operationName": operation_name
             }
         )
-        return response.text
+        self._validate_response(response.text, 'deleteVertex')
+        return self._parse_response(response.text, 'deleteVertex')
 
     # BulkDeleteVertices
     def bulk_delete_vertices(self, project_id, table_id, vertex_ids):
@@ -622,7 +648,8 @@ class Query(object):
                 "operationName": operation_name
             }
         )
-        return response.text
+        self._validate_response(response.text, 'bulkDeleteVertices')
+        return self._parse_response(response.text, 'bulkDeleteVertices')
 
     # Bulk Upload
     def bulk_upload(self, project_id, filepaths):
@@ -630,14 +657,13 @@ class Query(object):
             raise Exception('Project ID required')
         if not filepaths:
             raise Exception('CSV Files required')
-        
+
         # Upload
         multipart_form_data = []
         for filepath in filepaths:
             multipart_form_data.append(
                 ('files', (filepath.split('/')[-1], open(filepath, 'rb'))))
         multipart_form_data = tuple(multipart_form_data)
-
         response = self._session.post(
             self.BULK_UPLOAD_URL,
             files=multipart_form_data,
@@ -662,8 +688,7 @@ class Query(object):
                 "operationName": operation_name
             }
         )
-        if response.status_code != 200:
-            raise Exception('Something went wrong')
+        self._validate_response(response.text, 'bulkStartProcessing')
 
         status = 'running'
         while status != 'finished' and status != 'failed':
@@ -680,4 +705,5 @@ class Query(object):
             )
             status = json.loads(response.text).get('data', {}).get('getBulkBundle', {}).get('status')
             time.sleep(5)
-        return response.text
+        self._validate_response(response.text, 'getBulkBundle')
+        return self._parse_response(response.text, 'getBulkBundle')
