@@ -13,7 +13,7 @@ class Query(object):
     HEADERS = {
         "Accept": "application/json",
         "Content-Type": "application/json",
-        "User-Agent": "Python API/1.0"
+        "User-Agent": "Python API/0.13"
     }
 
     def __init__(self, proxies={}, verify=True):

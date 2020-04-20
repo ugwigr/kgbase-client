@@ -8,18 +8,18 @@ with open(path.join(this_directory, 'README.md')) as f:
 setuptools.setup(
     name='kgbase',
     packages=['kgbase'],
-    version='1.0',
+    include_package_data=True,
+    version='0.12',
     license='MIT',
     long_description=long_description,
     long_description_content_type='text/markdown',
-    author='Thinknum',                   # Type in your name
+    author='Kgbase',                   # Type in your name
     author_email='customersuccess@thinknum.com',      # Type in your E-Mail
     url='https://kgbase.com',
     download_url='https://github.com/thinknum/kgbase-client',
-    keywords=['Thinknum', 'Alternative data', 'Data', 'kgbase'],
+    keywords=['Kgbase', 'Thinknum', 'Alternative data', 'Data'],
     install_requires=[
         'requests',
-        'unicodecsv'
     ],
     classifiers=[
         'Development Status :: 5 - Production/Stable',

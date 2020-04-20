@@ -1,0 +1,2 @@
+include kgbase/graphql/mutation/*.graphql
+include kgbase/graphql/query/*.graphql
