@@ -48,8 +48,9 @@ class Query(object):
         json_response = json.loads(response_text)
         if json_response.get("errors"):
             raise Exception(json_response["errors"][0]["message"])
-        if json_response.get("data").get(operation_name).get("error"):
-            raise Exception(json_response["data"][operation_name]["error"])
+        response = json_response.get("data").get(operation_name)
+        if isinstance(response, dict) and response.get("error"):
+            raise Exception(response["error"])
 
     def _parse_response(self, response_text, operation_name):
         return json.loads(response_text).get("data").get(operation_name)
@@ -214,6 +215,7 @@ class Query(object):
                 "operationName": operation_name
             }
         )
+        self._validate_response(response.text, 'publicProjects')
         return self._parse_response(response.text, 'publicProjects')
 
     # GetTeamProjects
@@ -227,6 +229,7 @@ class Query(object):
                 "operationName": operation_name
             }
         )
+        self._validate_response(response.text, 'teamProjects')
         return self._parse_response(response.text, 'teamProjects')
 
     # GetFavoriteProjects
@@ -240,6 +243,7 @@ class Query(object):
                 "operationName": operation_name
             }
         )
+        self._validate_response(response.text, 'favoriteProjects')
         return self._parse_response(response.text, 'favoriteProjects')
 
     # GetUserProjects
@@ -253,6 +257,7 @@ class Query(object):
                 "operationName": operation_name
             }
         )
+        self._validate_response(response.text, 'userProjects')
         return self._parse_response(response.text, 'userProjects')
 
     # CreateProject
