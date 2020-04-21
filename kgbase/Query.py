@@ -4,6 +4,7 @@ import time
 import sys
 import os
 import datetime
+import platform
 
 
 class Query(object):
@@ -13,7 +14,7 @@ class Query(object):
     HEADERS = {
         "Accept": "application/json",
         "Content-Type": "application/json",
-        "User-Agent": "Python API/0.13"
+        "User-Agent": "Python API 0.17 / {local_version}".format(local_version=platform.python_version())
     }
 
     def __init__(self, proxies={}, verify=True):
