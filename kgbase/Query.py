@@ -77,7 +77,6 @@ class Query(object):
                 "operationName": operation_name
             }
         )
-        print (response.text)
         self._validate_response(response.text, 'loginUser')
         self._organization_id = json.loads(response.text).get("data", {}).get("loginUser", {}).get("user", {}).get("nickname")
         return self._parse_response(response.text, 'loginUser')
