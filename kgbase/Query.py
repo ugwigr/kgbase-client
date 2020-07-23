@@ -14,7 +14,7 @@ class Query(object):
     HEADERS = {
         "Accept": "application/json",
         "Content-Type": "application/json",
-        "User-Agent": "Python API 0.18 / {local_version}".format(local_version=platform.python_version())
+        "User-Agent": "Python API 0.19 / {local_version}".format(local_version=platform.python_version())
     }
 
     def __init__(self, proxies={}, verify=True):
