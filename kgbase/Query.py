@@ -9,12 +9,12 @@ import platform
 
 class Query(object):
 
-    BASE_URL = 'https://kgbase.com/graphql'
+    BASE_URL = 'https://kgbase.com/kgbase-query'
     BULK_UPLOAD_URL = "https://kgbase.com/bulk/upload"
     HEADERS = {
         "Accept": "application/json",
         "Content-Type": "application/json",
-        "User-Agent": "Python API 0.17 / {local_version}".format(local_version=platform.python_version())
+        "User-Agent": "Python API 0.18 / {local_version}".format(local_version=platform.python_version())
     }
 
     def __init__(self, proxies={}, verify=True):
@@ -77,6 +77,7 @@ class Query(object):
                 "operationName": operation_name
             }
         )
+        print (response.text)
         self._validate_response(response.text, 'loginUser')
         self._organization_id = json.loads(response.text).get("data", {}).get("loginUser", {}).get("user", {}).get("nickname")
         return self._parse_response(response.text, 'loginUser')
