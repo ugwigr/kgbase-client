@@ -14,7 +14,7 @@ class Query(object):
     HEADERS = {
         "Accept": "application/json",
         "Content-Type": "application/json",
-        "User-Agent": "Python API 0.19 / {local_version}".format(local_version=platform.python_version())
+        "User-Agent": "Python API 0.21 / {local_version}".format(local_version=platform.python_version())
     }
 
     def __init__(self, proxies={}, verify=True):
@@ -425,7 +425,7 @@ class Query(object):
             raise Exception('Display Name required')
         if not data_type:
             raise Exception('Data Type required')
-        if data_type not in ['text', 'number', 'boolean', 'url', 'date', 'date_added', 'link_one', 'link_many']:
+        if data_type not in ['text', 'number', 'boolean', 'url', 'date', 'date_added', 'link_one', 'link_many', 'image', 'image_url']:
             raise Exception('Invalid Data Type')
         operation_name = 'CreateColumn'
         response = self._requests(
@@ -462,7 +462,7 @@ class Query(object):
             raise Exception('Display Name required')
         if not data_type:
             raise Exception('Data Type required')
-        if data_type not in ['text', 'number', 'boolean', 'url', 'date', 'date_added', 'link_one', 'link_many']:
+        if data_type not in ['text', 'number', 'boolean', 'url', 'date', 'date_added', 'link_one', 'link_many', 'image', 'image_url']:
             raise Exception('Invalid Data Type')
         operation_name = 'UpdateColumn'
         response = self._requests(

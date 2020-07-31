@@ -15,6 +15,7 @@ fragment TableAll on TableType {
     color
     description
   }
+  isHidden
 }
 
 query GetSchema($context: GraphContextType!) {
