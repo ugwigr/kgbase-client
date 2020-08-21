@@ -176,7 +176,7 @@ The `columnId` is returned from the response. You need to know `columnId` when y
 }
 ```
 
-To create `linke_one` or `link_many` column:
+To create `link_one` or `link_many` column:
 ```python
 result = q.create_column(
     project_id='ctx-M53lgnjpCkc_plt0lqo',

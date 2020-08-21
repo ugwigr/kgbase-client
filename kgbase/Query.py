@@ -9,12 +9,12 @@ import platform
 
 class Query(object):
 
-    BASE_URL = 'https://kgbase.com/kgbase-query'
+    BASE_URL = 'https://www.kgbase.com/kgbase-query'
     BULK_UPLOAD_URL = "https://kgbase.com/bulk/upload"
     HEADERS = {
         "Accept": "application/json",
         "Content-Type": "application/json",
-        "User-Agent": "Python API 0.21 / {local_version}".format(local_version=platform.python_version())
+        "User-Agent": "Python API 0.23 / {local_version}".format(local_version=platform.python_version())
     }
 
     def __init__(self, proxies={}, verify=True):
