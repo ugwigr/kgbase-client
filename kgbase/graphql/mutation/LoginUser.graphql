@@ -8,6 +8,7 @@ fragment UserAll on UserType {
   apiKey
   isStaff
   lastActivityAt
+  hasExtendedTrial
 }
 
 mutation LoginUser($data: LoginInput!) {
