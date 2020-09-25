@@ -125,33 +125,49 @@ class Query(object):
         return self._parse_response(response.text, 'getSchema')
 
     # GetGraph
-    def get_graph(self, project_id, table_id, filters=[], offset=0, limit=50):
+    def get_graph(self, project_id, table_id=None, filters=[], offset=0, limit=50):
         if not project_id:
             raise Exception('Project ID required')
-        if not table_id:
-            raise Exception('Table ID required')
         operation_name = 'GetGraph'
-        response = self._requests(
-            method='post',
-            json={
-                "query": self._get_query(type='query', name=operation_name),
-                "variables": {
-                    "context": {"contextId": project_id},
-                    "contextId": project_id,
-                    "query": {
-                        "startingVertices": [], 
-                        "labels": [table_id], 
-                        "pagination": {
-                            "label": table_id, 
-                            "offset": offset, 
-                            "limit": limit
-                        }, 
-                        "filters": [dict({"label": table_id}, **filter) for filter in filters],
-                    }
-                },
-                "operationName": operation_name
-            }
-        )
+        if table_id:
+            response = self._requests(
+                method='post',
+                json={
+                    "query": self._get_query(type='query', name=operation_name),
+                    "variables": {
+                        "context": {"contextId": project_id},
+                        "contextId": project_id,
+                        "query": {
+                            "startingVertices": [], 
+                            "labels": [table_id], 
+                            "pagination": {
+                                "label": table_id, 
+                                "offset": offset, 
+                                "limit": limit
+                            }, 
+                            "filters": [dict({"label": table_id}, **filter) for filter in filters],
+                        }
+                    },
+                    "operationName": operation_name
+                }
+            )
+        else:
+            response = self._requests(
+                method='post',
+                json={
+                    "query": self._get_query(type='query', name=operation_name),
+                    "variables": {
+                        "context": {"contextId": project_id},
+                        "query": {
+                            "derivedColumns": [],
+                            "filters": [],
+                            "startingVertices": []
+                        },
+                        "limit": {"samplingMethod": "random"}
+                    },
+                    "operationName": operation_name
+                }
+            )
         return self._parse_response(response.text, 'getGraph')
 
     # SummarizeGraph
