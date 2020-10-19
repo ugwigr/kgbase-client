@@ -50,6 +50,7 @@ class Query(object):
         json_response = json.loads(response_text)
         if json_response.get("errors"):
             raise Exception(json_response["errors"][0]["message"])
+
         response = json_response.get("data").get(operation_name)
         if isinstance(response, dict) and response.get("error"):
             raise Exception(response["error"])
@@ -702,8 +703,10 @@ class Query(object):
             }
         )
         if response.status_code != 200:
-            raise Exception('Something went wrong')
+            raise Exception('Something went wrong in uploading csv file')
         bundle_id = json.loads(response.content)['bundle_id']
+        if not bundle_id:
+            raise Exception('Bundle id not found')
 
         operation_name = 'BulkStartImport'
         response = self._requests(
@@ -745,5 +748,7 @@ class Query(object):
             )
             self._validate_response(response.text, 'getTask')
             status = json.loads(response.text).get('data', {}).get('getTask', {}).get('status')
-            time.sleep(5)
+            progress = json.loads(response.text).get('data', {}).get('getTask', {}).get('progress')
+            print ("progress", progress)
+            time.sleep(2)
         return self._parse_response(response.text, 'getTask')
