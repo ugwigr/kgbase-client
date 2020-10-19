@@ -5,16 +5,17 @@ import sys
 import os
 import datetime
 import platform
+import csv
 
 
 class Query(object):
 
     BASE_URL = 'https://www.kgbase.com/kgbase-query'
-    BULK_UPLOAD_URL = "https://kgbase.com/bulk/upload"
+    BULK_UPLOAD_URL = "https://www.kgbase.com/bulk/upload"
     HEADERS = {
         "Accept": "application/json",
         "Content-Type": "application/json",
-        "User-Agent": "Python API 0.24 / {local_version}".format(local_version=platform.python_version())
+        "User-Agent": "Python API 0.25 / {local_version}".format(local_version=platform.python_version())
     }
 
     def __init__(self, proxies={}, verify=True):
@@ -674,17 +675,22 @@ class Query(object):
         return self._parse_response(response.text, 'bulkDeleteVertices')
 
     # Bulk Upload
-    def bulk_upload(self, project_id, filepaths):
+    def bulk_upload(self, project_id, table_id, filepath, column_ids, configs={}):
         if not project_id:
             raise Exception('Project ID required')
-        if not filepaths:
+        if not filepath:
             raise Exception('CSV Files required')
+
+        csv_file = open(filepath)
+        csv_reader = csv.reader(csv_file)
+        for row in csv_reader:
+            if len(row) != len(column_ids):
+                raise Exception('Number of column ids not matched with csv file')
+            break
 
         # Upload
         multipart_form_data = []
-        for filepath in filepaths:
-            multipart_form_data.append(
-                ('files', (filepath.split('/')[-1], open(filepath, 'rb'))))
+        multipart_form_data.append(('files', (filepath.split('/')[-1], open(filepath, 'rb'))))
         multipart_form_data = tuple(multipart_form_data)
         response = self._session.post(
             self.BULK_UPLOAD_URL,
@@ -692,40 +698,52 @@ class Query(object):
             data={
                 "organization_id": self._organization_id,
                 "project_id": project_id,
-                "file_type": "csv"
+                "file_type": "single_csv"
             }
         )
         if response.status_code != 200:
             raise Exception('Something went wrong')
         bundle_id = json.loads(response.content)['bundle_id']
 
-        operation_name = 'BulkStartProcessing'
+        operation_name = 'BulkStartImport'
         response = self._requests(
             method='post',
             json={
                 "query": self._get_query(type='mutation', name=operation_name),
                 "variables": {
                     "bundleId": bundle_id,
+                    "context": {"contextId": project_id},
+                    "sheetConfigs": [{
+                        "columnMap": [{"csvColumnIndex": i, "mappedColumnId": column_id, "wantsCreate": False} for i, column_id in enumerate(column_ids)],
+                        "countSkipRows": configs.get("countSkipRows", 0),
+                        "dropEmpty": configs.get("dropEmpty", False),
+                        "hasHeader": configs.get("hasHeader", False),
+                        "sheetName": "default",
+                        "targetTable": table_id
+                    }]
                 },
                 "operationName": operation_name
             }
         )
-        self._validate_response(response.text, 'bulkStartProcessing')
+        self._validate_response(response.text, 'bulkStartImport')
+        task_id = json.loads(response.text).get('data', {}).get('bulkStartImport', {}).get('taskId')
+        if not task_id:
+            raise Exception('Task id not found')
 
-        status = 'running'
+        status = 'queued'
         while status != 'finished' and status != 'failed':
-            operation_name = 'GetBulkBundle'
+            operation_name = 'GetTask'
             response = self._requests(
                 method='post',
                 json={
                     "query": self._get_query(type='query', name=operation_name),
                     "variables": {
-                        "bundleId": bundle_id,
+                        "taskId": task_id,
                     },
                     "operationName": operation_name
                 }
             )
-            status = json.loads(response.text).get('data', {}).get('getBulkBundle', {}).get('status')
+            self._validate_response(response.text, 'getTask')
+            status = json.loads(response.text).get('data', {}).get('getTask', {}).get('status')
             time.sleep(5)
-        self._validate_response(response.text, 'getBulkBundle')
-        return self._parse_response(response.text, 'getBulkBundle')
+        return self._parse_response(response.text, 'getTask')

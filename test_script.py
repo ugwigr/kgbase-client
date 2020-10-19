@@ -7,12 +7,31 @@ import json
 # csv upload	
 # raw import	
 
+
 if __name__ == "__main__":	
-    # q = Query()	
-    # result = q.login(	
-    #     username='sangwon.seo@thinknum.com',	
-    #     password='1'	
-    # )	
+    # import requests
+    # response = requests.post(
+    #     'https://kgbase.com/kgbase-query',
+    #     headers={
+    #         "Accept": "application/json",
+    #         "Content-Type": "application/json",
+    #          "User-Agent": "Python API 0.23"
+    #     },
+    #     json={
+    #         "operationName": "LoginUser",
+    #         "query": "mutation LoginUser($data: LoginInput!) {\n  loginUser(data: $data) {\n    ok\n    user {\n      ...UserAll\n      __typename\n    }\n    error\n    __typename\n  }\n}\nfragment UserAll on UserType {\n  uuid\n  graphqlId\n  username\n  name\n  avatarUrl\n  nickname\n  apiKey\n  isStaff\n  lastActivityAt\n  hasExtendedTrial\n  __typename\n}\n",
+    #         "variables": {"data": {"username": "sangwon.seo@thinknum.com", "password": "10Worldcup!"}}
+    #     }
+    #     #{'query': 'fragment UserAll on UserType {\n  uuid\n  graphqlId\n  username\n  name\n  avatarUrl\n  nickname\n  apiKey\n  isStaff\n  lastActivityAt\n  hasExtendedTrial\n}\n\nmutation LoginUser($data: LoginInput!) {\n  loginUser(data: $data) {\n    ok\n    user {\n      ...UserAll\n    }\n    error\n  }\n}', 'variables': {'data': {'username': 'sangwon.seo@thinknum.com', 'password': '10Worldcup!'}}, 'operationName': 'LoginUser'}
+    # )
+    # print (response.status_code)
+    # print (response.text)
+    q = Query()	
+    result = q.login(	
+        username='sangwon.seo@thinknum.com',	
+        password='testpassword'	
+    )
+    print (result)
     '''	
     {	
         "data": {	
@@ -35,8 +54,21 @@ if __name__ == "__main__":
     }	
     '''	
 
+    # result  = q.get_graph(
+    #     'ctx-MI1FrWruBh42XpBxA1C',
+    #     'tab-MI1FrWxd9rkK4DIgz1l'
+    # )
+    # print (result)
+
+    # result  = q.get_graph(
+    #     'ctx-MI1FrWruBh42XpBxA1C',
+    # )
+    # print (result)
     # result = q.get_user_state()	
     # print (result)	
+
+    
+    
     '''	
     {	
         "data": {	
@@ -301,8 +333,8 @@ if __name__ == "__main__":
     '''	
 
     # result = q.create_column(	
-    #     project_id='ctx-MCxXEVZjyndWiHH7VPY',	
-    #     table_id='tab-MCxXOmTENzVaAZUdDGR',	
+    #     project_id='ctx-MCx_qF9v1ixsSmwIUjD',	
+    #     table_id='tab-MCx_qFFfmpIxugPFD63',	
     #     display_name='api_column',	
     #     data_type='text'	
     # )	
@@ -713,15 +745,18 @@ if __name__ == "__main__":
         }	
     }	
     '''	
-
-    # result = q.bulk_upload(	
-    #     project_id='ctx-M5Na8A_zgK3m455pp-r',	
-    #     filepaths=[	
-    #         '/Users/sangwonseo/Downloads/company1.csv',	
-    #         '/Users/sangwonseo/Downloads/company2.csv',	
-    #     ]	
-    # )	
-    # print (result)	
+    result = q.bulk_upload(	
+        project_id='ctx-MK09gSHJwa3WtvUhInI',
+        table_id='tab-MK09gSNWBtZ-g2iLW8-',	
+        filepath='/Users/sangwonseo/Downloads/test1.csv',
+        column_ids=['col-0', 'col-1', 'col-2'],
+        configs={
+            'countSkipRows': 0,
+            'hasHeader': False,
+            'dropEmpty': False
+        }
+    )
+    print (result)	
     '''	
     {	
         "data": {	

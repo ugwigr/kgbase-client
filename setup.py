@@ -9,7 +9,7 @@ setuptools.setup(
     name='kgbase',
     packages=['kgbase'],
     include_package_data=True,
-    version='0.24',
+    version='0.25',
     license='MIT',
     long_description=long_description,
     long_description_content_type='text/markdown',
