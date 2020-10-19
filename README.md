@@ -413,10 +413,14 @@ To upload csv file:
 ```python
 q.bulk_upload(
     project_id='ctx-M57S8onUVXwdNMRgHPf',
-    filepaths=[
-        '/Users/sangwonseo/Downloads/company1.csv',
-        '/Users/sangwonseo/Downloads/company2.csv',
-    ]
+    table_id='tab-MK09gSNWBtZ-g2iLW8-',
+    filepath='/Users/sangwonseo/Downloads/company1.csv',
+    column_ids=['col-0', 'col-1', 'col-2'],
+    configs={
+        'countSkipRows': 0,
+        'hasHeader': False,
+        'dropEmpty': False
+    }
 )
 ```
 
