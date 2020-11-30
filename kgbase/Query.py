@@ -15,7 +15,7 @@ class Query(object):
     HEADERS = {
         "Accept": "application/json",
         "Content-Type": "application/json",
-        "User-Agent": "Python API 0.26 / {local_version}".format(local_version=platform.python_version())
+        "User-Agent": "Python API 0.28 / {local_version}".format(local_version=platform.python_version())
     }
 
     def __init__(self, proxies={}, verify=True):
@@ -434,7 +434,7 @@ class Query(object):
         return self._parse_response(response.text, 'deleteTable')
 
     # CreateColumn
-    def create_column(self, project_id, table_id, display_name, data_type, linked_table=None):
+    def create_column(self, project_id, table_id, display_name, data_type, linked_table=None, is_required=False):
         if not project_id:
             raise Exception('Project ID required')
         if not table_id:
@@ -456,10 +456,12 @@ class Query(object):
                     "data": {
                         "displayName": display_name, 
                         "dataType": data_type, 
-                        "linkedTable": linked_table
+                        "linkedTable": linked_table,
+                        "isRequired": is_required
                     } if data_type in ['link_one', 'link_many'] else {
                         "displayName": display_name, 
-                        "dataType": data_type
+                        "dataType": data_type,
+                        "isRequired": is_required
                     }
                 },
                 "operationName": operation_name
@@ -717,7 +719,7 @@ class Query(object):
                     "bundleId": bundle_id,
                     "context": {"contextId": project_id},
                     "sheetConfigs": [{
-                        "columnMap": [{"csvColumnIndex": i, "mappedColumnId": column_id, "wantsCreate": False} for i, column_id in enumerate(column_ids)],
+                        "columnMap": [{"csvColumnIndex": i, "mappedColumnId": column_id, "wantsCreate": False} for i, column_id in enumerate(column_ids) if column_id is not None],
                         "countSkipRows": configs.get("countSkipRows", 0),
                         "dropEmpty": configs.get("dropEmpty", False),
                         "hasHeader": configs.get("hasHeader", False),
