@@ -19,6 +19,7 @@ query GetGraph($context: GraphContextType!, $query: GraphQueryType!, $limits: Gr
     vertices {
       ...Vertex
     }
+    vertexIds
     edges {
       ...Edge
     }
