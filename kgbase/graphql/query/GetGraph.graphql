@@ -14,11 +14,16 @@ fragment Edge on EdgeType {
   toId
 }
 
-query GetGraph($context: GraphContextType!, $query: GraphQueryType!, $limits: GraphQueryLimitsType) {
+query GetGraph(
+  $context: GraphContextType!
+  $query: GraphQueryType!
+  $limits: GraphQueryLimitsType
+) {
   getGraph(context: $context, query: $query, limits: $limits) {
     vertices {
       ...Vertex
     }
+    vertexIds
     edges {
       ...Edge
     }
