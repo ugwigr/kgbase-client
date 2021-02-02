@@ -355,7 +355,7 @@ q.get_graph(
     project_id='ctx-M53zulrvmCoNnP7PMEU',
     table_id='tab-M53zumOvT3xKmqkIB_X',
     filters=[],
-    offset=1,
+    offset=0,
     limit=50
 )
 ```
@@ -372,7 +372,7 @@ q.get_graph(
             "value": "apple"
         }
     ],
-    offset=1,
+    offset=0,
     limit=50
 )
 ```
@@ -400,7 +400,7 @@ q.summarize_graph(
             "function": "sum"
         }
     ],
-    offset=1,
+    offset=0,
     limit=50
 )
 ```
