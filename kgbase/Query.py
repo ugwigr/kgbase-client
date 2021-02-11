@@ -15,7 +15,7 @@ class Query(object):
     HEADERS = {
         "Accept": "application/json",
         "Content-Type": "application/json",
-        "User-Agent": "Python API 0.29 / {local_version}".format(local_version=platform.python_version())
+        "User-Agent": "Python API 0.30 / {local_version}".format(local_version=platform.python_version())
     }
 
     def __init__(self, proxies={}, verify=True):
@@ -277,7 +277,11 @@ class Query(object):
             }
         )
         self._validate_response(response.text, 'userProjects')
-        return self._parse_response(response.text, 'userProjects')
+        response = self._parse_response(response.text, 'userProjects')
+        for item in response:
+            for collaborator in item['collaborators']:
+                collaborator['username'] = '********'
+        return response
 
     # CreateProject
     def create_project(self, name, is_public=False, color="gray"):
