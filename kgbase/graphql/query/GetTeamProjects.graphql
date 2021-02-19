@@ -8,7 +8,6 @@ fragment ProjectOwnerAll on ProjectOwnerType {
 fragment UserAll on UserType {
   uuid
   graphqlId
-  username
   name
   avatarUrl
   nickname
