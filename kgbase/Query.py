@@ -22,6 +22,7 @@ class Query(object):
         self._session = requests.session()
         self._proxies = proxies
         self._verify = verify
+        self.timeout = None
 
     def _requests(self, method, data={}, json={}, params={}):
         if method not in ['post', 'get']:
@@ -33,7 +34,8 @@ class Query(object):
             json=json,
             params=params,
             proxies=self._proxies,
-            verify=self._verify
+            verify=self._verify,
+            timeout=self.timeout
         )
 
     def _get_query(self, type, name):
@@ -72,7 +74,7 @@ class Query(object):
                 "query": self._get_query(type='mutation', name=operation_name),
                 "variables": {
                     "data": {
-                        "username": username, 
+                        "username": username,
                         "password": password
                     }
                 },
@@ -127,31 +129,45 @@ class Query(object):
         return self._parse_response(response.text, 'getSchema')
 
     # GetGraph
-    def get_graph(self, project_id, table_id=None, filters=[], offset=0, limit=50):
+    def get_graph(self, project_id, table_id=None, filters=[], offset=0,
+                  limit=50, sort_column=None, sort_direction=None):
+
         if not project_id:
             raise Exception('Project ID required')
+
         operation_name = 'GetGraph'
         if table_id:
+            pagination = {
+                "label": table_id,
+                "offset": offset,
+                "limit": limit,
+            }
+
+            if sort_column and sort_direction:
+                pagination["sortColumn"] = sort_column
+                pagination["sortDirection"] = sort_direction
+
+            query = {
+                "startingVertices": [],
+                "labels": [table_id],
+                "pagination": pagination,
+                "filters": [dict({"label": table_id}, **filter) for filter in filters],
+                "derivedColumns": []
+            }
+
+            payload = {
+                "query": self._get_query(type='query', name=operation_name),
+                "variables": {
+                    "context": {"contextId": project_id},
+                    "contextId": project_id,
+                    "query": query
+                },
+                "operationName": operation_name
+            }
+
             response = self._requests(
                 method='post',
-                json={
-                    "query": self._get_query(type='query', name=operation_name),
-                    "variables": {
-                        "context": {"contextId": project_id},
-                        "contextId": project_id,
-                        "query": {
-                            "startingVertices": [], 
-                            "labels": [table_id], 
-                            "pagination": {
-                                "label": table_id, 
-                                "offset": offset, 
-                                "limit": limit
-                            }, 
-                            "filters": [dict({"label": table_id}, **filter) for filter in filters],
-                        }
-                    },
-                    "operationName": operation_name
-                }
+                json=payload
             )
         else:
             response = self._requests(
@@ -206,7 +222,7 @@ class Query(object):
             }
         )
         return self._parse_response(response.text, 'summarizeGraph')
-    
+
     # GetTask
     def get_task(self, task_id):
         if not task_id:
@@ -367,7 +383,7 @@ class Query(object):
             json={
                 "query": self._get_query(type='mutation', name=operation_name),
                 "variables": {
-                    "context": {"contextId": project_id}, 
+                    "context": {"contextId": project_id},
                     "data": {
                         "displayName": display_name,
                         "config": {
@@ -395,7 +411,7 @@ class Query(object):
             json={
                 "query": self._get_query(type='mutation', name=operation_name),
                 "variables": {
-                    "context": {"contextId": project_id}, 
+                    "context": {"contextId": project_id},
                     "tableId": table_id,
                     "data": {
                         "displayName": display_name,
@@ -423,7 +439,7 @@ class Query(object):
             json={
                 "query": self._get_query(type='mutation', name=operation_name),
                 "variables": {
-                    "context": {"contextId": project_id}, 
+                    "context": {"contextId": project_id},
                     "tableId": table_id,
                     "preserveRelationshipsData": preserve_relationships_data
                 },
@@ -451,15 +467,15 @@ class Query(object):
             json={
                 "query": self._get_query(type='mutation', name=operation_name),
                 "variables": {
-                    "context": {"contextId": project_id}, 
+                    "context": {"contextId": project_id},
                     "tableId": table_id,
                     "data": {
-                        "displayName": display_name, 
-                        "dataType": data_type, 
+                        "displayName": display_name,
+                        "dataType": data_type,
                         "linkedTable": linked_table,
                         "isRequired": is_required
                     } if data_type in ['link_one', 'link_many'] else {
-                        "displayName": display_name, 
+                        "displayName": display_name,
                         "dataType": data_type,
                         "isRequired": is_required
                     }
@@ -490,7 +506,7 @@ class Query(object):
             json={
                 "query": self._get_query(type='mutation', name=operation_name),
                 "variables": {
-                    "context": {"contextId": project_id}, 
+                    "context": {"contextId": project_id},
                     "tableId": table_id,
                     "columnId": column_id,
                     "data": {
@@ -519,9 +535,9 @@ class Query(object):
             json={
                 "query": self._get_query(type='mutation', name=operation_name),
                 "variables": {
-                    "context": {"contextId": project_id}, 
+                    "context": {"contextId": project_id},
                     "tableId": table_id,
-                    "columnId": column_id,                
+                    "columnId": column_id,
                 },
                 "operationName": operation_name
             }
@@ -564,7 +580,7 @@ class Query(object):
             json={
                 "query": self._get_query(type='mutation', name=operation_name),
                 "variables": {
-                    "context": {"contextId": project_id}, 
+                    "context": {"contextId": project_id},
                     "label": table_id,
                     "data": {
                         "values": data_values,
@@ -614,7 +630,7 @@ class Query(object):
             json={
                 "query": self._get_query(type='mutation', name=operation_name),
                 "variables": {
-                    "context": {"contextId": project_id}, 
+                    "context": {"contextId": project_id},
                     "label": table_id,
                     "vertexId": vertex_id,
                     "data": {
@@ -627,7 +643,7 @@ class Query(object):
         )
         self._validate_response(response.text, 'updateVertex')
         return self._parse_response(response.text, 'updateVertex')
-    
+
     # DeleteVertex
     def delete_vertex(self, project_id, table_id, vertex_id):
         if not project_id:
@@ -642,7 +658,7 @@ class Query(object):
             json={
                 "query": self._get_query(type='mutation', name=operation_name),
                 "variables": {
-                    "context": {"contextId": project_id}, 
+                    "context": {"contextId": project_id},
                     "label": table_id,
                     "vertexId": vertex_id
                 },
@@ -666,7 +682,7 @@ class Query(object):
             json={
                 "query": self._get_query(type='mutation', name=operation_name),
                 "variables": {
-                    "context": {"contextId": project_id}, 
+                    "context": {"contextId": project_id},
                     "label": table_id,
                     "vertexIds": vertex_ids,
                     "deleteAll": False
