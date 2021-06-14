@@ -15,11 +15,12 @@ class Query(object):
     HEADERS = {
         "Accept": "application/json",
         "Content-Type": "application/json",
-        "User-Agent": "Python API 0.32 / {local_version}".format(local_version=platform.python_version())
+        "User-Agent": "Python API 0.33 / {local_version}".format(local_version=platform.python_version())
     }
 
     def __init__(self, proxies={}, verify=True):
         self._session = requests.session()
+        self._session.trust_env = False
         self._proxies = proxies
         self._verify = verify
         self.timeout = None
