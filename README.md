@@ -160,13 +160,15 @@ To create column:
 ```python
 q.create_column(
     project_id='ctx-M53lgnjpCkc_plt0lqo',
-    table_id='tab-M53nDu1y1SXMVA_ny97'
+    table_id='tab-M53nDu1y1SXMVA_ny97',
     display_name='company',
     data_type='text'
 )
 ```
 
-The `data_type` should be one of `text`, `number`, `boolean`, `url`, `date`, `date_added`, `link_one`, `link_many`.
+The `data_type` should be one of `text`, `number`, `boolean`, `url`, `date`, `date_added`, `date_udated`, `auto_id`, `link_one`, `link_many`.
+
+You can specify prefix for `auto_id` column using optional `data_format` property.
 
 The `columnId` is returned from the response. You need to know `columnId` when you update or delete column.
 ```json
@@ -237,7 +239,7 @@ q.create_vertex(
 )
 ```
 
-Note that you don't have to set `date_added` type column in creating vertex. Since the value is automatically set by today. Also `column_ids` and `values` lists should have same size, and each value in list should match with each data type of columns that you defined before.
+Note that you don't have to set `date_added`, `date_updated` and `auto_id` type columns when creating vertex since values are set automatically. Also `column_ids` and `values` lists should have same size, and each value in list should match with each data type of columns that you defined before.
 
 The `vertexId` is returned from the result. You need to know `vertexId` when you update or delete vertex.
 

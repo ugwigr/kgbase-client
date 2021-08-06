@@ -450,7 +450,7 @@ class Query(object):
         return self._parse_response(response.text, 'deleteTable')
 
     # CreateColumn
-    def create_column(self, project_id, table_id, display_name, data_type, linked_table=None, is_required=False):
+    def create_column(self, project_id, table_id, display_name, data_type, linked_table=None, is_required=False, data_format=None):
         if not project_id:
             raise Exception('Project ID required')
         if not table_id:
@@ -459,7 +459,7 @@ class Query(object):
             raise Exception('Display Name required')
         if not data_type:
             raise Exception('Data Type required')
-        if data_type not in ['text', 'number', 'boolean', 'url', 'date', 'date_added', 'link_one', 'link_many', 'image', 'image_url']:
+        if data_type not in ['text', 'number', 'boolean', 'url', 'date', 'date_added', 'date_updated', 'auto_id', 'link_one', 'link_many', 'image', 'image_url']:
             raise Exception('Invalid Data Type')
         operation_name = 'CreateColumn'
         response = self._requests(
@@ -477,7 +477,8 @@ class Query(object):
                     } if data_type in ['link_one', 'link_many'] else {
                         "displayName": display_name,
                         "dataType": data_type,
-                        "isRequired": is_required
+                        "isRequired": is_required,
+                        "dataFormat": data_format
                     }
                 },
                 "operationName": operation_name
@@ -487,7 +488,7 @@ class Query(object):
         return self._parse_response(response.text, 'createColumn')
 
     # UpdateColumn
-    def update_column(self, project_id, table_id, column_id, display_name, data_type, linked_table=None, restore_relationships_data=False):
+    def update_column(self, project_id, table_id, column_id, display_name, data_type, linked_table=None, restore_relationships_data=False, data_format=None):
         if not project_id:
             raise Exception('Project ID required')
         if not table_id:
@@ -498,7 +499,7 @@ class Query(object):
             raise Exception('Display Name required')
         if not data_type:
             raise Exception('Data Type required')
-        if data_type not in ['text', 'number', 'boolean', 'url', 'date', 'date_added', 'link_one', 'link_many', 'image', 'image_url']:
+        if data_type not in ['text', 'number', 'boolean', 'url', 'date', 'date_added', 'date_updated', 'auto_id', 'link_one', 'link_many', 'image', 'image_url']:
             raise Exception('Invalid Data Type')
         operation_name = 'UpdateColumn'
         response = self._requests(
@@ -511,7 +512,8 @@ class Query(object):
                     "columnId": column_id,
                     "data": {
                         "displayName": display_name,
-                        "dataType": data_type
+                        "dataType": data_type,
+                        "dataFormat": data_format
                     },
                     "restoreRelationshipsData": False
                 },
