@@ -82,7 +82,7 @@ q.create_project(
 )
 ```
 
-The `projectId` is returned from response. You need to know `projectId` when you update or detroy project.
+The `projectId` is returned from response. You need to know `projectId` when you update or destroy project.
 ```json
 {
     "ok": true,
