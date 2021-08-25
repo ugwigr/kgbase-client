@@ -122,7 +122,7 @@ The `projectId` is returned from response. You need to know `projectId` when you
 }
 ```
 
-To get project state:
+To get project state (returns the project specified by `project_id`):
 ```python
 q.get_project_state(
     project_id='ctx-M53lgnjpCkc_plt0lqo'
