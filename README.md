@@ -54,6 +54,33 @@ q.logout()
 
 ## Projects
 
+A project is represented by a dictionary with the following structure
+
+```python
+{
+ 'apiUsers': [],
+ 'canManage': bool,
+ 'collaborators': [],
+ 'color': str,
+ 'dataChangedAt': str,
+ 'description': str,
+ 'favoritesCount': int,
+ 'graphqlId': str,
+ 'isPublic': bool,
+ 'name': str,
+ 'owner': {
+           'avatarUrl': str,
+           'name': str,
+           'ownerType': str,
+           'slug': str
+           },
+ 'projectId': str,
+ 'slug': str,
+ 'updatedAt': str,
+ 'uuid': str
+ }
+```
+
 To get all public projects: 
 ```python
 q.get_public_projects()
