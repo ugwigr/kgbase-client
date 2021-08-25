@@ -249,6 +249,9 @@ q.delete_column(
 ```
 
 ## Vertex
+
+Recall that a vertex is a row in a table.
+
 To create vertex:
 ```python
 q.create_vertex(
