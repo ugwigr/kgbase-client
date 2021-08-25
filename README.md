@@ -361,7 +361,7 @@ q.get_schema(
 )
 ```
 
-You can see tables and columns belonging to the project.
+It returns the tables and columns belonging to the project.
 ```json
 {
     "tables": [
