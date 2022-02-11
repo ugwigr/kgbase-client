@@ -592,7 +592,6 @@ class Query(object):
                 value = value.strftime('%Y%m%dT%H%M%S')
             else:
                 value = str(value)
-
             data_values.append({
                 "key": column_id,
                 "value": value
