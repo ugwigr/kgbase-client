@@ -1,0 +1,6 @@
+mutation UploadFile($namespace: String!, $data: String!) {
+  uploadFile(namespace: $namespace, data: $data) {
+    ok
+    path
+  }
+}

@@ -6,6 +6,7 @@ import os
 import datetime
 import platform
 import csv
+import base64
 
 
 class Query(object):
@@ -548,6 +549,32 @@ class Query(object):
         self._validate_response(response.text, 'deleteColumn')
         return self._parse_response(response.text, 'deleteColumn')
 
+    # UploadFile
+    def upload_file(self, filepath):
+        if not os.path.exists(filepath):
+            raise Exception('File not found')
+        ext = os.path.splitext(filepath)[-1].lower().replace('.', '')
+        img_file = open(filepath, 'rb')
+        encoded_string = base64.b64encode(img_file.read())
+        operation_name = 'UploadFile'
+        response = self._requests(
+            method='post',
+            json={
+                "query": self._get_query(type='mutation', name='UploadFile'),
+                "variables": {
+                    "namespace":"files",
+                    "data":"data:image/{};base64,{}".format(
+                        ext,
+                        encoded_string
+                    )
+                },
+                "operationName": operation_name
+            }
+        )
+        self._validate_response(response.text, 'uploadFile')
+        result = self._parse_response(response.text, 'uploadFile')
+        return result['path']
+
     # CreateVertex
     def create_vertex(self, project_id, table_id, values, edges):
         if not project_id:
@@ -565,6 +592,7 @@ class Query(object):
                 value = value.strftime('%Y%m%dT%H%M%S')
             else:
                 value = str(value)
+
             data_values.append({
                 "key": column_id,
                 "value": value
