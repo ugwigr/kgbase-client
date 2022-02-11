@@ -6,6 +6,7 @@ import os
 import datetime
 import platform
 import csv
+import base64
 
 
 class Query(object):
@@ -15,7 +16,7 @@ class Query(object):
     HEADERS = {
         "Accept": "application/json",
         "Content-Type": "application/json",
-        "User-Agent": "Python API 0.34 / {local_version}".format(local_version=platform.python_version())
+        "User-Agent": "Python API 0.35 / {local_version}".format(local_version=platform.python_version())
     }
 
     def __init__(self, proxies={}, verify=True):
@@ -547,6 +548,32 @@ class Query(object):
         )
         self._validate_response(response.text, 'deleteColumn')
         return self._parse_response(response.text, 'deleteColumn')
+
+    # UploadFile
+    def upload_file(self, filepath):
+        if not os.path.exists(filepath):
+            raise Exception('File not found')
+        ext = os.path.splitext(filepath)[-1].lower().replace('.', '')
+        img_file = open(filepath, 'rb')
+        encoded_string = base64.b64encode(img_file.read())
+        operation_name = 'UploadFile'
+        response = self._requests(
+            method='post',
+            json={
+                "query": self._get_query(type='mutation', name='UploadFile'),
+                "variables": {
+                    "namespace":"files",
+                    "data":"data:image/{};base64,{}".format(
+                        ext,
+                        encoded_string
+                    )
+                },
+                "operationName": operation_name
+            }
+        )
+        self._validate_response(response.text, 'uploadFile')
+        result = self._parse_response(response.text, 'uploadFile')
+        return result['path']
 
     # CreateVertex
     def create_vertex(self, project_id, table_id, values, edges):
