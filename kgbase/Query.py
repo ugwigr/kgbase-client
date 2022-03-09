@@ -16,7 +16,7 @@ class Query(object):
     HEADERS = {
         "Accept": "application/json",
         "Content-Type": "application/json",
-        "User-Agent": "Python API 0.35 / {local_version}".format(local_version=platform.python_version())
+        "User-Agent": "Python API 0.36 / {local_version}".format(local_version=platform.python_version())
     }
 
     def __init__(self, proxies={}, verify=True):
@@ -452,7 +452,7 @@ class Query(object):
         return self._parse_response(response.text, 'deleteTable')
 
     # CreateColumn
-    def create_column(self, project_id, table_id, display_name, data_type, linked_table=None, is_required=False, data_format=None):
+    def create_column(self, project_id, table_id, display_name, data_type, linked_context=None, linked_table=None, is_required=False):
         if not project_id:
             raise Exception('Project ID required')
         if not table_id:
@@ -474,13 +474,13 @@ class Query(object):
                     "data": {
                         "displayName": display_name,
                         "dataType": data_type,
-                        "linkedTable": linked_table,
-                        "isRequired": is_required
+                        "isRequired": is_required,
+                        "linkedContext": linked_context,
+                        "linkedTable": linked_table
                     } if data_type in ['link_one', 'link_many'] else {
                         "displayName": display_name,
                         "dataType": data_type,
-                        "isRequired": is_required,
-                        "dataFormat": data_format
+                        "isRequired": is_required
                     }
                 },
                 "operationName": operation_name
@@ -490,7 +490,7 @@ class Query(object):
         return self._parse_response(response.text, 'createColumn')
 
     # UpdateColumn
-    def update_column(self, project_id, table_id, column_id, display_name, data_type, linked_table=None, restore_relationships_data=False, data_format=None):
+    def update_column(self, project_id, table_id, column_id, display_name, data_type, linked_context=None, linked_table=None, is_required=False, restore_relationships_data=True):
         if not project_id:
             raise Exception('Project ID required')
         if not table_id:
@@ -515,9 +515,15 @@ class Query(object):
                     "data": {
                         "displayName": display_name,
                         "dataType": data_type,
-                        "dataFormat": data_format
+                        "isRequired": is_required,
+                        "linkedContext": linked_context,
+                        "linkedTable": linked_table
+                    } if data_type in ['link_one', 'link_many'] else {
+                        "displayName": display_name,
+                        "dataType": data_type,
+                        "isRequired": is_required
                     },
-                    "restoreRelationshipsData": False
+                    "restoreRelationshipsData": restore_relationships_data
                 },
                 "operationName": operation_name
             }
@@ -598,10 +604,11 @@ class Query(object):
             })
 
         data_edges = []
-        for label, to_id in edges:
+        for edge in edges:
             data_edges.append({
-                "label": label,
-                "toId": to_id
+                "label": edge["label"],
+                "toContext": edge["to_context"],
+                "toId": edge["to_id"]
             })
 
         operation_name = 'CreateVertex'
@@ -648,10 +655,11 @@ class Query(object):
             })
 
         data_edges = []
-        for label, to_id in edges:
+        for edge in edges:
             data_edges.append({
-                "label": label,
-                "toId": to_id
+                "label": edge["label"],
+                "toContext": edge["to_context"],
+                "toId": edge["to_id"]
             })
 
         operation_name = 'UpdateVertex'
